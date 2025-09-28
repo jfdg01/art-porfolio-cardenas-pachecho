@@ -6,42 +6,24 @@
 -->
 
 <script lang="ts">
-	import { Mail, Home, Menu, ArrowUp, GraduationCap } from 'lucide-svelte';
+	import { Mail, Home, ArrowUp, GraduationCap } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import LanguageSelector from './LanguageSelector.svelte';
+	import NavigationSelect from './NavigationSelect.svelte';
 	import { goto } from '$app/navigation';
 
-	let showMobileMenu = $state(false);
 	let showScrollToTop = $state(false);
-
-	function toggleMobileMenu() {
-		showMobileMenu = !showMobileMenu;
-	}
-
-	function closeMobileMenu() {
-		showMobileMenu = false;
-	}
 
 	function goToHome() {
 		goto('/');
-		closeMobileMenu();
 	}
 
 	function goToContact() {
 		goto('/contact');
-		closeMobileMenu();
 	}
 
 	function goToOnlineClasses() {
 		goto('/clases-online');
-		closeMobileMenu();
-	}
-
-	// Handle keyboard navigation
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Escape' && showMobileMenu) {
-			closeMobileMenu();
-		}
 	}
 
 	// Scroll to top functionality
@@ -58,7 +40,7 @@
 	}
 </script>
 
-<svelte:window onkeydown={handleKeydown} onscroll={handleScroll} />
+<svelte:window onscroll={handleScroll} />
 
 <header
 	class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-gray-200/50 shadow-sm"
@@ -116,54 +98,10 @@
 				<!-- Language Selector - Mobile -->
 				<LanguageSelector />
 
-				<!-- Mobile Menu Button -->
-				<button
-					onclick={toggleMobileMenu}
-					aria-haspopup="menu"
-					aria-expanded={showMobileMenu}
-					aria-label="Open navigation menu"
-					class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white/80 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all duration-200 min-h-[44px] min-w-[44px] text-gray-700"
-				>
-					<Menu class="size-5" />
-				</button>
+				<!-- Navigation Select - Mobile -->
+				<NavigationSelect />
 			</div>
 		</div>
-
-		<!-- Mobile Navigation Menu -->
-		{#if showMobileMenu}
-			<div class="md:hidden border-t border-gray-200/50 bg-white/95 backdrop-blur-xl">
-				<div class="py-4 space-y-2">
-					<!-- Navigation Links - Mobile -->
-					<button
-						onclick={goToHome}
-						class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 text-gray-700"
-						role="menuitem"
-						aria-label="View artworks"
-					>
-						<Home class="size-5" />
-						<span class="font-medium">{$t('artworks')}</span>
-					</button>
-					<button
-						onclick={goToOnlineClasses}
-						class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 text-gray-700"
-						role="menuitem"
-						aria-label="Online classes"
-					>
-						<GraduationCap class="size-5" />
-						<span class="font-medium">{$t('onlineClassesPage')}</span>
-					</button>
-					<button
-						onclick={goToContact}
-						class="w-full flex items-center gap-3 px-4 py-3 text-sm hover:bg-gray-50 text-left transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 text-gray-700"
-						role="menuitem"
-						aria-label="Contact information"
-					>
-						<Mail class="size-5" />
-						<span class="font-medium">{$t('contact')}</span>
-					</button>
-				</div>
-			</div>
-		{/if}
 	</div>
 </header>
 
