@@ -1,6 +1,6 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/icon.ico';
+	import favicon from '$lib/assets/favicon.ico';
 	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';
 	import { locale } from 'svelte-i18n';
