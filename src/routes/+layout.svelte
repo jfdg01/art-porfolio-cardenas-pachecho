@@ -1,6 +1,5 @@
 <script lang="ts">
 	import '../app.css';
-	import favicon from '$lib/assets/favicon.ico';
 	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';
 	import { locale } from 'svelte-i18n';
@@ -25,10 +24,6 @@
 		}
 	});
 </script>
-
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
 	{@render children?.()}
