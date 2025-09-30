@@ -10,6 +10,21 @@
 	import { Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
+	import Img from '@zerodevx/svelte-img';
+
+	// Import all images with optimization for gallery cards
+	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
+		import: 'default',
+		eager: true,
+		query: { w: '250;350;500', format: 'webp;jpg', as: 'run' }
+	});
+
+	// Create a mapping from filename to optimized image
+	const imageMap: Record<string, unknown> = {};
+	Object.entries(imageImports).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMap[filename] = image;
+	});
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
@@ -21,7 +36,6 @@
 	} = $props();
 
 	// Simple image-only approach
-	let imageElement = $state<HTMLImageElement | undefined>(undefined);
 
 	function handleClick() {
 		goto(`/artwork/${artwork.id}`);
@@ -48,13 +62,25 @@
 		<!-- Image -->
 		<div class="relative">
 			{#if artwork.images && artwork.images.length > 0}
-				<img
-					bind:this={imageElement}
-					src={artwork.images[0].src}
-					alt={$t('artworkAlt', { values: { title: artwork.title } })}
-					class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-					loading="lazy"
-				/>
+				{@const imageSrc = artwork.images[0].src}
+				{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
+				{@const optimizedImage = imageName ? imageMap[imageName] : undefined}
+				{#if optimizedImage}
+					<Img
+						src={optimizedImage}
+						alt={$t('artworkAlt', { values: { title: artwork.title } })}
+						class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+						sizes="(max-width: 320px) 288px, (max-width: 768px) 192px, (max-width: 1024px) 187px, (max-width: 1440px) 288px, 300px"
+					/>
+				{:else}
+					<!-- Fallback for images not found in the mapping -->
+					<img
+						src={imageSrc}
+						alt={$t('artworkAlt', { values: { title: artwork.title } })}
+						class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
+						loading="lazy"
+					/>
+				{/if}
 			{:else}
 				<div class="w-full h-48 bg-gray-200 flex items-center justify-center">
 					<p class="text-gray-500">No image available</p>

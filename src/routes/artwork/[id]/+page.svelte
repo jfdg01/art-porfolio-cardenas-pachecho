@@ -10,6 +10,21 @@
 	import { goto } from '$app/navigation';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import Img from '@zerodevx/svelte-img';
+
+	// Import all images with optimization for detail pages
+	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
+		import: 'default',
+		eager: true,
+		query: { w: '400;800;1200;1600', format: 'jpg;webp', as: 'run:32' }
+	});
+
+	// Create a mapping from filename to optimized image
+	const imageMap: Record<string, unknown> = {};
+	Object.entries(imageImports).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMap[filename] = image;
+	});
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -115,12 +130,25 @@
 					<div class="space-y-4">
 						<div class="relative">
 							{#if currentImage && currentImage.src}
-								<img
-									src={currentImage.src}
-									alt={$t('artworkAlt', { values: { title: artwork.title } })}
-									class="w-full h-auto rounded-lg shadow-md"
-									loading="lazy"
-								/>
+								{@const imageSrc = currentImage.src}
+								{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
+								{@const optimizedImage = imageName ? imageMap[imageName] : undefined}
+								{#if optimizedImage}
+									<Img
+										src={optimizedImage}
+										alt={$t('artworkAlt', { values: { title: artwork.title } })}
+										class="w-full h-auto rounded-lg shadow-md"
+										sizes="(max-width: 320px) 288px, (max-width: 768px) 192px, (max-width: 1024px) 187px, (max-width: 1440px) 288px, 300px"
+									/>
+								{:else}
+									<!-- Fallback for images not found in the mapping -->
+									<img
+										src={imageSrc}
+										alt={$t('artworkAlt', { values: { title: artwork.title } })}
+										class="w-full h-auto rounded-lg shadow-md"
+										loading="lazy"
+									/>
+								{/if}
 							{:else}
 								<div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
 									<p class="text-gray-500">No image available</p>
