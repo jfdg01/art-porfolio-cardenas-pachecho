@@ -9,7 +9,7 @@ export default defineConfig({
 		sveltekit(),
 		imagetools({
 			profiles: {
-				run: new URLSearchParams('w=250;350;500&format=webp;jpg')
+				run: new URLSearchParams('w=200;300&format=webp;jpg')
 			}
 		})
 	]

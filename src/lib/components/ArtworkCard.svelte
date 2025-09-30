@@ -16,7 +16,7 @@
 	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
 		import: 'default',
 		eager: true,
-		query: { w: '250;350;500', format: 'webp;jpg', as: 'run' }
+		query: { w: '200;300', format: 'webp;jpg', as: 'run' }
 	});
 
 	// Create a mapping from filename to optimized image
