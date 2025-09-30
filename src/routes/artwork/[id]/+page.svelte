@@ -16,7 +16,7 @@
 	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
 		import: 'default',
 		eager: true,
-		query: { w: '400;800;1200;1600', format: 'jpg;webp', as: 'run:32' }
+		query: { format: 'jpg;webp', as: 'run' }
 	});
 
 	// Create a mapping from filename to optimized image
@@ -138,8 +138,8 @@
 										src={optimizedImage}
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
 										class="w-full h-auto rounded-lg shadow-md"
-										sizes="(max-width: 320px) 288px, (max-width: 768px) 192px, (max-width: 1024px) 187px, (max-width: 1440px) 288px, 300px"
-									/>
+										sizes="(max-width: 320px) 254px, (max-width: 425px) 360px, (max-width: 768px) 670px, (max-width: 1024px) 423px, (max-width: 1440px) 551px, 551px"
+										/>
 								{:else}
 									<!-- Fallback for images not found in the mapping -->
 									<img

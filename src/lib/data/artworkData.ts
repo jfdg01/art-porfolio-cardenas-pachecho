@@ -11,8 +11,9 @@ export const artworkData: Artwork[] = [
 	{
 		id: 'albor',
 		title: 'Albor',
-		description: '', // TODO: Add description
+		description: 'Esto es un cuadro de un pajaro asbtracto', // TODO: Add description
 		images: artworkImages['albor'],
+		year: 2020,
 		category: ['pintura'],
 		isAvailable: false
 	},
