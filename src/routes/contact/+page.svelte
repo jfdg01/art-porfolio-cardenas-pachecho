@@ -6,10 +6,15 @@
 -->
 
 <script lang="ts">
+	import type { PageData } from './$types';
 	import { t } from 'svelte-i18n';
 	import { Send } from 'lucide-svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
+	import SEO from '$lib/components/SEO.svelte';
+
+	// Get page data from server-side load function
+	let { data }: { data: PageData } = $props();
 
 	let formData = $state({
 		name: '',
@@ -57,9 +62,7 @@
 	}
 </script>
 
-<svelte:head>
-	<title>{$t('contactPage')} - Carmen Cárdenas Pacheco</title>
-</svelte:head>
+<SEO seo={data.seo} />
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-x-hidden">
 	<GalleryHeader />

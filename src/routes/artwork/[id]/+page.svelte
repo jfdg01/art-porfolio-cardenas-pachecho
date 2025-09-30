@@ -9,6 +9,7 @@
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -72,10 +73,7 @@
 	});
 </script>
 
-<svelte:head>
-	<title>{artwork.title} - Carmen Cárdenas Pacheco</title>
-	<meta name="description" content="View {artwork.title} by Carmen Cárdenas Pacheco" />
-</svelte:head>
+<SEO seo={data.seo} />
 
 <div
 	class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 overflow-x-hidden"

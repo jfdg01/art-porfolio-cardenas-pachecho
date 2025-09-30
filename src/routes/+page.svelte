@@ -4,19 +4,21 @@
 -->
 
 <script lang="ts">
+	import type { PageData } from './$types';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ArtworkFilter from '$lib/components/ArtworkFilter.svelte';
 	import ArtworkGrid from '$lib/components/ArtworkGrid.svelte';
+	import SEO from '$lib/components/SEO.svelte';
+
+	// Get page data from server-side load function
+	let { data }: { data: PageData } = $props();
 
 	// Get shared gallery state
 	const galleryState = getGalleryState();
 </script>
 
-<svelte:head>
-	<title>Carmen Cárdenas Pacheco</title>
-	<meta name="description" content="Bienvenid@ a la galería de Carmen Cárdenas Pacheco." />
-</svelte:head>
+<SEO seo={data.seo} />
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
 	<!-- Header -->
