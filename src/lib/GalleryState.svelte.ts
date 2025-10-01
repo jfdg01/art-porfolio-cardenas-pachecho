@@ -18,19 +18,20 @@ const GALLERY_KEY = Symbol('gallery_state');
 export class GalleryStateClass {
 	// Reactive properties using $state rune
 	artworks = $state<Artwork[]>(artworkData);
-	selectedCategory = $state<string>('');
+	selectedCategories = $state<string[]>([]);
 
 	// Getter methods for computed values
 	get filteredArtworks() {
-		if (!this.selectedCategory) {
+		if (this.selectedCategories.length === 0) {
 			return this.artworks;
 		}
 
 		return this.artworks.filter((artwork) => {
-			if (Array.isArray(artwork.category)) {
-				return artwork.category.includes(this.selectedCategory);
-			}
-			return artwork.category === this.selectedCategory;
+			const artworkCategories = Array.isArray(artwork.category)
+				? artwork.category
+				: [artwork.category];
+			// Check if artwork has ANY of the selected categories
+			return artworkCategories.some((cat) => this.selectedCategories.includes(cat));
 		});
 	}
 
@@ -51,12 +52,17 @@ export class GalleryStateClass {
 		this.artworks = artworks;
 	}
 
-	setCategoryFilter(category: string) {
-		this.selectedCategory = category;
+	setCategoryFilter(categories: string[]) {
+		this.selectedCategories = categories;
 	}
 
 	clearFilters() {
-		this.selectedCategory = '';
+		this.selectedCategories = [];
+	}
+
+	// Legacy getter for backward compatibility (if needed)
+	get selectedCategory() {
+		return this.selectedCategories.length === 1 ? this.selectedCategories[0] : '';
 	}
 
 	// Utility methods

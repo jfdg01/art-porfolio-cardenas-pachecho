@@ -139,7 +139,7 @@
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
 										class="w-full h-auto rounded-lg shadow-md"
 										sizes="(max-width: 320px) 254px, (max-width: 425px) 360px, (max-width: 768px) 670px, (max-width: 1024px) 423px, (max-width: 1440px) 551px, 551px"
-										/>
+									/>
 								{:else}
 									<!-- Fallback for images not found in the mapping -->
 									<img
