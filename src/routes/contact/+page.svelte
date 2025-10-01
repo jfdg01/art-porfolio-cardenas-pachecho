@@ -9,6 +9,7 @@
 	import type { PageData } from './$types';
 	import { t } from 'svelte-i18n';
 	import { Send } from 'lucide-svelte';
+	import { Label, Button, Progress, AlertDialog, Separator } from 'bits-ui';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
 	import SEO from '$lib/components/SEO.svelte';
@@ -25,13 +26,78 @@
 
 	let isSubmitting = $state(false);
 	let submitMessage = $state('');
+	let formErrors = $state<Record<string, string>>({});
+	let showConfirmationDialog = $state(false);
+	let submissionProgress = $state(0);
+
+	// Validation function
+	function validateForm() {
+		const errors: Record<string, string> = {};
+
+		if (!formData.name.trim()) {
+			errors.name = $t('nameRequired') || 'Name is required';
+		}
+
+		if (!formData.email.trim()) {
+			errors.email = $t('emailRequired') || 'Email is required';
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+			errors.email = $t('emailInvalid') || 'Please enter a valid email address';
+		}
+
+		if (!formData.subject.trim()) {
+			errors.subject = $t('subjectRequired') || 'Subject is required';
+		}
+
+		if (!formData.message.trim()) {
+			errors.message = $t('messageRequired') || 'Message is required';
+		}
+
+		return errors;
+	}
+
+	function showConfirmation() {
+		showConfirmationDialog = true;
+	}
+
+	function confirmSubmission() {
+		showConfirmationDialog = false;
+		handleFormSubmission();
+	}
+
+	function cancelSubmission() {
+		showConfirmationDialog = false;
+	}
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
 		if (isSubmitting) return;
 
-		isSubmitting = true;
+		// Clear previous errors and messages
+		formErrors = {};
 		submitMessage = '';
+
+		// Validate form
+		const validationErrors = validateForm();
+		if (Object.keys(validationErrors).length > 0) {
+			formErrors = validationErrors;
+			return;
+		}
+
+		// Show confirmation dialog
+		showConfirmation();
+	}
+
+	async function handleFormSubmission() {
+		isSubmitting = true;
+		submissionProgress = 0;
+
+		// Simulate progress
+		const progressInterval = setInterval(() => {
+			submissionProgress += 20;
+			if (submissionProgress >= 100) {
+				clearInterval(progressInterval);
+			}
+		}, 200);
 
 		try {
 			// Create mailto link with form data
@@ -95,80 +161,126 @@
 				</h2>
 
 				<form onsubmit={handleSubmit} class="space-y-6">
-					<!-- Name Field -->
-					<div>
-						<label
-							for="name"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
-						>
-							{$t('name')} *
-						</label>
-						<input
-							type="text"
-							id="name"
-							bind:value={formData.name}
-							required
-							class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
-							placeholder={$t('name')}
-						/>
-					</div>
+					<fieldset class="space-y-6">
+						<legend class="sr-only">
+							{$t('getInTouch')}
+						</legend>
 
-					<!-- Email Field -->
-					<div>
-						<label
-							for="email"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
-						>
-							{$t('email')} *
-						</label>
-						<input
-							type="email"
-							id="email"
-							bind:value={formData.email}
-							required
-							class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
-							placeholder={$t('email')}
-						/>
-					</div>
+						<!-- Name Field -->
+						<div>
+							<Label.Root
+								for="name"
+								class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							>
+								{$t('name')}
+							</Label.Root>
+							<input
+								type="text"
+								id="name"
+								bind:value={formData.name}
+								class="w-full bg-white border {formErrors.name
+									? 'border-red-500'
+									: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+								placeholder={$t('name')}
+							/>
+							{#if formErrors.name}
+								<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.name}</p>
+							{/if}
+						</div>
 
-					<!-- Subject Field -->
-					<div>
-						<label
-							for="subject"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
-						>
-							{$t('subject')} *
-						</label>
-						<input
-							type="text"
-							id="subject"
-							bind:value={formData.subject}
-							required
-							class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
-							placeholder={$t('subject')}
-						/>
-					</div>
+						<!-- Email Field -->
+						<div>
+							<Label.Root
+								for="email"
+								class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							>
+								{$t('email')}
+							</Label.Root>
+							<input
+								type="email"
+								id="email"
+								bind:value={formData.email}
+								class="w-full bg-white border {formErrors.email
+									? 'border-red-500'
+									: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+								placeholder={$t('email')}
+							/>
+							{#if formErrors.email}
+								<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.email}</p>
+							{/if}
+						</div>
 
-					<!-- Message Field -->
-					<div>
-						<label
-							for="message"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
-						>
-							{$t('message')} *
-						</label>
-						<textarea
-							id="message"
-							bind:value={formData.message}
-							required
-							rows="6"
-							class="w-full bg-white border border-gray-200 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-vertical montserrat-medium"
-							placeholder={$t('message')}
-						></textarea>
-					</div>
+						<!-- Subject Field -->
+						<div>
+							<Label.Root
+								for="subject"
+								class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							>
+								{$t('subject')}
+							</Label.Root>
+							<input
+								type="text"
+								id="subject"
+								bind:value={formData.subject}
+								class="w-full bg-white border {formErrors.subject
+									? 'border-red-500'
+									: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+								placeholder={$t('subject')}
+							/>
+							{#if formErrors.subject}
+								<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.subject}</p>
+							{/if}
+						</div>
+
+						<!-- Message Field -->
+						<div>
+							<Label.Root
+								for="message"
+								class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							>
+								{$t('message')}
+							</Label.Root>
+							<textarea
+								id="message"
+								bind:value={formData.message}
+								rows="6"
+								class="w-full bg-white border {formErrors.message
+									? 'border-red-500'
+									: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-vertical montserrat-medium"
+								placeholder={$t('message')}
+							></textarea>
+							{#if formErrors.message}
+								<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.message}</p>
+							{/if}
+						</div>
+					</fieldset>
+
+					<!-- Separator -->
+					<Separator.Root class="my-6" />
+
+					<!-- Progress Indicator -->
+					{#if isSubmitting}
+						<div class="mb-4">
+							<div class="flex justify-between text-sm text-gray-600 mb-2 montserrat-medium">
+								<span>{$t('sendingMessage') || 'Sending message...'}</span>
+								<span>{submissionProgress}%</span>
+							</div>
+							<Progress.Root
+								value={submissionProgress}
+								max={100}
+								class="w-full h-2 bg-gray-200 rounded-full overflow-hidden relative"
+								aria-labelledby="progress-label"
+							>
+								<div
+									class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300 ease-out rounded-full"
+									style={`transform: translateX(-${100 - (100 * (submissionProgress ?? 0)) / 100}%)`}
+								></div>
+							</Progress.Root>
+						</div>
+					{/if}
 
 					<!-- Submit Button -->
-					<button
+					<Button.Root
 						type="submit"
 						disabled={isSubmitting}
 						class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 montserrat-semibold"
@@ -182,20 +294,99 @@
 							<Send class="w-5 h-5" />
 							{$t('sendMessage')}
 						{/if}
-					</button>
+					</Button.Root>
 
 					<!-- Submit Message -->
 					{#if submitMessage}
 						<div
-							class="p-4 rounded-lg {submitMessage.includes('successfully')
-								? 'bg-green-50 text-green-800 border border-green-200'
+							class="p-4 rounded-lg {submitMessage.includes('successfully') ||
+							submitMessage.includes('exitosamente') ||
+							submitMessage.includes('succès')
+								? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border border-green-300 shadow-sm'
 								: 'bg-red-50 text-red-800 border border-red-200'}"
 						>
-							{submitMessage}
+							<div class="flex items-start gap-3">
+								{#if submitMessage.includes('successfully') || submitMessage.includes('exitosamente') || submitMessage.includes('succès')}
+									<!-- Success Icon -->
+									<div class="flex-shrink-0 w-5 h-5 mt-0.5">
+										<svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+											<path
+												fill-rule="evenodd"
+												d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+												clip-rule="evenodd"
+											/>
+										</svg>
+									</div>
+								{:else}
+									<!-- Error Icon -->
+									<div class="flex-shrink-0 w-5 h-5 mt-0.5">
+										<svg class="w-5 h-5 text-red-600" fill="currentColor" viewBox="0 0 20 20">
+											<path
+												fill-rule="evenodd"
+												d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+												clip-rule="evenodd"
+											/>
+										</svg>
+									</div>
+								{/if}
+								<div class="flex-1">
+									{#if submitMessage.includes('successfully') || submitMessage.includes('exitosamente') || submitMessage.includes('succès')}
+										<h4 class="text-sm font-semibold text-green-800 mb-1 montserrat-semibold">
+											{$t('emailClientOpened').includes('¡') ? '¡Éxito!' : 'Success!'}
+										</h4>
+									{/if}
+									<p
+										class="text-sm leading-relaxed {submitMessage.includes('successfully') ||
+										submitMessage.includes('exitosamente') ||
+										submitMessage.includes('succès')
+											? 'text-green-700'
+											: 'text-red-700'} montserrat-medium"
+									>
+										{submitMessage}
+									</p>
+								</div>
+							</div>
 						</div>
 					{/if}
 				</form>
 			</div>
 		</div>
 	</main>
+
+	<!-- Confirmation Dialog -->
+	<AlertDialog.Root bind:open={showConfirmationDialog}>
+		<AlertDialog.Portal>
+			<AlertDialog.Overlay
+				class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+			/>
+			<AlertDialog.Content
+				class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-md translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg"
+			>
+				<div class="flex flex-col space-y-2 text-center sm:text-left">
+					<AlertDialog.Title class="text-lg font-semibold text-gray-900 montserrat-semibold">
+						{$t('confirmSubmission') || 'Confirm Submission'}
+					</AlertDialog.Title>
+					<AlertDialog.Description class="text-sm text-gray-600 montserrat-medium">
+						{$t('confirmSubmissionMessage') ||
+							'Are you sure you want to send this message? Your default email client will open with the message prepared.'}
+					</AlertDialog.Description>
+				</div>
+
+				<div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+					<AlertDialog.Cancel
+						onclick={cancelSubmission}
+						class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 ring-offset-white transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 montserrat-medium"
+					>
+						{$t('cancel') || 'Cancel'}
+					</AlertDialog.Cancel>
+					<AlertDialog.Action
+						onclick={confirmSubmission}
+						class="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white ring-offset-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 montserrat-medium"
+					>
+						{$t('confirm') || 'Confirm'}
+					</AlertDialog.Action>
+				</div>
+			</AlertDialog.Content>
+		</AlertDialog.Portal>
+	</AlertDialog.Root>
 </div>
