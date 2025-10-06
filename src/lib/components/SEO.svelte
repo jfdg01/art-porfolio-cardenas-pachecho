@@ -17,7 +17,7 @@
 
 	let { seo, noIndex = false }: SEOProps = $props();
 
-	const SITE_URL = 'https://www.cardenaspacheco.es';
+	const SITE_URL = 'https://cardenaspacheco.es';
 
 	// Default SEO data
 	const defaultSEO: SEOData = {

@@ -13,11 +13,11 @@ export const load: PageServerLoad = async ({ url }) => {
 			'@type': 'WebSite',
 			name: 'Carmen Cárdenas Pacheco',
 			description: 'Galería de arte de Carmen Cárdenas Pacheco',
-			url: 'https://www.cardenaspacheco.es',
+			url: 'https://cardenaspacheco.es',
 			author: {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
-				url: 'https://www.cardenaspacheco.es'
+				url: 'https://cardenaspacheco.es'
 			},
 			publisher: {
 				'@type': 'Person',
@@ -25,7 +25,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			},
 			potentialAction: {
 				'@type': 'SearchAction',
-				target: 'https://www.cardenaspacheco.es/?q={search_term_string}',
+				target: 'https://cardenaspacheco.es/?q={search_term_string}',
 				'query-input': 'required name=search_term_string'
 			},
 			mainEntity: {

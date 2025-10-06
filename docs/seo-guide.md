@@ -152,7 +152,7 @@ The component structure dynamically pulls page information, including the URL, e
 
 HTML
 
-\<meta property\="og:url" content\="https://www.cardenaspacheco.es{$page.url.pathname.toString()}"\>  
+\<meta property\="og:url" content\="https://cardenaspacheco.es{$page.url.pathname.toString()}"\>  
 \<meta property\="og:type" content\="website"\>  
 \<meta property\="og:title" content\="{title}"\>  
 \<meta property\="og:description" content\="{description}"\>  

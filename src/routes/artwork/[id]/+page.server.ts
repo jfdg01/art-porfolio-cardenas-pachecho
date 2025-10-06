@@ -23,12 +23,12 @@ export const load: PageServerLoad = async ({ params, url }) => {
 			'@type': 'VisualArtwork',
 			name: artwork.title,
 			description: artwork.description || `View ${artwork.title} by Carmen Cárdenas Pacheco`,
-			image: `https://www.cardenaspacheco.es${typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src || '/images/default.webp'}`,
+			image: `https://cardenaspacheco.es${typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src || '/images/default.webp'}`,
 			url: url.href,
 			creator: {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
-				url: 'https://www.cardenaspacheco.es'
+				url: 'https://cardenaspacheco.es'
 			},
 			dateCreated: artwork.year ? `${artwork.year}-01-01` : new Date().toISOString(),
 			artform: 'Painting',
