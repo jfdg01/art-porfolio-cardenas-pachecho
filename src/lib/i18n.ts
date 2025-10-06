@@ -11,8 +11,8 @@ register('pt', () => import('./locales/pt.json'));
 register('cn', () => import('./locales/cn.json'));
 register('jp', () => import('./locales/jp.json'));
 register('kr', () => import('./locales/kr.json'));
-register('indian', () => import('./locales/indian.json'));
-register('hebrew', () => import('./locales/hebrew.json'));
+register('hi', () => import('./locales/hi.json'));
+register('he', () => import('./locales/he.json'));
 
 // Initialize with proper SSR handling
 init({

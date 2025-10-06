@@ -22,8 +22,8 @@
 		{ code: 'cn', name: '中文', flag: '🇨🇳' },
 		{ code: 'jp', name: '日本語', flag: '🇯🇵' },
 		{ code: 'kr', name: '한국어', flag: '🇰🇷' },
-		{ code: 'indian', name: 'हिन्दी', flag: '🇮🇳' },
-		{ code: 'hebrew', name: 'עברית', flag: '🇮🇱' }
+		{ code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
+		{ code: 'he', name: 'עברית', flag: '🇮🇱' }
 	] as const;
 
 	type LanguageCode = (typeof languages)[number]['code'];

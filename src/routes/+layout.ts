@@ -13,8 +13,8 @@ type SupportedLocale =
 	| 'cn'
 	| 'jp'
 	| 'kr'
-	| 'indian'
-	| 'hebrew';
+	| 'hi'
+	| 'he';
 
 const supportedLocales: SupportedLocale[] = [
 	'en',
@@ -27,8 +27,8 @@ const supportedLocales: SupportedLocale[] = [
 	'cn',
 	'jp',
 	'kr',
-	'indian',
-	'hebrew'
+	'hi',
+	'he'
 ];
 
 function isValidLocale(locale: string): locale is SupportedLocale {
