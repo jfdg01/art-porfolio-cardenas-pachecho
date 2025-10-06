@@ -289,7 +289,7 @@
 							<div
 								class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
 							></div>
-							Sending...
+							{$t('sending')}
 						{:else}
 							<Send class="w-5 h-5" />
 							{$t('sendMessage')}
@@ -298,15 +298,14 @@
 
 					<!-- Submit Message -->
 					{#if submitMessage}
+						{@const isSuccess = submitMessage === $t('emailClientOpened')}
 						<div
-							class="p-4 rounded-lg {submitMessage.includes('successfully') ||
-							submitMessage.includes('exitosamente') ||
-							submitMessage.includes('succès')
+							class="p-4 rounded-lg {isSuccess
 								? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border border-green-300 shadow-sm'
 								: 'bg-red-50 text-red-800 border border-red-200'}"
 						>
 							<div class="flex items-start gap-3">
-								{#if submitMessage.includes('successfully') || submitMessage.includes('exitosamente') || submitMessage.includes('succès')}
+								{#if isSuccess}
 									<!-- Success Icon -->
 									<div class="flex-shrink-0 w-5 h-5 mt-0.5">
 										<svg class="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
@@ -330,15 +329,13 @@
 									</div>
 								{/if}
 								<div class="flex-1">
-									{#if submitMessage.includes('successfully') || submitMessage.includes('exitosamente') || submitMessage.includes('succès')}
+									{#if isSuccess}
 										<h4 class="text-sm font-semibold text-green-800 mb-1 montserrat-semibold">
-											{$t('emailClientOpened').includes('¡') ? '¡Éxito!' : 'Success!'}
+											{$t('success')}
 										</h4>
 									{/if}
 									<p
-										class="text-sm leading-relaxed {submitMessage.includes('successfully') ||
-										submitMessage.includes('exitosamente') ||
-										submitMessage.includes('succès')
+										class="text-sm leading-relaxed {isSuccess
 											? 'text-green-700'
 											: 'text-red-700'} montserrat-medium"
 									>

@@ -1,0 +1,191 @@
+{
+	"totalLocales": 12,
+	"totalKeys": 83,
+	"missingKeys": {
+		"ru": ["emailLabel"]
+	},
+	"extraKeys": {},
+	"inconsistentTypes": {},
+	"emptyValues": {},
+	"duplicateValues": {
+		"artworkAlt": {
+			"{title}": ["cn", "de", "en", "es", "fr", "hebrew", "indian", "it", "jp", "kr", "pt", "ru"]
+		},
+		"success": {
+			"成功！": ["cn", "jp"]
+		},
+		"artistName": {
+			"Carmen Cárdenas Pacheco": [
+				"cn",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hebrew",
+				"indian",
+				"it",
+				"jp",
+				"kr",
+				"pt",
+				"ru"
+			]
+		},
+		"emailAddress": {
+			"cardenaspachecocarmenalejandra@gmail.com": [
+				"cn",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hebrew",
+				"indian",
+				"it",
+				"jp",
+				"kr",
+				"pt",
+				"ru"
+			]
+		},
+		"phoneNumber": {
+			"+34628672368": [
+				"cn",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hebrew",
+				"indian",
+				"it",
+				"jp",
+				"kr",
+				"pt",
+				"ru"
+			]
+		},
+		"whatsapp": {
+			"WhatsApp": ["cn", "de", "en", "es", "fr", "hebrew", "indian", "it", "jp", "kr", "pt", "ru"]
+		},
+		"instagram": {
+			"@cardenas.pacheco": [
+				"cn",
+				"de",
+				"en",
+				"es",
+				"fr",
+				"hebrew",
+				"indian",
+				"it",
+				"jp",
+				"kr",
+				"pt",
+				"ru"
+			]
+		},
+		"artworks": {
+			"作品": ["cn", "jp"],
+			"Obras": ["es", "pt"]
+		},
+		"categories.acuarela": {
+			"水彩画": ["cn", "jp"]
+		},
+		"categories.grabado": {
+			"版画": ["cn", "jp"]
+		},
+		"name": {
+			"Name": ["de", "en"],
+			"Nome": ["it", "pt"]
+		},
+		"in": {
+			"in": ["de", "en", "it"]
+		},
+		"tagsLabel": {
+			"Tags": ["de", "en"],
+			"Etiquetas": ["es", "pt"]
+		},
+		"navigation": {
+			"Navigation": ["de", "en", "fr"]
+		},
+		"dimensionsLabel": {
+			"Dimensions": ["en", "fr"]
+		},
+		"descriptionLabel": {
+			"Description": ["en", "fr"]
+		},
+		"contact": {
+			"Contact": ["en", "fr"]
+		},
+		"email": {
+			"Email": ["en", "fr", "it", "pt"]
+		},
+		"message": {
+			"Message": ["en", "fr"]
+		},
+		"emailLabel": {
+			"Email": ["en", "fr", "it", "pt"]
+		},
+		"showingCount": {
+			"Mostrando {count, plural, one {# obra} other {# obras}}": ["es", "pt"]
+		},
+		"sold": {
+			"Vendido": ["es", "pt"]
+		},
+		"sending": {
+			"Enviando...": ["es", "pt"]
+		},
+		"cancel": {
+			"Cancelar": ["es", "pt"]
+		},
+		"confirm": {
+			"Confirmar": ["es", "pt"]
+		},
+		"artworksFound": {
+			"obras encontradas": ["es", "pt"]
+		},
+		"filterBy": {
+			"Filtrar por {category}": ["es", "pt"]
+		},
+		"categories.pintura": {
+			"Pintura": ["es", "pt"]
+		}
+	},
+	"lineCounts": {
+		"cn": 88,
+		"de": 88,
+		"en": 88,
+		"es": 88,
+		"fr": 88,
+		"hebrew": 88,
+		"indian": 88,
+		"it": 88,
+		"jp": 88,
+		"kr": 88,
+		"pt": 88,
+		"ru": 87
+	},
+	"fileSizes": {
+		"cn": 3359,
+		"de": 3842,
+		"en": 3552,
+		"es": 3855,
+		"fr": 3943,
+		"hebrew": 4249,
+		"indian": 6313,
+		"it": 3736,
+		"jp": 4410,
+		"kr": 3937,
+		"pt": 3820,
+		"ru": 5556
+	},
+	"recommendations": [
+		{
+			"type": "error",
+			"message": "Found 1 missing translation keys across all locales",
+			"action": "Add missing keys to incomplete locales"
+		},
+		{
+			"type": "info",
+			"message": "Found 28 keys with identical values across multiple locales",
+			"action": "Review if translations should be different for each locale"
+		}
+	]
+}
