@@ -38,6 +38,7 @@
 	// Simple image-only approach
 
 	function handleClick() {
+		// Navigate without query parameters - state is preserved in GalleryState context
 		goto(`/artwork/${artwork.id}`);
 	}
 

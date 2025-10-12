@@ -11,6 +11,7 @@
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import Img from '@zerodevx/svelte-img';
+	import { getGalleryState } from '$lib/GalleryState.svelte';
 
 	// Import all images with optimization for detail pages
 	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
@@ -28,10 +29,36 @@
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
-	let artwork = data.artwork;
+
+	// Make artwork reactive to data changes
+	let artwork = $derived(data.artwork);
+
+	// Get gallery state for calculating next/prev
+	const galleryState = getGalleryState();
+
+	// Calculate next/prev based on current filter state
+	let navigation = $derived.by(() => {
+		const filteredArtworks = galleryState.filteredArtworks;
+		const currentIndex = filteredArtworks.findIndex((art) => art.id === artwork.id);
+
+		if (currentIndex === -1) {
+			return { nextId: null, prevId: null };
+		}
+
+		const nextIndex = currentIndex === filteredArtworks.length - 1 ? 0 : currentIndex + 1;
+		const prevIndex = currentIndex === 0 ? filteredArtworks.length - 1 : currentIndex - 1;
+
+		return {
+			nextId: filteredArtworks[nextIndex]?.id || null,
+			prevId: filteredArtworks[prevIndex]?.id || null
+		};
+	});
 
 	// Current image index for cycling through variants
 	let currentImageIndex = $state(0);
+
+	// Navigation state
+	let isNavigating = $state(false);
 
 	// Computed values
 	let currentImage = $derived(artwork?.images?.[currentImageIndex] || null);
@@ -41,8 +68,23 @@
 		goto('/');
 	}
 
+	function navigateToArtwork(artworkId: string | null) {
+		if (!artworkId || isNavigating) return;
+		isNavigating = true;
+		goto(`/artwork/${artworkId}`, { replaceState: false });
+	}
+
 	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'ArrowLeft' && hasMultipleImages) {
+		// Ctrl+Arrow for artwork navigation
+		if (event.ctrlKey && event.key === 'ArrowLeft') {
+			event.preventDefault();
+			navigateToArtwork(navigation.prevId);
+		} else if (event.ctrlKey && event.key === 'ArrowRight') {
+			event.preventDefault();
+			navigateToArtwork(navigation.nextId);
+		}
+		// Plain arrow keys for image cycling (only if multiple images)
+		else if (event.key === 'ArrowLeft' && hasMultipleImages) {
 			event.preventDefault();
 			previousImage();
 		} else if (event.key === 'ArrowRight' && hasMultipleImages) {
@@ -64,10 +106,11 @@
 		}
 	}
 
-	// Reset image index when artwork changes
+	// Reset image index and navigation state when artwork changes
 	$effect(() => {
 		if (artwork) {
 			currentImageIndex = 0;
+			isNavigating = false;
 		}
 	});
 
@@ -100,13 +143,13 @@
 	<!-- Go Back Button -->
 	<div class="bg-white/80 backdrop-blur-md border-b border-gray-200/50">
 		<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="py-3">
+			<div class="py-3 md:py-4">
 				<button
 					onclick={goBack}
-					class="inline-flex items-center gap-2 px-3 py-2 text-xs md:text-sm font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 min-h-[44px]"
+					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
 					aria-label={$t('goBack')}
 				>
-					<ArrowLeft class="w-4 h-4" />
+					<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
 					<span>{$t('goBack')}</span>
 				</button>
 			</div>
@@ -334,6 +377,45 @@
 								</div>
 							</div>
 						{/if}
+
+						<!-- Artwork Navigation Controls -->
+						<div class="pt-4 md:pt-6 border-t border-gray-200/50">
+							<div class="flex items-center justify-between gap-3 md:gap-4">
+								<!-- Previous Artwork Button -->
+								<button
+									onclick={() => navigateToArtwork(navigation.prevId)}
+									disabled={!navigation.prevId || isNavigating}
+									class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+									aria-label={$t('previousArtwork')}
+									title={$t('previousArtwork')}
+								>
+									<ChevronLeft class="w-5 h-5" />
+									<span class="hidden sm:inline">{$t('previousArtwork')}</span>
+								</button>
+
+								<!-- Go Back to Gallery Button -->
+								<button
+									onclick={goBack}
+									class="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
+									aria-label={$t('goBack')}
+								>
+									<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
+									<span class="whitespace-nowrap">{$t('goBack')}</span>
+								</button>
+
+								<!-- Next Artwork Button -->
+								<button
+									onclick={() => navigateToArtwork(navigation.nextId)}
+									disabled={!navigation.nextId || isNavigating}
+									class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+									aria-label={$t('nextArtwork')}
+									title={$t('nextArtwork')}
+								>
+									<span class="hidden sm:inline">{$t('nextArtwork')}</span>
+									<ChevronRight class="w-5 h-5" />
+								</button>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
