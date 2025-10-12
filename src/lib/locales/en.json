@@ -73,6 +73,16 @@
 	"sold": "Sold",
 	"soldHeading": "This artwork has been sold",
 	"soldInfo": "This artwork is not available for purchase, but if you are interested you can contact me and commission a similar piece",
+	"sort": {
+		"availability": "Availability",
+		"category": "Category",
+		"label": "Sort by",
+		"nameAsc": "Name (A-Z)",
+		"nameDesc": "Name (Z-A)",
+		"random": "Random",
+		"yearNewest": "Year (Newest First)",
+		"yearOldest": "Year (Oldest First)"
+	},
 	"stayTuned": "Stay Tuned!",
 	"subject": "Subject",
 	"subjectRequired": "Subject is required",

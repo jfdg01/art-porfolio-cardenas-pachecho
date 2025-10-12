@@ -73,6 +73,16 @@
 	"sold": "Vendido",
 	"soldHeading": "Esta obra ha sido vendida",
 	"soldInfo": "Esta obra no está disponible para la compra, pero si te interesa puedes contactarme y encargar una obra similar",
+	"sort": {
+		"availability": "Disponibilidad",
+		"category": "Categoría",
+		"label": "Ordenar por",
+		"nameAsc": "Nombre (A-Z)",
+		"nameDesc": "Nombre (Z-A)",
+		"random": "Aleatorio",
+		"yearNewest": "Año (Más reciente)",
+		"yearOldest": "Año (Más antiguo)"
+	},
 	"stayTuned": "¡Mantente atento!",
 	"subject": "Asunto",
 	"subjectRequired": "El asunto es obligatorio",

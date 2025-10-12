@@ -73,6 +73,16 @@
 	"sold": "Vendu",
 	"soldHeading": "Cette œuvre a été vendue",
 	"soldInfo": "Cette œuvre n'est pas disponible à l'achat, mais si elle vous intéresse, vous pouvez me contacter et commander une pièce similaire",
+	"sort": {
+		"availability": "Disponibilité",
+		"category": "Catégorie",
+		"label": "Trier par",
+		"nameAsc": "Nom (A-Z)",
+		"nameDesc": "Nom (Z-A)",
+		"random": "Aléatoire",
+		"yearNewest": "Année (Plus récent)",
+		"yearOldest": "Année (Plus ancien)"
+	},
 	"stayTuned": "Restez à l'écoute !",
 	"subject": "Sujet",
 	"subjectRequired": "Le sujet est obligatoire",

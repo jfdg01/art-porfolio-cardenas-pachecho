@@ -4,7 +4,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const seo = {
 		title: 'Carmen Cárdenas Pacheco - Galería de Arte',
 		description:
-			'Bienvenid@ a la galería de arte de Carmen Cárdenas Pacheco. Explora una colección única de obras artísticas contemporáneas.',
+			'Bienvenid@ a la galería de arte de Carmen Cárdenas Pacheco. Ponte en contacto conmigo y mis clases online.',
 		image: '/web-app-manifest-512x512.png',
 		type: 'website',
 		url: url.href,

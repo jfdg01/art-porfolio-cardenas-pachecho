@@ -73,6 +73,16 @@
 	"sold": "판매됨",
 	"soldHeading": "이 작품은 판매되었습니다",
 	"soldInfo": "이 작품은 구매할 수 없지만 관심이 있으시면 저에게 연락하여 유사한 작품을 주문하실 수 있습니다",
+	"sort": {
+		"availability": "구매 가능 여부",
+		"category": "카테고리",
+		"label": "정렬 기준",
+		"nameAsc": "이름 (A-Z)",
+		"nameDesc": "이름 (Z-A)",
+		"random": "무작위",
+		"yearNewest": "연도 (최신순)",
+		"yearOldest": "연도 (오래된순)"
+	},
 	"stayTuned": "계속 지켜봐 주세요!",
 	"subject": "제목",
 	"subjectRequired": "제목은 필수입니다",

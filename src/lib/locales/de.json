@@ -73,6 +73,16 @@
 	"sold": "Verkauft",
 	"soldHeading": "Dieses Kunstwerk wurde verkauft",
 	"soldInfo": "Dieses Kunstwerk ist nicht zum Kauf verfügbar, aber wenn Sie interessiert sind, können Sie mich kontaktieren und ein ähnliches Stück in Auftrag geben",
+	"sort": {
+		"availability": "Verfügbarkeit",
+		"category": "Kategorie",
+		"label": "Sortieren nach",
+		"nameAsc": "Name (A-Z)",
+		"nameDesc": "Name (Z-A)",
+		"random": "Zufällig",
+		"yearNewest": "Jahr (Neueste zuerst)",
+		"yearOldest": "Jahr (Älteste zuerst)"
+	},
 	"stayTuned": "Bleiben Sie dran!",
 	"subject": "Betreff",
 	"subjectRequired": "Betreff ist erforderlich",

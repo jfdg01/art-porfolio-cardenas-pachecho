@@ -73,6 +73,16 @@
 	"sold": "売却済み",
 	"soldHeading": "このアートワークは売却されました",
 	"soldInfo": "このアートワークは購入できませんが、ご興味がございましたらお問い合わせいただき、類似の作品をご注文いただけます",
+	"sort": {
+		"availability": "在庫状況",
+		"category": "カテゴリ",
+		"label": "並べ替え",
+		"nameAsc": "名前 (A-Z)",
+		"nameDesc": "名前 (Z-A)",
+		"random": "ランダム",
+		"yearNewest": "年 (新しい順)",
+		"yearOldest": "年 (古い順)"
+	},
 	"stayTuned": "お楽しみに！",
 	"subject": "件名",
 	"subjectRequired": "件名は必須です",

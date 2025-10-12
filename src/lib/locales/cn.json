@@ -73,6 +73,16 @@
 	"sold": "已售",
 	"soldHeading": "这件艺术品已售出",
 	"soldInfo": "这件艺术品不可购买，但如果您感兴趣，可以联系我定制类似的作品",
+	"sort": {
+		"availability": "可用性",
+		"category": "类别",
+		"label": "排序方式",
+		"nameAsc": "名称 (A-Z)",
+		"nameDesc": "名称 (Z-A)",
+		"random": "随机",
+		"yearNewest": "年份 (最新)",
+		"yearOldest": "年份 (最早)"
+	},
 	"stayTuned": "敬请期待！",
 	"subject": "主题",
 	"subjectRequired": "主题是必填项",
