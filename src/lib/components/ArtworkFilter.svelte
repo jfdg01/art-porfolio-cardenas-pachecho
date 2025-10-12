@@ -155,8 +155,7 @@
 		<!-- Results Count -->
 		<div class="mt-4 lg:mt-6">
 			<p class="text-sm text-gray-600 text-center">
-				<span class="font-medium text-gray-900">{galleryState.filteredArtworks.length}</span>
-				{$t('artworksFound')}
+				{$t('showingCount', { values: { count: galleryState.filteredArtworks.length } })}
 				{#if galleryState.selectedCategories.length > 0}
 					<span class="text-blue-600">
 						{$t('in')}
@@ -307,8 +306,7 @@
 		<!-- Results Count -->
 		<div class="mt-4">
 			<p class="text-sm text-gray-600 text-center">
-				<span class="font-medium text-gray-900">{galleryState.filteredArtworks.length}</span>
-				{$t('artworksFound')}
+				{$t('showingCount', { values: { count: galleryState.filteredArtworks.length } })}
 				{#if galleryState.selectedCategories.length > 0}
 					<span class="text-blue-600">
 						{$t('in')}
