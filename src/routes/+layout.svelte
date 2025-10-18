@@ -4,6 +4,10 @@
 	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';
 	import { locale } from 'svelte-i18n';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+
+	// Initialize Vercel Speed Insights
+	injectSpeedInsights();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let { children, data }: { children: any; data: LayoutData } = $props();
