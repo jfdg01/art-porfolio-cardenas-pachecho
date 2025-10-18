@@ -54,6 +54,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"@vercel/analytics": "^1.5.0",
 		"@vercel/speed-insights": "^1.2.0",
 		"bigger-picture": "^1.1.19",
 		"bits-ui": "^2.11.4",
