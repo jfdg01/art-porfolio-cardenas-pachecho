@@ -5,7 +5,7 @@
  */
 
 import { getContext, setContext } from 'svelte';
-import { SvelteSet } from 'svelte/reactivity';
+import { SvelteSet, SvelteDate } from 'svelte/reactivity';
 import type { Artwork } from '$lib/types/artwork';
 import { artworkData } from '$lib/data/artworkData';
 
@@ -29,7 +29,6 @@ export class GalleryStateClass {
 	artworks = $state<Artwork[]>(artworkData);
 	selectedCategories = $state<string[]>([]);
 	sortBy = $state<SortOption>('random');
-	private randomSeed = Math.random(); // Consistent random seed for session
 
 	// Getter methods for computed values
 	get filteredArtworks() {
@@ -49,6 +48,22 @@ export class GalleryStateClass {
 
 		// Then apply sorting
 		return this.sortArtworks(filtered);
+	}
+
+	/**
+	 * Generate a seed based on current time (truncated to the minute)
+	 * This ensures the random order changes every minute but stays consistent within that minute
+	 */
+	private getMinuteBasedSeed(): number {
+		const now = new SvelteDate();
+		// Combine year, month, day, hour, minute into a single number
+		const seed =
+			now.getFullYear() * 100000000 +
+			(now.getMonth() + 1) * 1000000 +
+			now.getDate() * 10000 +
+			now.getHours() * 100 +
+			now.getMinutes();
+		return seed;
 	}
 
 	/**
@@ -82,14 +97,16 @@ export class GalleryStateClass {
 					return a.year - b.year;
 				});
 
-			case 'random':
-				// Seeded random shuffle for consistency during session
+			case 'random': {
+				// Dynamic seed that changes every minute
+				let seed = this.getMinuteBasedSeed();
 				return sorted.sort(() => {
-					// Use a simple hash of the seed for pseudo-random but consistent ordering
-					const hash = (this.randomSeed * 9301 + 49297) % 233280;
-					this.randomSeed = hash / 233280;
-					return this.randomSeed - 0.5;
+					// Seeded pseudo-random using current minute
+					const hash = (seed * 9301 + 49297) % 233280;
+					seed = hash;
+					return hash / 233280 - 0.5;
 				});
+			}
 
 			case 'category':
 				return sorted.sort((a, b) => {
@@ -134,10 +151,6 @@ export class GalleryStateClass {
 
 	setSortBy(sortBy: SortOption) {
 		this.sortBy = sortBy;
-		// Reset random seed when changing sort to ensure consistent random ordering
-		if (sortBy === 'random') {
-			this.randomSeed = Math.random();
-		}
 	}
 
 	clearFilters() {
