@@ -10,6 +10,7 @@
 	import { t } from 'svelte-i18n';
 	import { Select } from 'bits-ui';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	// Define navigation options with reactive labels
 	const navigationOptions = $derived([
@@ -44,6 +45,15 @@
 	type NavigationValue = (typeof navigationOptions)[number]['value'];
 
 	let selectedValue = $state<NavigationValue | undefined>(undefined);
+
+	// Check if a path is active
+	function isActivePath(path: string): boolean {
+		if (path === '/') {
+			// For home, only match exact path or artwork detail pages
+			return $page.url.pathname === '/' || $page.url.pathname.startsWith('/artwork/');
+		}
+		return $page.url.pathname === path;
+	}
 
 	function handleNavigation(value: string | undefined) {
 		if (!value) return;
@@ -82,23 +92,27 @@
 
 				<Select.Viewport class="p-1">
 					{#each navigationOptions as option (option.value)}
+						{@const isActive = isActivePath(option.path)}
 						<Select.Item
 							value={option.value}
-							class="flex items-center gap-3 px-3 py-2.5 text-sm hover:bg-gray-50 text-left rounded cursor-pointer focus:bg-gray-50 focus:outline-none data-[highlighted]:bg-gray-50"
+							class="flex items-center gap-3 px-3 py-2.5 text-sm text-left rounded cursor-pointer focus:outline-none {isActive
+								? 'bg-blue-50 hover:bg-blue-100 data-[highlighted]:bg-blue-100'
+								: 'hover:bg-gray-50 data-[highlighted]:bg-gray-50 focus:bg-gray-50'}"
+							aria-current={isActive ? 'page' : undefined}
 						>
-							{#snippet children({ selected })}
-								{#if option.value === 'home'}
-									<Home class="size-4 text-gray-600" />
-								{:else if option.value === 'classes'}
-									<GraduationCap class="size-4 text-gray-600" />
-								{:else if option.value === 'contact'}
-									<Mail class="size-4 text-gray-600" />
-								{/if}
-								<span class="flex-1 font-medium">{option.label}</span>
-								{#if selected}
-									<Check class="size-4 text-blue-600" />
-								{/if}
-							{/snippet}
+							{#if option.value === 'home'}
+								<Home class="size-4 {isActive ? 'text-blue-600' : 'text-gray-600'}" />
+							{:else if option.value === 'classes'}
+								<GraduationCap class="size-4 {isActive ? 'text-blue-600' : 'text-gray-600'}" />
+							{:else if option.value === 'contact'}
+								<Mail class="size-4 {isActive ? 'text-blue-600' : 'text-gray-600'}" />
+							{/if}
+							<span class="flex-1 font-medium {isActive ? 'text-blue-600' : ''}"
+								>{option.label}</span
+							>
+							{#if isActive}
+								<Check class="size-4 text-blue-600" />
+							{/if}
 						</Select.Item>
 					{/each}
 				</Select.Viewport>

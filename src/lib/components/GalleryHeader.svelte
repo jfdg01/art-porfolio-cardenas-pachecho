@@ -11,8 +11,18 @@
 	import LanguageSelector from './LanguageSelector.svelte';
 	import NavigationSelect from './NavigationSelect.svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let showScrollToTop = $state(false);
+
+	// Check if a path is active
+	function isActivePath(path: string): boolean {
+		if (path === '/') {
+			// For home, only match exact path or artwork detail pages
+			return $page.url.pathname === '/' || $page.url.pathname.startsWith('/artwork/');
+		}
+		return $page.url.pathname === path;
+	}
 
 	function goToHome() {
 		goto('/');
@@ -65,24 +75,39 @@
 				<div class="flex items-center gap-1 lg:gap-2">
 					<button
 						onclick={goToHome}
-						class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+							'/'
+						)
+							? 'text-blue-600 bg-blue-50'
+							: 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}"
 						aria-label="View artworks"
+						aria-current={isActivePath('/') ? 'page' : undefined}
 					>
 						<Home class="size-4" />
 						<span class="hidden lg:inline">{$t('artworks')}</span>
 					</button>
 					<button
 						onclick={goToOnlineClasses}
-						class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+							'/clases-online'
+						)
+							? 'text-blue-600 bg-blue-50'
+							: 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}"
 						aria-label="Online classes"
+						aria-current={isActivePath('/clases-online') ? 'page' : undefined}
 					>
 						<GraduationCap class="size-4" />
 						<span class="hidden lg:inline">{$t('onlineClassesPage')}</span>
 					</button>
 					<button
 						onclick={goToContact}
-						class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px]"
+						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+							'/contact'
+						)
+							? 'text-blue-600 bg-blue-50'
+							: 'text-gray-700 hover:text-blue-600 hover:bg-blue-50'}"
 						aria-label="Contact information"
+						aria-current={isActivePath('/contact') ? 'page' : undefined}
 					>
 						<Mail class="size-4" />
 						<span class="hidden lg:inline">{$t('contact')}</span>
