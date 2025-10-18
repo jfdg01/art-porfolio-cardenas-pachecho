@@ -13,5 +13,9 @@ export default defineConfig({
 				artwork: new URLSearchParams('w=400;700&format=webp;jpg')
 			}
 		})
-	]
+	],
+	server: {
+		host: true, // Listen on all addresses including LAN
+		port: 5173
+	}
 });

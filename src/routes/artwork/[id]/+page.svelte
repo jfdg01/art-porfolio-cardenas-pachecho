@@ -8,10 +8,12 @@
 	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import Img from '@zerodevx/svelte-img';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
+	import BiggerPicture from 'bigger-picture';
 
 	// Import all images with optimization for detail pages
 	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
@@ -35,6 +37,9 @@
 
 	// Get gallery state for calculating next/prev
 	const galleryState = getGalleryState();
+
+	// BiggerPicture lightbox instance
+	let bp: ReturnType<typeof BiggerPicture> | null = null;
 
 	// Calculate next/prev based on current filter state
 	let navigation = $derived.by(() => {
@@ -106,6 +111,33 @@
 		}
 	}
 
+	function openLightbox() {
+		if (!bp) return;
+
+		bp.open({
+			items: artwork.images.map((image) => {
+				// Extract the filename without extension to look up in imageMap
+				const imageName = image.src.split('/').pop()?.replace('.webp', '');
+				const optimizedImage = imageName ? imageMap[imageName] : undefined;
+
+				// If we have an optimized image, extract the fallback URL from it
+				// The optimizedImage.img.src contains the actual built URL
+				// @ts-expect-error - optimized image structure from vite-imagetools
+				const imgUrl = optimizedImage?.img?.src || image.src;
+
+				return {
+					img: imgUrl,
+					alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
+					// @ts-expect-error - optimized image structure from vite-imagetools
+					width: optimizedImage?.img?.w || 1920,
+					// @ts-expect-error - optimized image structure from vite-imagetools
+					height: optimizedImage?.img?.h || 1080
+				};
+			}),
+			position: currentImageIndex
+		});
+	}
+
 	// Reset image index and navigation state when artwork changes
 	$effect(() => {
 		if (artwork) {
@@ -128,6 +160,20 @@
 				mainElement.focus();
 			}
 		}
+	});
+
+	// Initialize BiggerPicture lightbox
+	onMount(() => {
+		bp = BiggerPicture({
+			target: document.body
+		});
+
+		// Cleanup on unmount
+		return () => {
+			if (bp) {
+				bp.close();
+			}
+		};
 	});
 </script>
 
@@ -176,22 +222,31 @@
 								{@const imageSrc = currentImage.src}
 								{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
 								{@const optimizedImage = imageName ? imageMap[imageName] : undefined}
-								{#if optimizedImage}
-									<Img
-										src={optimizedImage}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										sizes="(max-width: 320px) 254px, (max-width: 425px) 360px, (max-width: 768px) 670px, (max-width: 1024px) 423px, (max-width: 1440px) 551px, 551px"
-									/>
-								{:else}
-									<!-- Fallback for images not found in the mapping -->
-									<img
-										src={imageSrc}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										loading="lazy"
-									/>
-								{/if}
+								<div
+									onclick={openLightbox}
+									onkeydown={(e) => e.key === 'Enter' && openLightbox()}
+									class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+									role="button"
+									tabindex="0"
+									aria-label={$t('expandImage', { default: 'Expand image' })}
+								>
+									{#if optimizedImage}
+										<Img
+											src={optimizedImage}
+											alt={$t('artworkAlt', { values: { title: artwork.title } })}
+											class="w-full h-auto rounded-lg shadow-md"
+											sizes="(max-width: 320px) 254px, (max-width: 425px) 360px, (max-width: 768px) 670px, (max-width: 1024px) 423px, (max-width: 1440px) 551px, 551px"
+										/>
+									{:else}
+										<!-- Fallback for images not found in the mapping -->
+										<img
+											src={imageSrc}
+											alt={$t('artworkAlt', { values: { title: artwork.title } })}
+											class="w-full h-auto rounded-lg shadow-md"
+											loading="lazy"
+										/>
+									{/if}
+								</div>
 							{:else}
 								<div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
 									<p class="text-gray-500">No image available</p>

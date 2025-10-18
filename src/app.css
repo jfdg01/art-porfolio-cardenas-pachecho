@@ -1,6 +1,7 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+@import 'bigger-picture/css';
 
 @theme {
 	--breakpoint-xxs: 320px;
