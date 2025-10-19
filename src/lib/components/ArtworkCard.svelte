@@ -61,7 +61,7 @@
 		aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
 	>
 		<!-- Image -->
-		<div class="relative">
+		<div class="relative overflow-hidden">
 			{#if artwork.images && artwork.images.length > 0}
 				{@const imageSrc = artwork.images[0].src}
 				{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
