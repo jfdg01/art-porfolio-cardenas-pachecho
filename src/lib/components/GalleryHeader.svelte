@@ -10,7 +10,6 @@
 	import { t } from 'svelte-i18n';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import NavigationSelect from './NavigationSelect.svelte';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	let showScrollToTop = $state(false);
@@ -22,18 +21,6 @@
 			return $page.url.pathname === '/' || $page.url.pathname.startsWith('/artwork/');
 		}
 		return $page.url.pathname === path;
-	}
-
-	function goToHome() {
-		goto('/');
-	}
-
-	function goToContact() {
-		goto('/contact');
-	}
-
-	function goToOnlineClasses() {
-		goto('/clases-online');
 	}
 
 	// Scroll to top functionality
@@ -60,21 +47,23 @@
 		<div class="flex items-center justify-between gap-3 py-3 md:gap-4 md:py-4 lg:gap-6 lg:py-6">
 			<!-- Logo/Title - Mobile First -->
 			<div class="shrink-0">
-				<button
-					onclick={goToHome}
-					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1"
+				<a
+					href="/"
+					data-sveltekit-preload-data="hover"
+					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
 					aria-label="Go to home page"
 				>
 					Carmen Cárdenas Pacheco
-				</button>
+				</a>
 			</div>
 
 			<!-- Desktop Navigation and Controls -->
 			<div class="hidden md:flex items-center gap-3 lg:gap-4">
 				<!-- Navigation Buttons - Desktop -->
 				<div class="flex items-center gap-1 lg:gap-2">
-					<button
-						onclick={goToHome}
+					<a
+						href="/"
+						data-sveltekit-preload-data="hover"
 						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/'
 						)
@@ -85,9 +74,10 @@
 					>
 						<Home class="size-4" />
 						<span class="hidden lg:inline">{$t('artworks')}</span>
-					</button>
-					<button
-						onclick={goToOnlineClasses}
+					</a>
+					<a
+						href="/clases-online"
+						data-sveltekit-preload-data="hover"
 						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/clases-online'
 						)
@@ -98,9 +88,10 @@
 					>
 						<GraduationCap class="size-4" />
 						<span class="hidden lg:inline">{$t('onlineClassesPage')}</span>
-					</button>
-					<button
-						onclick={goToContact}
+					</a>
+					<a
+						href="/contact"
+						data-sveltekit-preload-data="hover"
 						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/contact'
 						)
@@ -111,7 +102,7 @@
 					>
 						<Mail class="size-4" />
 						<span class="hidden lg:inline">{$t('contact')}</span>
-					</button>
+					</a>
 				</div>
 
 				<!-- Language Selector - Desktop -->

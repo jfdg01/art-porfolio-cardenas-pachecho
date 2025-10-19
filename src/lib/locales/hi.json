@@ -4,6 +4,7 @@
 	"artistName": "Carmen Cárdenas Pacheco",
 	"artworkAlt": "{title}",
 	"artworks": "कलाकृतियां",
+	"available": "उपलब्ध",
 	"availableInfo": "यह टुकड़ा खरीदारी के लिए उपलब्ध है। शिपिंग, भुगतान और डिलीवरी के बारे में अधिक जानकारी के लिए हमसे संपर्क करें।",
 	"cancel": "रद्द करें",
 	"categories": {
@@ -61,6 +62,7 @@
 	"onlineClassesPage": "ऑनलाइन कक्षाएं",
 	"openFilterMenu": "फ़िल्टर मेनू खोलें",
 	"openNavigationMenu": "नेविगेशन मेनू खोलें",
+	"options": "विकल्प",
 	"phoneNumber": "+34628672368",
 	"phoneNumberLabel": "फोन नंबर",
 	"priceLabel": "मूल्य",
@@ -71,6 +73,7 @@
 	"sendingMessage": "संदेश भेजा जा रहा है...",
 	"showAllCategories": "सभी श्रेणियां दिखाएं",
 	"showingCount": "{count} कलाकृतियां दिखाई जा रही हैं",
+	"showOnlyAvailable": "केवल उपलब्ध दिखाएं",
 	"sold": "बेचा गया",
 	"soldHeading": "यह कलाकृति बेच दी गई है",
 	"soldInfo": "यह कलाकृति खरीदारी के लिए उपलब्ध नहीं है, लेकिन यदि आप रुचि रखते हैं तो आप मुझसे संपर्क करके इसी तरह की कलाकृति का आदेश दे सकते हैं",

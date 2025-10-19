@@ -4,6 +4,7 @@
 	"artistName": "Carmen Cárdenas Pacheco",
 	"artworkAlt": "{title}",
 	"artworks": "Kunstwerke",
+	"available": "Verfügbar",
 	"availableInfo": "Dieses Stück ist zum Kauf verfügbar. Kontaktieren Sie uns für Informationen zu Versand, Zahlung und Lieferung.",
 	"cancel": "Abbrechen",
 	"categories": {
@@ -61,6 +62,7 @@
 	"onlineClassesPage": "Online-Kurse",
 	"openFilterMenu": "Filtermenü öffnen",
 	"openNavigationMenu": "Navigationsmenü öffnen",
+	"options": "Optionen",
 	"phoneNumber": "+34628672368",
 	"phoneNumberLabel": "Telefonnummer",
 	"priceLabel": "Preis",
@@ -71,6 +73,7 @@
 	"sendingMessage": "Nachricht wird gesendet...",
 	"showAllCategories": "Alle Kategorien anzeigen",
 	"showingCount": "Zeige {count, plural, one {# Kunstwerk} other {# Kunstwerke}}",
+	"showOnlyAvailable": "Nur verfügbare anzeigen",
 	"sold": "Verkauft",
 	"soldHeading": "Dieses Kunstwerk wurde verkauft",
 	"soldInfo": "Dieses Kunstwerk ist nicht zum Kauf verfügbar, aber wenn Sie interessiert sind, können Sie mich kontaktieren und ein ähnliches Stück in Auftrag geben",

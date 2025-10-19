@@ -4,6 +4,7 @@
 	"artistName": "Carmen Cárdenas Pacheco",
 	"artworkAlt": "{title}",
 	"artworks": "יצירות אמנות",
+	"available": "זמין",
 	"availableInfo": "יצירה זו זמינה לרכישה. צור קשר לקבלת מידע נוסף על משלוח, תשלום ומסירה.",
 	"cancel": "ביטול",
 	"categories": {
@@ -61,6 +62,7 @@
 	"onlineClassesPage": "שיעורים אונליין",
 	"openFilterMenu": "פתח תפריט מסננים",
 	"openNavigationMenu": "פתח תפריט ניווט",
+	"options": "אפשרויות",
 	"phoneNumber": "+34628672368",
 	"phoneNumberLabel": "מספר טלפון",
 	"priceLabel": "מחיר",
@@ -71,6 +73,7 @@
 	"sendingMessage": "שליחת הודעה...",
 	"showAllCategories": "הצג את כל הקטגוריות",
 	"showingCount": "מציג {count} יצירות אמנות",
+	"showOnlyAvailable": "הצג רק זמינים",
 	"sold": "נמכר",
 	"soldHeading": "יצירה זו נמכרה",
 	"soldInfo": "יצירה זו אינה זמינה לרכישה, אך אם אתה מעוניין אתה יכול ליצור איתי קשר ולהזמין יצירה דומה",

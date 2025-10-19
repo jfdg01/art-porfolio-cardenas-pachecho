@@ -4,6 +4,7 @@
 	"artistName": "Carmen Cárdenas Pacheco",
 	"artworkAlt": "{title}",
 	"artworks": "作品",
+	"available": "可用",
 	"availableInfo": "这件作品可供购买。联系我们了解更多关于运输、付款和交付的信息。",
 	"cancel": "取消",
 	"categories": {
@@ -61,6 +62,7 @@
 	"onlineClassesPage": "在线课程",
 	"openFilterMenu": "打开筛选菜单",
 	"openNavigationMenu": "打开导航菜单",
+	"options": "选项",
 	"phoneNumber": "+34628672368",
 	"phoneNumberLabel": "电话号码",
 	"priceLabel": "价格",
@@ -71,6 +73,7 @@
 	"sendingMessage": "正在发送消息...",
 	"showAllCategories": "显示所有类别",
 	"showingCount": "显示 {count} 件艺术品",
+	"showOnlyAvailable": "仅显示可用",
 	"sold": "已售",
 	"soldHeading": "这件艺术品已售出",
 	"soldInfo": "这件艺术品不可购买，但如果您感兴趣，可以联系我定制类似的作品",

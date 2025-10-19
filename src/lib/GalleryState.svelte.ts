@@ -29,6 +29,7 @@ export class GalleryStateClass {
 	artworks = $state<Artwork[]>(artworkData);
 	selectedCategories = $state<string[]>([]);
 	sortBy = $state<SortOption>('random');
+	showOnlyAvailable = $state<boolean>(false);
 
 	// Getter methods for computed values
 	get filteredArtworks() {
@@ -44,6 +45,11 @@ export class GalleryStateClass {
 				// Check if artwork has ANY of the selected categories
 				return artworkCategories.some((cat) => this.selectedCategories.includes(cat));
 			});
+		}
+
+		// Then apply availability filtering
+		if (this.showOnlyAvailable) {
+			filtered = filtered.filter((artwork) => artwork.isAvailable);
 		}
 
 		// Then apply sorting
@@ -150,8 +156,13 @@ export class GalleryStateClass {
 		this.sortBy = sortBy;
 	}
 
+	setShowOnlyAvailable(showOnlyAvailable: boolean) {
+		this.showOnlyAvailable = showOnlyAvailable;
+	}
+
 	clearFilters() {
 		this.selectedCategories = [];
+		this.showOnlyAvailable = false;
 	}
 
 	// Legacy getter for backward compatibility (if needed)
