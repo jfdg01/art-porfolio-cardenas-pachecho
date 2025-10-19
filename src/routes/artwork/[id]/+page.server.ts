@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	// Generate SEO metadata on the server
 	const seo = {
 		title: `${artwork.title} - Carmen Cárdenas Pacheco`,
-		description: `View ${artwork.title} by Carmen Cárdenas Pacheco. ${artwork.description || 'Explore this beautiful artwork in the gallery.'}`,
+		description: `View ${artwork.title} by Carmen Cárdenas Pacheco. ${artwork.description || 'Explore this beautiful artwork in the portfolio.'}`,
 		image:
 			typeof artwork.images[0] === 'string'
 				? artwork.images[0]

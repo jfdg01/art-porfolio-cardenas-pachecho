@@ -4,7 +4,7 @@ export const load: PageServerLoad = async ({ url }) => {
 	const seo = {
 		title: 'Contacto - Carmen Cárdenas Pacheco',
 		description:
-			'Contacta con Carmen Cárdenas Pacheco para consultas sobre su obra artística, compras y colaboraciones.',
+			'Contacta con Carmen Cárdenas Pacheco para consultas sobre su portfolio artístico, compras y colaboraciones.',
 		image: '/web-app-manifest-512x512.png',
 		type: 'website',
 		url: url.href,
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			'@type': 'ContactPage',
 			name: 'Contacto - Carmen Cárdenas Pacheco',
 			description:
-				'Contacta con Carmen Cárdenas Pacheco para consultas sobre su obra artística, compras y colaboraciones.',
+				'Contacta con Carmen Cárdenas Pacheco para consultas sobre su portfolio artístico, compras y colaboraciones.',
 			url: url.href,
 			mainEntity: {
 				'@type': 'Person',

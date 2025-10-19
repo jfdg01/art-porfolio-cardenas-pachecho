@@ -2,9 +2,9 @@ import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
 	const seo = {
-		title: 'Carmen Cárdenas Pacheco - Galería de Arte',
+		title: 'Carmen Cárdenas Pacheco - Portfolio de Arte',
 		description:
-			'Bienvenid@ a la galería de arte de Carmen Cárdenas Pacheco. Ponte en contacto conmigo y mis clases online.',
+			'Bienvenid@ al portfolio de arte de Carmen Cárdenas Pacheco. Ponte en contacto conmigo y mis clases online.',
 		image: '/web-app-manifest-512x512.png',
 		type: 'website',
 		url: url.href,
@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			'@context': 'https://schema.org',
 			'@type': 'WebSite',
 			name: 'Carmen Cárdenas Pacheco',
-			description: 'Galería de arte de Carmen Cárdenas Pacheco',
+			description: 'Portfolio de arte de Carmen Cárdenas Pacheco',
 			url: 'https://cardenaspacheco.es',
 			author: {
 				'@type': 'Person',
@@ -23,15 +23,10 @@ export const load: PageServerLoad = async ({ url }) => {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco'
 			},
-			potentialAction: {
-				'@type': 'SearchAction',
-				target: 'https://cardenaspacheco.es/?q={search_term_string}',
-				'query-input': 'required name=search_term_string'
-			},
 			mainEntity: {
 				'@type': 'ItemList',
-				name: 'Artworks by Carmen Cárdenas Pacheco',
-				description: 'Collection of contemporary artworks'
+				name: 'Portfolio by Carmen Cárdenas Pacheco',
+				description: 'Collection of contemporary art'
 			}
 		}
 	};
