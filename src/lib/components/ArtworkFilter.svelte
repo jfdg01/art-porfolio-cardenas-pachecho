@@ -191,17 +191,27 @@
 					</div>
 				</div>
 				<div class="flex items-center gap-2">
-					<button
-						onclick={(e) => {
-							e.stopPropagation();
-							clearFilters();
-						}}
-						disabled={galleryState.selectedCategories.length === 0}
-						class="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none"
-						aria-label={$t('clearFilters')}
-					>
-						<X class="size-4" />
-					</button>
+					{#if galleryState.selectedCategories.length > 0}
+						<div
+							role="button"
+							tabindex="0"
+							onclick={(e) => {
+								e.stopPropagation();
+								clearFilters();
+							}}
+							onkeydown={(e) => {
+								if (e.key === 'Enter' || e.key === ' ') {
+									e.preventDefault();
+									e.stopPropagation();
+									clearFilters();
+								}
+							}}
+							class="p-1 text-red-600 hover:text-red-700 hover:bg-red-50 rounded transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-1"
+							aria-label={$t('clearFilters')}
+						>
+							<X class="size-4" />
+						</div>
+					{/if}
 					<div class="text-gray-400">
 						<svg
 							class="size-4 transform transition-transform duration-200 data-[state=open]:rotate-180"
