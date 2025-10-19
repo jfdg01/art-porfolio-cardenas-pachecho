@@ -53,7 +53,7 @@
 <!-- Single seamless card with image and title -->
 <div class="artwork-container">
 	<div
-		class="artwork-card group cursor-pointer rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 bg-white"
+		class="artwork-card group cursor-pointer rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-white"
 		onclick={handleClick}
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -98,11 +98,22 @@
 			</div>
 		</div>
 
-		<!-- Title - integrated into the same card -->
+		<!-- Title with availability indicator -->
 		<div class="px-3 py-2 border-t border-gray-200/50">
-			<h3 class="font-semibold text-gray-900 text-sm leading-tight text-center">
-				{artwork.title}
-			</h3>
+			<div class="flex items-center justify-center gap-2">
+				<h3 class="font-semibold text-gray-900 text-sm leading-tight text-center">
+					{artwork.title}
+				</h3>
+				{#if artwork.isAvailable}
+					<span
+						class="relative w-3 h-3 bg-green-600 rounded-full flex-shrink-0 animate-pulse"
+						aria-label={$t('available', { default: 'Available' })}
+					>
+						<!-- Animated glow ring -->
+						<span class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-90"></span>
+					</span>
+				{/if}
+			</div>
 		</div>
 	</div>
 </div>

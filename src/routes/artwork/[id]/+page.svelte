@@ -316,7 +316,7 @@
 						</h1>
 					</div>
 					<!-- Price -->
-					{#if artwork.price && artwork.currency}
+					{#if artwork.price}
 						<div class="flex items-start gap-3">
 							<Euro class="w-5 h-5 text-gray-400 mt-1" />
 							<div class="flex-1">
@@ -325,7 +325,7 @@
 								</p>
 								<p class="text-lg md:text-2xl font-bold text-gray-900">
 									{artwork.price}
-									{artwork.currency}
+									{artwork.currency || 'EUR'}
 								</p>
 							</div>
 						</div>

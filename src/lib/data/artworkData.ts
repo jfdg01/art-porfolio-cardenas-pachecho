@@ -23,7 +23,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['alcon-collage'],
 		category: ['pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 350
 	},
 	{
 		id: 'apunte-abstracto-1',
@@ -39,7 +40,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-abstracto-2'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 30
 	},
 	{
 		id: 'apunte-abstracto-3',
@@ -47,7 +49,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-abstracto-3'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 30
 	},
 	{
 		id: 'apunte-acrilico-1',
@@ -55,7 +58,9 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-acrilico-1'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 120
+
 	},
 	{
 		id: 'apunte-acrilico-2',
@@ -63,7 +68,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-acrilico-2'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 120
 	},
 	{
 		id: 'apunte-acrilico-3',
@@ -79,7 +85,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-acrilico-4'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 120
 	},
 	{
 		id: 'apunte-acuarela-paloma',
@@ -143,7 +150,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-paisaje-collage-1'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 40
 	},
 	{
 		id: 'apunte-paisaje-collage-2',
@@ -151,7 +159,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['apunte-paisaje-collage-2'],
 		category: ['apunte', 'pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 40
 	},
 	{
 		id: 'belong',
@@ -183,7 +192,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['dama'],
 		category: ['dibujo'],
-		isAvailable: false
+		isAvailable: true,
+		price: 350
 	},
 	{
 		id: 'estudio-anatomia',
@@ -191,7 +201,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['estudio-anatomia'],
 		category: ['dibujo', 'apunte'],
-		isAvailable: false
+		isAvailable: true,
+		price: 350
 	},
 	{
 		id: 'estudio-retrato-1',
@@ -199,7 +210,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['estudio-retrato-1'],
 		category: ['acuarela', 'apunte'],
-		isAvailable: false
+		isAvailable: true,
+		price: 120
 	},
 	{
 		id: 'estudio-retrato-2',
@@ -207,7 +219,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['estudio-retrato-2'],
 		category: ['acuarela', 'apunte'],
-		isAvailable: false
+		isAvailable: true,
+		price: 120
 	},
 	{
 		id: 'grafito-catedral',
@@ -223,7 +236,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['hombre-con-barba'],
 		category: ['acuarela'],
-		isAvailable: false
+		isAvailable: true,
+		price: 370
 	},
 	{
 		id: 'inherente',
@@ -231,7 +245,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['inherente'],
 		category: ['dibujo'],
-		isAvailable: false
+		isAvailable: true,
+		price: 470
 	},
 	{
 		id: 'lechera',
@@ -271,7 +286,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['provecto'],
 		category: ['acuarela'],
-		isAvailable: false
+		isAvailable: true,
+		price: 370
 	},
 	{
 		id: 'retrato-del-fayum',
@@ -279,7 +295,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['retrato-del-fayum'],
 		category: ['grabado'],
-		isAvailable: false
+		isAvailable: true,
+		price: 60
 	},
 	{
 		id: 'retrato-sanguina',
@@ -319,7 +336,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['theophany'],
 		category: ['acuarela'],
-		isAvailable: false
+		isAvailable: true,
+		price: 430
 	},
 	{
 		id: 'time-after-time',
@@ -335,7 +353,8 @@ export const artworkData: Artwork[] = [
 		description: '', // TODO: Add description
 		images: artworkImages['tragaluz'],
 		category: ['pintura'],
-		isAvailable: false
+		isAvailable: true,
+		price: 350
 	},
 	{
 		id: 'vetusto',
