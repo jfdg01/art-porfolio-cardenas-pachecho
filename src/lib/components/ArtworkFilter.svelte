@@ -71,20 +71,19 @@ Follows mobile-first design system with glass morphism and gradient accents
 		<!-- Availability Toggle - Always Visible (Mobile-First, Touch-Friendly) -->
 		<button
 			onclick={toggleAvailability}
-			class="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 min-h-[44px] montserrat-semibold {galleryState.showOnlyAvailable
+			class="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 min-h-[44px] montserrat-semibold {galleryState.showOnlyAvailable
 				? 'bg-gradient-to-r from-green-500 to-emerald-500 text-white border-transparent shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus-visible:ring-green-500'
 				: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400 focus-visible:ring-blue-500'} md:text-base md:gap-3"
 			aria-label={$t('showOnlyAvailable')}
 		>
 			<span class="text-base md:text-lg">{galleryState.showOnlyAvailable ? '✓' : '○'}</span>
-			<span class="hidden xs:inline">{$t('showOnlyAvailable')}</span>
-			<span class="xs:hidden">{$t('available')}</span>
+			<span>{$t('showOnlyAvailable')}</span>
 		</button>
 
 		<!-- Options Toggle Button (Touch-Friendly) -->
 		<button
 			onclick={() => (optionsOpen = !optionsOpen)}
-			class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] montserrat-semibold {optionsOpen
+			class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] montserrat-semibold {optionsOpen
 				? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md'
 				: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'} md:text-base md:px-6"
 			aria-label={$t('options')}
@@ -106,7 +105,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 				<!-- Filter Button -->
 				<button
 					onclick={() => (filterOpen = !filterOpen)}
-					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {filterOpen
+					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {filterOpen
 						? 'bg-blue-50 text-blue-900 border-blue-300'
 						: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} md:text-base"
 					aria-label={$t('filterByCategory')}
@@ -173,7 +172,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 				<!-- Sort Button -->
 				<button
 					onclick={() => (sortOpen = !sortOpen)}
-					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {sortOpen
+					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {sortOpen
 						? 'bg-blue-50 text-blue-900 border-blue-300'
 						: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} md:text-base"
 					aria-label={$t('sort.label')}
