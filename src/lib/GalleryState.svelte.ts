@@ -51,18 +51,15 @@ export class GalleryStateClass {
 	}
 
 	/**
-	 * Generate a seed based on current time (truncated to the minute)
-	 * This ensures the random order changes every minute but stays consistent within that minute
+	 * Generate a seed based on current date (truncated to the day)
+	 * This ensures the random order stays consistent throughout the day
+	 * and changes daily for variety
 	 */
-	private getMinuteBasedSeed(): number {
+	private getDailyBasedSeed(): number {
 		const now = new SvelteDate();
-		// Combine year, month, day, hour, minute into a single number
-		const seed =
-			now.getFullYear() * 100000000 +
-			(now.getMonth() + 1) * 1000000 +
-			now.getDate() * 10000 +
-			now.getHours() * 100 +
-			now.getMinutes();
+		// Combine year, month, day into a single number
+		// This creates a stable seed that only changes once per day
+		const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
 		return seed;
 	}
 
@@ -98,10 +95,10 @@ export class GalleryStateClass {
 				});
 
 			case 'random': {
-				// Dynamic seed that changes every minute
-				let seed = this.getMinuteBasedSeed();
+				// Stable daily seed for consistent ordering throughout the day
+				let seed = this.getDailyBasedSeed();
 				return sorted.sort(() => {
-					// Seeded pseudo-random using current minute
+					// Seeded pseudo-random using daily seed
 					const hash = (seed * 9301 + 49297) % 233280;
 					seed = hash;
 					return hash / 233280 - 0.5;
