@@ -16,7 +16,7 @@
 export const imageImportsDetail = import.meta.glob('$lib/assets/images/*.webp', {
 	import: 'default',
 	eager: true,
-	query: { as: 'deatail' }
+	query: { as: 'detail' }
 });
 
 export const imageImportsGallery = import.meta.glob('$lib/assets/images/*.webp', {

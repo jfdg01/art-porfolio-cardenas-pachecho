@@ -14,20 +14,7 @@
 	import Img from '@zerodevx/svelte-img';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import BiggerPicture from 'bigger-picture';
-
-	// Import all images with optimization for detail pages
-	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
-		import: 'default',
-		eager: true,
-		query: { format: 'jpg;webp', as: 'run' }
-	});
-
-	// Create a mapping from filename to optimized image
-	const imageMap: Record<string, unknown> = {};
-	Object.entries(imageImports).forEach(([path, image]) => {
-		const filename = path.split('/').pop()?.replace('.webp', '') || '';
-		imageMap[filename] = image;
-	});
+	import { imageMapDetail } from '$lib/data/imageImports';
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -116,9 +103,9 @@
 
 		bp.open({
 			items: artwork.images.map((image) => {
-				// Extract the filename without extension to look up in imageMap
+				// Extract the filename without extension to look up in imageMapDetail
 				const imageName = image.src.split('/').pop()?.replace('.webp', '');
-				const optimizedImage = imageName ? imageMap[imageName] : undefined;
+				const optimizedImage = imageName ? imageMapDetail[imageName] : undefined;
 
 				// If we have an optimized image, extract the fallback URL from it
 				// The optimizedImage.img.src contains the actual built URL
@@ -226,7 +213,7 @@
 						{#if currentImage && currentImage.src}
 							{@const imageSrc = currentImage.src}
 							{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-							{@const optimizedImage = imageName ? imageMap[imageName] : undefined}
+							{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
 							<div
 								onclick={openLightbox}
 								onkeydown={(e) => e.key === 'Enter' && openLightbox()}
@@ -240,7 +227,7 @@
 										src={optimizedImage}
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
 										class="w-full h-auto rounded-lg shadow-md"
-										sizes="(max-width: 320px) 254px, (max-width: 425px) 360px, (max-width: 768px) 670px, (max-width: 1024px) 423px, (max-width: 1440px) 551px, 551px"
+										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
 									/>
 								{:else}
 									<!-- Fallback for images not found in the mapping -->
@@ -249,6 +236,7 @@
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
 										class="w-full h-auto rounded-lg shadow-md"
 										loading="lazy"
+										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
 									/>
 								{/if}
 							</div>

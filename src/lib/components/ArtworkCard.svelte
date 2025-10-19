@@ -11,20 +11,7 @@
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import Img from '@zerodevx/svelte-img';
-
-	// Import all images with optimization for gallery cards
-	const imageImports = import.meta.glob('$lib/assets/images/*.webp', {
-		import: 'default',
-		eager: true,
-		query: { w: '200;300', format: 'webp;jpg', as: 'gallery' }
-	});
-
-	// Create a mapping from filename to optimized image
-	const imageMap: Record<string, unknown> = {};
-	Object.entries(imageImports).forEach(([path, image]) => {
-		const filename = path.split('/').pop()?.replace('.webp', '') || '';
-		imageMap[filename] = image;
-	});
+	import { imageMapGallery } from '$lib/data/imageImports';
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
@@ -65,13 +52,13 @@
 			{#if artwork.images && artwork.images.length > 0}
 				{@const imageSrc = artwork.images[0].src}
 				{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-				{@const optimizedImage = imageName ? imageMap[imageName] : undefined}
+				{@const optimizedImage = imageName ? imageMapGallery[imageName] : undefined}
 				{#if optimizedImage}
 					<Img
 						src={optimizedImage}
 						alt={$t('artworkAlt', { values: { title: artwork.title } })}
 						class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
-						sizes="(max-width: 320px) 288px, (max-width: 768px) 192px, (max-width: 1024px) 187px, (max-width: 1440px) 288px, 300px"
+						sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
 					/>
 				{:else}
 					<!-- Fallback for images not found in the mapping -->
