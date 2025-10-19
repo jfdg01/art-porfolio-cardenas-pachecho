@@ -279,7 +279,7 @@
 
 						{#if !artwork.isAvailable}
 							<div
-								class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold"
+								class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
 							>
 								{$t('sold')}
 							</div>
@@ -320,10 +320,10 @@
 						<div class="flex items-start gap-3">
 							<Euro class="w-5 h-5 text-gray-400 mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium text-gray-700 mb-1">
+								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
 									{$t('priceLabel')}
 								</p>
-								<p class="text-lg md:text-2xl font-bold text-gray-900">
+								<p class="text-lg md:text-2xl font-bold montserrat-bold text-gray-900">
 									{artwork.price}
 									{artwork.currency || 'EUR'}
 								</p>
@@ -336,10 +336,10 @@
 						<div class="flex items-start gap-3">
 							<Ruler class="w-5 h-5 text-gray-400 mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium text-gray-700 mb-1">
+								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
 									{$t('dimensionsLabel')}
 								</p>
-								<p class="text-base md:text-lg font-semibold text-gray-900">
+								<p class="text-base md:text-lg font-semibold montserrat-semibold text-gray-900">
 									{artwork.dimensions.width} × {artwork.dimensions.height}
 									{artwork.dimensions.unit}
 								</p>
@@ -352,8 +352,12 @@
 						<div class="flex items-start gap-3">
 							<Calendar class="w-5 h-5 text-gray-400 mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium text-gray-700 mb-1">{$t('yearLabel')}</p>
-								<p class="text-base md:text-lg font-semibold text-gray-900">{artwork.year}</p>
+								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
+									{$t('yearLabel')}
+								</p>
+								<p class="text-base md:text-lg font-semibold montserrat-semibold text-gray-900">
+									{artwork.year}
+								</p>
 							</div>
 						</div>
 					{/if}
@@ -362,19 +366,21 @@
 					<div class="flex items-start gap-3">
 						<Tag class="w-5 h-5 text-gray-400 mt-1" />
 						<div class="flex-1">
-							<p class="text-xs md:text-sm font-medium text-gray-700 mb-2">{$t('tagsLabel')}</p>
+							<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-2">
+								{$t('tagsLabel')}
+							</p>
 							<div class="flex flex-wrap gap-2">
 								{#if Array.isArray(artwork.category)}
 									{#each artwork.category as category (category)}
 										<span
-											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium bg-blue-100 text-blue-800"
+											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-blue-100 text-blue-800"
 										>
 											{$t('categories.' + category)}
 										</span>
 									{/each}
 								{:else}
 									<span
-										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium bg-blue-100 text-blue-800"
+										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-blue-100 text-blue-800"
 									>
 										{$t('categories.' + artwork.category)}
 									</span>
@@ -386,10 +392,12 @@
 					<!-- Description -->
 					{#if artwork.description}
 						<div>
-							<p class="text-xs md:text-sm font-medium text-gray-700 mb-2">
+							<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-2">
 								{$t('descriptionLabel')}
 							</p>
-							<p class="text-sm md:text-base text-gray-600 leading-relaxed max-w-prose">
+							<p
+								class="text-sm md:text-base montserrat-medium text-gray-600 leading-relaxed max-w-prose"
+							>
 								{artwork.description}
 							</p>
 						</div>
@@ -403,14 +411,14 @@
 							>
 								{$t('interestedHeading')}
 							</h3>
-							<p class="text-green-700 text-xs md:text-sm mb-4 leading-relaxed">
+							<p class="text-green-700 text-xs md:text-sm montserrat-medium mb-4 leading-relaxed">
 								{$t('availableInfo')}
 							</p>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 							<a
 								href="/contact"
 								data-sveltekit-preload-data="hover"
-								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 							>
 								{$t('contactArtist')}
 							</a>
@@ -421,7 +429,7 @@
 								<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-blue-800">
 									{$t('soldHeading')}
 								</h3>
-								<p class="text-blue-700 text-xs md:text-sm leading-relaxed">
+								<p class="text-blue-700 text-xs md:text-sm montserrat-medium leading-relaxed">
 									{$t('soldInfo')}
 								</p>
 								<div class="pt-2 flex justify-center">
@@ -429,7 +437,7 @@
 									<a
 										href="/contact"
 										data-sveltekit-preload-data="hover"
-										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 									>
 										{$t('contactArtist')}
 									</a>
@@ -440,7 +448,7 @@
 
 					<!-- Artwork Navigation Controls -->
 					<div class="pt-4 md:pt-6 border-t border-gray-200/50">
-						<div class="flex items-center justify-between gap-3 md:gap-4">
+						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
 							<button
 								onclick={() => navigateToArtwork(navigation.prevId)}
@@ -450,13 +458,13 @@
 								title={$t('previousArtwork')}
 							>
 								<ChevronLeft class="w-5 h-5" />
-								<span class="hidden sm:inline">{$t('previousArtwork')}</span>
+								<span class="hidden lg:inline">{$t('previousArtwork')}</span>
 							</button>
 
 							<!-- Go Back to Gallery Button -->
 							<button
 								onclick={goBack}
-								class="inline-flex items-center justify-center gap-2 px-4 py-3 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
+								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
 								aria-label={$t('goBack')}
 							>
 								<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
@@ -471,7 +479,7 @@
 								aria-label={$t('nextArtwork')}
 								title={$t('nextArtwork')}
 							>
-								<span class="hidden sm:inline">{$t('nextArtwork')}</span>
+								<span class="hidden lg:inline">{$t('nextArtwork')}</span>
 								<ChevronRight class="w-5 h-5" />
 							</button>
 						</div>

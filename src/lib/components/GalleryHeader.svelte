@@ -50,7 +50,7 @@
 				<a
 					href="/"
 					data-sveltekit-preload-data="hover"
-					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
+					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold montserrat-semibold tracking-tight bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent hover:from-blue-600 hover:to-indigo-600 transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
 					aria-label="Go to home page"
 				>
 					Carmen Cárdenas Pacheco
@@ -64,7 +64,7 @@
 					<a
 						href="/"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/'
 						)
 							? 'text-blue-600 bg-blue-50'
@@ -78,7 +78,7 @@
 					<a
 						href="/clases-online"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/clases-online'
 						)
 							? 'text-blue-600 bg-blue-50'
@@ -92,7 +92,7 @@
 					<a
 						href="/contact"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
 							'/contact'
 						)
 							? 'text-blue-600 bg-blue-50'

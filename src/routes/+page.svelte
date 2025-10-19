@@ -24,9 +24,7 @@
 <GalleryHeader />
 
 <!-- Main Content - Mobile First -->
-<main
-	class="mx-auto px-4 md:px-6 lg:px-8 xl:px-12 2xl:px-16 max-w-full md:max-w-2xl lg:max-w-4xl xl:max-w-7xl 2xl:max-w-[1400px] py-6 md:py-8 lg:py-12"
->
+<main class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6 md:py-8 lg:py-12">
 	<!-- Filter Section - Mobile First -->
 	<div class="mb-6 md:mb-8 lg:mb-12">
 		<ArtworkFilter />

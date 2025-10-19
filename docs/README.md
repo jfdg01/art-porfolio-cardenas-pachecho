@@ -12,17 +12,17 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **The Complete Design System Reference**
 
-- ✅ Design tokens (borders, shadows, spacing, icons, z-index)
-- ✅ Complete color palette (primary, semantic, neutral)
-- ✅ Typography system with Montserrat weights
-- ✅ All component patterns (buttons, cards, forms, modals, navigation)
-- ✅ Dropdown/Select components (Bits UI patterns)
-- ✅ Collapsibles, accordions, and toggle groups
-- ✅ Badges, tags, status indicators, and progress bars
-- ✅ Icon containers and loading states
-- ✅ Animation and transition guidelines
-- ✅ Accessibility requirements
-- ✅ Usage decision trees
+- Design tokens (borders, shadows, spacing, icons, z-index)
+- Complete color palette (primary, semantic, neutral)
+- Typography system with Montserrat weights
+- All component patterns (buttons, cards, forms, modals, navigation)
+- Dropdown/Select components (Bits UI patterns)
+- Collapsibles, accordions, and toggle groups
+- Badges, tags, status indicators, and progress bars
+- Icon containers and loading states
+- Animation and transition guidelines
+- Accessibility requirements
+- Usage decision trees
 
 **Use this guide when:**
 
@@ -37,18 +37,18 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **Quick Copy-Paste Reference**
 
-- ✅ Production-ready code snippets for every component
-- ✅ All button variants (6 types)
-- ✅ All card variants (4 types)
-- ✅ Form elements (inputs, textareas, validation)
-- ✅ Dropdowns and selects (complete Bits UI examples)
-- ✅ Collapsibles and toggle groups
-- ✅ Badges, tags, and status indicators
-- ✅ Modals and dialogs
-- ✅ Progress bars and loading states
-- ✅ Icon containers
-- ✅ Navigation patterns
-- ✅ Layout patterns
+- Production-ready code snippets for every component
+- All button variants (6 types)
+- All card variants (4 types)
+- Form elements (inputs, textareas, validation)
+- Dropdowns and selects (complete Bits UI examples)
+- Collapsibles and toggle groups
+- Badges, tags, and status indicators
+- Modals and dialogs
+- Progress bars and loading states
+- Icon containers
+- Navigation patterns
+- Layout patterns
 
 **Use this guide when:**
 
@@ -63,13 +63,13 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **Mobile-First Responsive Design**
 
-- ✅ Breakpoint system (320px → 2560px)
-- ✅ Mobile-first philosophy and principles
-- ✅ Safe padding patterns (prevent horizontal overflow)
-- ✅ Component-specific responsive patterns
-- ✅ Layout patterns (containers, grids)
-- ✅ Typography scaling
-- ✅ Responsive testing checklist
+- Breakpoint system (320px → 2560px)
+- Mobile-first philosophy and principles
+- Safe padding patterns (prevent horizontal overflow)
+- Component-specific responsive patterns
+- Layout patterns (containers, grids)
+- Typography scaling
+- Responsive testing checklist
 
 **Use this guide when:**
 
@@ -86,11 +86,11 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **Modern State Management with Runes**
 
-- ✅ Using classes with Svelte 5 runes
-- ✅ `$state` rune for reactive properties
-- ✅ Context API for shared state
-- ✅ Creating `.svelte.ts` files
-- ✅ Best practices and patterns
+- Using classes with Svelte 5 runes
+- `$state` rune for reactive properties
+- Context API for shared state
+- Creating `.svelte.ts` files
+- Best practices and patterns
 
 **Use this guide when:**
 
@@ -107,10 +107,10 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **Internationalization Best Practices**
 
-- ✅ Using svelte-i18n
-- ✅ Translation key conventions
-- ✅ Automated hygiene scripts
-- ✅ Validation and testing
+- Using svelte-i18n
+- Translation key conventions
+- Automated hygiene scripts
+- Validation and testing
 
 **Use this guide when:**
 
@@ -126,18 +126,18 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **Search Engine Optimization**
 
-- ✅ Meta tags and descriptions
-- ✅ Open Graph and Twitter cards
-- ✅ Structured data
-- ✅ SEO component usage
+- Meta tags and descriptions
+- Open Graph and Twitter cards
+- Structured data
+- SEO component usage
 
 ### 7. [Sitemap Generation](./sitemap-generation.md)
 
 **Dynamic Sitemap Creation**
 
-- ✅ Automated sitemap generation
-- ✅ Including dynamic routes
-- ✅ XML sitemap format
+- Automated sitemap generation
+- Including dynamic routes
+- XML sitemap format
 
 **Use these guides when:**
 
@@ -153,9 +153,9 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 
 **SvelteKit Routing Solutions**
 
-- ✅ Common routing issues and fixes
-- ✅ Navigation patterns
-- ✅ Dynamic routing
+- Common routing issues and fixes
+- Navigation patterns
+- Dynamic routing
 
 **Use this guide when:**
 
@@ -175,14 +175,14 @@ This directory contains comprehensive documentation for the Portal Artistas desi
 4. **Add State** (if needed): Use [svelte5classesparadigm.md](./svelte5classesparadigm.md) for state management
 5. **Add Translations**: Follow [i18n-hygiene-guide.md](./i18n-hygiene-guide.md) for i18n
 6. **Verify Accessibility**:
-   - ✅ Touch targets ≥ 44px
-   - ✅ Focus states visible
-   - ✅ ARIA labels present
-   - ✅ Keyboard navigation works
+   - Touch targets ≥ 44px
+   - Focus states visible
+   - ARIA labels present
+   - Keyboard navigation works
 7. **Test Responsive**:
-   - ✅ 320px, 768px, 1024px, 1920px
-   - ✅ No horizontal scroll
-   - ✅ Text readable at all sizes
+   - 320px, 768px, 1024px, 1920px
+   - No horizontal scroll
+   - Text readable at all sizes
 
 ---
 

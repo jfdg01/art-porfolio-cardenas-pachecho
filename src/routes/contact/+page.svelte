@@ -140,7 +140,9 @@
 		>
 			{$t('contactPage')}
 		</h1>
-		<p class="text-sm sm:text-base lg:text-lg font-medium text-gray-600 max-w-[70ch] mx-auto">
+		<p
+			class="text-sm sm:text-base lg:text-lg font-medium montserrat-medium text-gray-600 max-w-[70ch] mx-auto"
+		>
 			{$t('contactDescription')}
 		</p>
 	</div>
@@ -153,9 +155,9 @@
 
 		<!-- Contact Form -->
 		<div
-			class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 sm:p-8 w-full"
+			class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 md:p-8 w-full"
 		>
-			<h2 class="text-xl font-semibold montserrat-semibold text-gray-900 mb-6">
+			<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-gray-900 mb-6">
 				{$t('getInTouch')}
 			</h2>
 

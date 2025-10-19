@@ -47,7 +47,7 @@
 			{$t('comingSoon')}
 		</h2>
 		<p
-			class="text-lg sm:text-xl lg:text-2xl font-medium text-gray-600 leading-relaxed max-w-[70ch] mx-auto mb-8 sm:mb-12"
+			class="text-lg sm:text-xl lg:text-2xl font-medium montserrat-medium text-gray-600 leading-relaxed max-w-[70ch] mx-auto mb-8 sm:mb-12"
 		>
 			{$t('onlineClassesInterest')}
 		</p>

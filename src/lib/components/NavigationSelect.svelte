@@ -86,7 +86,9 @@
 				class="absolute right-0 mt-2 w-56 rounded-lg border border-gray-200 bg-white/95 backdrop-blur-md shadow-lg z-50 max-h-80 overflow-y-auto p-2"
 				sideOffset={8}
 			>
-				<div class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 px-2 py-1">
+				<div
+					class="text-xs font-semibold montserrat-semibold text-gray-500 uppercase tracking-wide mb-2 px-2 py-1"
+				>
 					{$t('navigation')}
 				</div>
 
@@ -95,7 +97,7 @@
 						{@const isActive = isActivePath(option.path)}
 						<Select.Item
 							value={option.value}
-							class="flex items-center gap-3 px-3 py-2.5 text-sm text-left rounded cursor-pointer focus:outline-none {isActive
+							class="flex items-center gap-3 px-3 py-2.5 text-sm montserrat-medium text-left rounded cursor-pointer focus:outline-none {isActive
 								? 'bg-blue-50 hover:bg-blue-100 data-[highlighted]:bg-blue-100'
 								: 'hover:bg-gray-50 data-[highlighted]:bg-gray-50 focus:bg-gray-50'}"
 							aria-current={isActive ? 'page' : undefined}

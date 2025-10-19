@@ -101,7 +101,9 @@
 		<!-- Title with availability indicator -->
 		<div class="px-3 py-2 border-t border-gray-200/50">
 			<div class="flex items-center justify-center gap-2">
-				<h3 class="font-semibold text-gray-900 text-sm leading-tight text-center">
+				<h3
+					class="font-semibold montserrat-semibold text-gray-900 text-sm leading-tight text-center"
+				>
 					{artwork.title}
 				</h3>
 				{#if artwork.isAvailable}

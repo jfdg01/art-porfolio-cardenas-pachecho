@@ -33,8 +33,10 @@
 				></path>
 			</svg>
 		</div>
-		<h3 class="text-lg font-medium text-gray-900 mb-2">{$t('noArtworksTitle')}</h3>
-		<p class="text-gray-500">{$t('noArtworksHint')}</p>
+		<h3 class="text-lg font-medium montserrat-medium text-gray-900 mb-2">
+			{$t('noArtworksTitle')}
+		</h3>
+		<p class="text-gray-500 montserrat-medium">{$t('noArtworksHint')}</p>
 	</div>
 {:else}
 	<!-- Masonry Layout using CSS Columns -->
@@ -46,7 +48,7 @@
 
 	<!-- Results Count -->
 	<div class="mt-8 text-center">
-		<p class="text-sm text-gray-500">
+		<p class="text-sm text-gray-500 montserrat-medium">
 			{$t('showingCount', { values: { count: artworks.length } })}
 		</p>
 	</div>

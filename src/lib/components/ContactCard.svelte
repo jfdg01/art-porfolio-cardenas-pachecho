@@ -16,9 +16,9 @@
 </script>
 
 <div
-	class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 sm:p-8"
+	class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 md:p-8"
 >
-	<h2 class="text-xl font-semibold montserrat-semibold text-gray-900 mb-6 text-center">
+	<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-gray-900 mb-6 text-center">
 		{$t('contactInfo')}
 	</h2>
 
@@ -37,7 +37,7 @@
 					</h3>
 					<a
 						href="mailto:cardenaspachecocarmenalejandra@gmail.com"
-						class="text-gray-900 font-medium break-all hover:text-blue-600 transition-colors duration-200"
+						class="text-gray-900 font-medium montserrat-medium break-all hover:text-blue-600 transition-colors duration-200"
 					>
 						{$t('emailAddress')}
 					</a>
@@ -61,7 +61,7 @@
 						href="https://wa.me/34628672368"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium break-all hover:text-green-600 transition-colors duration-200"
+						class="text-gray-900 font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
 						{$t('phoneNumber')}
 					</a>
@@ -85,7 +85,7 @@
 						href="https://wa.me/34628672368"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium break-all hover:text-green-600 transition-colors duration-200"
+						class="text-gray-900 font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
 						{$t('phoneNumber')}
 					</a>
@@ -107,7 +107,7 @@
 						href="https://instagram.com/cardenas.pacheco"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium break-all hover:text-pink-600 transition-colors duration-200"
+						class="text-gray-900 font-medium montserrat-medium break-all hover:text-pink-600 transition-colors duration-200"
 					>
 						{$t('instagram')}
 					</a>
