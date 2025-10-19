@@ -125,8 +125,12 @@ Usage example: `p-3 md:p-6 lg:p-8 xl:p-10 2xl:p-12` (mobile-first progression)
 ```html
 <!-- ✅ CORRECT: Safe padding that won't overflow -->
 <div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-	<!-- ❌ WRONG: Excessive padding causes horizontal overflow -->
-	<div class="mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 max-w-7xl"></div>
+	<!-- Safe padding stops at lg:px-8 -->
+</div>
+
+<!-- ❌ WRONG: Excessive padding causes horizontal overflow -->
+<div class="mx-auto px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12 max-w-7xl">
+	<!-- Never use xl:px-10, xl:px-12, or 2xl:px-16 -->
 </div>
 ```
 
@@ -221,6 +225,96 @@ Mobile overlay filter → desktop docked:
 </aside>
 ```
 
+### Component-Specific Responsive Patterns
+
+#### Buttons (Mobile-First)
+
+```html
+<!-- Primary Button -->
+<button class="px-4 py-3 text-sm md:px-6 md:text-base min-h-[44px]">
+	<!-- Scales padding and text size -->
+</button>
+
+<!-- Icon Button -->
+<button class="min-h-[44px] min-w-[44px]">
+	<!-- Always maintains touch-friendly size -->
+</button>
+```
+
+#### Cards (Mobile-First)
+
+```html
+<!-- Card padding progression -->
+<div class="p-4 md:p-6 lg:p-8 rounded-xl md:rounded-2xl">
+	<!-- Padding and border radius scale up -->
+</div>
+```
+
+#### Forms (Mobile-First)
+
+```html
+<!-- Form inputs maintain consistent sizing -->
+<input class="w-full px-4 py-3 text-sm md:text-base" />
+
+<!-- Labels scale -->
+<label class="text-xs md:text-sm">Label</label>
+
+<!-- Error messages -->
+<p class="text-xs md:text-sm text-red-600">Error message</p>
+```
+
+#### Modals/Dialogs (Mobile-First)
+
+```html
+<!-- Modal content scales width -->
+<div class="w-full max-w-md p-4 sm:p-6">
+	<!-- Actions stack on mobile, inline on desktop -->
+	<div class="flex flex-col-reverse sm:flex-row sm:space-x-2">
+		<button>Cancel</button>
+		<button>Confirm</button>
+	</div>
+</div>
+```
+
+#### Dropdowns/Selects (Mobile-First)
+
+```html
+<!-- Trigger maintains touch size -->
+<button class="min-h-[44px] min-w-[44px] px-4 py-2.5">Select</button>
+
+<!-- Dropdown panel width -->
+<div class="w-48 sm:w-56 md:w-64">
+	<!-- Items maintain touch targets -->
+	<div class="px-3 py-2.5 min-h-[44px]">Item</div>
+</div>
+```
+
+#### Icon Containers (Mobile-First)
+
+```html
+<!-- Icon containers scale -->
+<div class="w-10 h-10 sm:w-12 sm:h-12 lg:w-16 lg:h-16">
+	<Icon class="w-5 h-5 sm:w-6 sm:h-6 lg:w-8 lg:h-8" />
+</div>
+```
+
+#### Badges/Tags (Mobile-First)
+
+```html
+<!-- Text and padding scale -->
+<span class="px-2 py-1 text-xs md:px-3 md:text-sm">Badge</span>
+```
+
+#### Navigation (Mobile-First)
+
+```html
+<!-- Desktop nav shows full labels -->
+<a class="px-4 py-2 min-h-[44px]">
+	<Icon class="size-4" />
+	<span class="hidden lg:inline">Label</span>
+</a>
+```
+
 ### Workflow Guidelines (Mobile-First)
 
 1. **Mobile Foundation (320px+)**: Build mobile-optimized design first. Ensure no horizontal scroll and all core actions are reachable with 44px touch targets.
@@ -236,6 +330,22 @@ Mobile overlay filter → desktop docked:
 6. **Ultra-wide (1440px+)**: At `2xl`, add maximum spacing and premium desktop optimizations.
 
 7. **Validation**: Test the complete matrix and keyboard/AT accessibility at each step.
+
+### Responsive Testing Checklist
+
+Before deploying any responsive component:
+
+- ✅ Test at 320px (smallest mobile)
+- ✅ Test at 375px, 390px, 414px (common mobile sizes)
+- ✅ Test at 768px (tablet portrait)
+- ✅ Test at 1024px (tablet landscape / small laptop)
+- ✅ Test at 1280px, 1366px (standard desktop)
+- ✅ Test at 1920px (HD desktop)
+- ✅ Test at 2560px (QHD desktop)
+- ✅ Verify no horizontal scrollbars at any size
+- ✅ Check touch targets are 44px minimum
+- ✅ Verify text remains readable (not too small or too large)
+- ✅ Test with browser zoom at 150% and 200%
 
 ---
 
