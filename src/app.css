@@ -25,9 +25,11 @@
 	--color-popover-foreground: #0f172a;
 	--color-accent: #f1f5f9;
 	--color-accent-foreground: #0f172a;
-	--color-destructive: #ef4444;
+	--color-destructive: rgb(190, 49, 49);
 	--color-destructive-foreground: #ffffff;
 	--color-ring: #3b82f6;
+	--color-success: #22c55e;
+	--color-success-foreground: #ffffff;
 
 	/* Collapsible animations */
 	--animate-collapsible-down: collapsible-down 200ms ease-out;
@@ -36,23 +38,25 @@
 
 @layer theme {
 	.dark {
-		/* Dark mode colors */
-		--color-background: #0f172a;
-		--color-foreground: #f8fafc;
-		--color-muted: #1e293b;
-		--color-muted-foreground: #94a3b8;
-		--color-border: #334155;
+		/* Dark mode colors using Tailwind's neutral palette */
+		--color-background: #171717; /* neutral-900 */
+		--color-foreground: #fafafa; /* neutral-50 */
+		--color-muted: #262626; /* neutral-800 */
+		--color-muted-foreground: #a3a3a3; /* neutral-400 */
+		--color-border: #404040; /* neutral-700 */
 		--color-primary: #60a5fa;
 		--color-primary-foreground: #0f172a;
-		--color-card: #1e293b;
-		--color-card-foreground: #f8fafc;
-		--color-popover: #1e293b;
-		--color-popover-foreground: #f8fafc;
-		--color-accent: #1e293b;
-		--color-accent-foreground: #f8fafc;
-		--color-destructive: #ef4444;
+		--color-card: #262626; /* neutral-800 */
+		--color-card-foreground: #fafafa; /* neutral-50 */
+		--color-popover: #262626; /* neutral-800 */
+		--color-popover-foreground: #fafafa; /* neutral-50 */
+		--color-accent: #262626; /* neutral-800 */
+		--color-accent-foreground: #fafafa; /* neutral-50 */
+		--color-destructive: rgb(190, 49, 49);
 		--color-destructive-foreground: #ffffff;
 		--color-ring: #60a5fa;
+		--color-success: #4ade80;
+		--color-success-foreground: #ffffff;
 	}
 }
 

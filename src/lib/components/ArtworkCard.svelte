@@ -95,11 +95,15 @@
 				</h3>
 				{#if artwork.isAvailable}
 					<span
-						class="relative w-3 h-3 bg-green-600 rounded-full flex-shrink-0 animate-pulse"
+						class="relative w-3 h-3 rounded-full flex-shrink-0 animate-pulse"
+						style="background-color: var(--color-success)"
 						aria-label={$t('available', { default: 'Available' })}
 					>
 						<!-- Animated glow ring -->
-						<span class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-90"></span>
+						<span
+							class="absolute inset-0 rounded-full animate-ping opacity-90"
+							style="background-color: var(--color-success)"
+						></span>
 					</span>
 				{/if}
 			</div>

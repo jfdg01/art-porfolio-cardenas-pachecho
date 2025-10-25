@@ -267,7 +267,7 @@
 
 						{#if !artwork.isAvailable}
 							<div
-								class="absolute top-4 right-4 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
+								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
 							>
 								{$t('sold')}
 							</div>
@@ -282,8 +282,8 @@
 									onclick={() => (currentImageIndex = index)}
 									class="w-3 h-3 rounded-full transition-all duration-200 {currentImageIndex ===
 									index
-										? 'bg-blue-600'
-										: 'bg-gray-300 hover:bg-gray-400'}"
+										? 'bg-primary'
+										: 'bg-muted hover:bg-muted-foreground/30'}"
 									aria-label="View image {index + 1}"
 								></button>
 							{/each}
@@ -376,7 +376,7 @@
 									{/each}
 								{:else}
 									<span
-										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-blue-100 text-blue-800"
+										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-primary/10 text-primary"
 									>
 										{$t('categories.' + artwork.category)}
 									</span>
@@ -403,31 +403,35 @@
 
 					<!-- Contact Information -->
 					{#if artwork.isAvailable}
-						<div class="bg-green-50 border border-green-200 rounded-xl p-4 md:p-6">
-							<h3
-								class="text-base md:text-lg font-semibold montserrat-semibold text-green-800 mb-2"
-							>
+						<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-6">
+							<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-primary mb-2">
 								{$t('interestedHeading')}
 							</h3>
-							<p class="text-green-700 text-xs md:text-sm montserrat-medium mb-4 leading-relaxed">
+							<p
+								class="text-muted-foreground text-xs md:text-sm montserrat-medium mb-4 leading-relaxed"
+							>
 								{$t('availableInfo')}
 							</p>
 							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 							<a
 								href="/contact"
 								data-sveltekit-preload-data="hover"
-								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 							>
 								{$t('contactArtist')}
 							</a>
 						</div>
 					{:else}
-						<div class="bg-blue-50 border border-blue-200 rounded-xl p-4 md:p-6">
+						<div class="bg-muted/50 border border-border rounded-xl p-4 md:p-6">
 							<div class="space-y-3">
-								<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-blue-800">
+								<h3
+									class="text-base md:text-lg font-semibold montserrat-semibold text-muted-foreground"
+								>
 									{$t('soldHeading')}
 								</h3>
-								<p class="text-blue-700 text-xs md:text-sm montserrat-medium leading-relaxed">
+								<p
+									class="text-muted-foreground text-xs md:text-sm montserrat-medium leading-relaxed"
+								>
 									{$t('soldInfo')}
 								</p>
 								<div class="pt-2 flex justify-center">
@@ -435,7 +439,7 @@
 									<a
 										href="/contact"
 										data-sveltekit-preload-data="hover"
-										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 									>
 										{$t('contactArtist')}
 									</a>

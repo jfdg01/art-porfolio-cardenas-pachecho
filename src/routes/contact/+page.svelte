@@ -201,13 +201,13 @@
 							type="email"
 							id="email"
 							bind:value={formData.email}
-							class="w-full bg-white border {formErrors.email
-								? 'border-red-500'
-								: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+							class="w-full bg-card border {formErrors.email
+								? 'border-destructive'
+								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
 							placeholder={$t('email')}
 						/>
 						{#if formErrors.email}
-							<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.email}</p>
+							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.email}</p>
 						{/if}
 					</div>
 
@@ -223,13 +223,13 @@
 							type="text"
 							id="subject"
 							bind:value={formData.subject}
-							class="w-full bg-white border {formErrors.subject
-								? 'border-red-500'
-								: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+							class="w-full bg-card border {formErrors.subject
+								? 'border-destructive'
+								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
 							placeholder={$t('subject')}
 						/>
 						{#if formErrors.subject}
-							<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.subject}</p>
+							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.subject}</p>
 						{/if}
 					</div>
 
@@ -245,13 +245,13 @@
 							id="message"
 							bind:value={formData.message}
 							rows="6"
-							class="w-full bg-white border {formErrors.message
-								? 'border-red-500'
-								: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-vertical montserrat-medium"
+							class="w-full bg-card border {formErrors.message
+								? 'border-destructive'
+								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 resize-vertical montserrat-medium"
 							placeholder={$t('message')}
 						></textarea>
 						{#if formErrors.message}
-							<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.message}</p>
+							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.message}</p>
 						{/if}
 					</div>
 				</fieldset>
