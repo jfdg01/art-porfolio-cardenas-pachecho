@@ -40,7 +40,7 @@
 <!-- Single seamless card with image and title -->
 <div class="artwork-container">
 	<div
-		class="artwork-card group cursor-pointer rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-white"
+		class="artwork-card group cursor-pointer rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-card"
 		onclick={handleClick}
 		onkeydown={handleKeydown}
 		tabindex="0"
@@ -70,8 +70,8 @@
 					/>
 				{/if}
 			{:else}
-				<div class="w-full h-48 bg-gray-200 flex items-center justify-center">
-					<p class="text-gray-500">No image available</p>
+				<div class="w-full h-48 bg-muted flex items-center justify-center">
+					<p class="text-muted-foreground">No image available</p>
 				</div>
 			{/if}
 
@@ -86,10 +86,10 @@
 		</div>
 
 		<!-- Title with availability indicator -->
-		<div class="px-3 py-2 border-t border-gray-200/50">
+		<div class="px-3 py-2 border-t border-border">
 			<div class="flex items-center justify-center gap-2">
 				<h3
-					class="font-semibold montserrat-semibold text-gray-900 text-sm leading-tight text-center"
+					class="font-semibold montserrat-semibold text-card-foreground text-sm leading-tight text-center"
 				>
 					{artwork.title}
 				</h3>

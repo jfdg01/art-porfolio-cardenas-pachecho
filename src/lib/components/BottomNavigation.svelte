@@ -22,7 +22,7 @@
 
 <!-- Bottom Navigation Bar - Mobile Only -->
 <nav
-	class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-t border-gray-200/50 shadow-lg"
+	class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-t border-border shadow-lg"
 	aria-label="Main navigation"
 >
 	<div class="flex items-center justify-around px-4 pb-[env(safe-area-inset-bottom,0.5rem)] py-1">
@@ -30,11 +30,11 @@
 		<a
 			href="/"
 			data-sveltekit-preload-data="hover"
-			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 {isActivePath(
+			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {isActivePath(
 				'/'
 			)
-				? 'text-blue-600'
-				: 'text-gray-600 hover:text-blue-600'}"
+				? 'text-primary'
+				: 'text-muted-foreground hover:text-primary'}"
 			aria-label={$t('artworks')}
 			aria-current={isActivePath('/') ? 'page' : undefined}
 		>
@@ -46,11 +46,11 @@
 		<a
 			href="/clases-online"
 			data-sveltekit-preload-data="hover"
-			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 {isActivePath(
+			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {isActivePath(
 				'/clases-online'
 			)
-				? 'text-blue-600'
-				: 'text-gray-600 hover:text-blue-600'}"
+				? 'text-primary'
+				: 'text-muted-foreground hover:text-primary'}"
 			aria-label={$t('onlineClassesPage')}
 			aria-current={isActivePath('/clases-online') ? 'page' : undefined}
 		>
@@ -62,11 +62,11 @@
 		<a
 			href="/contact"
 			data-sveltekit-preload-data="hover"
-			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 {isActivePath(
+			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {isActivePath(
 				'/contact'
 			)
-				? 'text-blue-600'
-				: 'text-gray-600 hover:text-blue-600'}"
+				? 'text-primary'
+				: 'text-muted-foreground hover:text-primary'}"
 			aria-label={$t('contact')}
 			aria-current={isActivePath('/contact') ? 'page' : undefined}
 		>

@@ -35,7 +35,7 @@
 	});
 </script>
 
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 flex flex-col">
+<div class="min-h-screen bg-background flex flex-col">
 	<div class="flex-1">
 		{@render children?.()}
 	</div>

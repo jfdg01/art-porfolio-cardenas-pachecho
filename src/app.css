@@ -11,9 +11,49 @@
 	--breakpoint-xl: 1440px;
 	--breakpoint-2xl: 2560px;
 
+	/* Light mode colors */
+	--color-background: #ffffff;
+	--color-foreground: #0f172a;
+	--color-muted: #f1f5f9;
+	--color-muted-foreground: #64748b;
+	--color-border: #e2e8f0;
+	--color-primary: #3b82f6;
+	--color-primary-foreground: #ffffff;
+	--color-card: #ffffff;
+	--color-card-foreground: #0f172a;
+	--color-popover: #ffffff;
+	--color-popover-foreground: #0f172a;
+	--color-accent: #f1f5f9;
+	--color-accent-foreground: #0f172a;
+	--color-destructive: #ef4444;
+	--color-destructive-foreground: #ffffff;
+	--color-ring: #3b82f6;
+
 	/* Collapsible animations */
 	--animate-collapsible-down: collapsible-down 200ms ease-out;
 	--animate-collapsible-up: collapsible-up 200ms ease-out;
+}
+
+@layer theme {
+	.dark {
+		/* Dark mode colors */
+		--color-background: #0f172a;
+		--color-foreground: #f8fafc;
+		--color-muted: #1e293b;
+		--color-muted-foreground: #94a3b8;
+		--color-border: #334155;
+		--color-primary: #60a5fa;
+		--color-primary-foreground: #0f172a;
+		--color-card: #1e293b;
+		--color-card-foreground: #f8fafc;
+		--color-popover: #1e293b;
+		--color-popover-foreground: #f8fafc;
+		--color-accent: #1e293b;
+		--color-accent-foreground: #f8fafc;
+		--color-destructive: #ef4444;
+		--color-destructive-foreground: #ffffff;
+		--color-ring: #60a5fa;
+	}
 }
 
 /* Collapsible keyframes */

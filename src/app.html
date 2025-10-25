@@ -14,12 +14,12 @@
 		<link rel="manifest" href="/site.webmanifest" />
 
 		<!-- Theme and App Meta -->
-		<meta name="theme-color" content="#ffffff" />
-		<meta name="msapplication-TileColor" content="#ffffff" />
+		<meta name="theme-color" content="var(--color-background)" />
+		<meta name="msapplication-TileColor" content="var(--color-background)" />
 
 		%sveltekit.head%
 	</head>
-	<body>
+	<body class="bg-background text-foreground">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
 </html>
