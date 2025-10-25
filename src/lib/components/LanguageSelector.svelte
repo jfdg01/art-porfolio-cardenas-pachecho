@@ -56,17 +56,17 @@
 		items={selectOptions}
 	>
 		<Select.Trigger
-			class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white/80 hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-all duration-200 min-h-[44px] min-w-[44px] text-gray-700"
+			class="inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 min-h-[44px] min-w-[44px] text-foreground"
 			aria-label={$t('selectLanguage')}
 		>
 			<Languages class="size-5" />
 		</Select.Trigger>
 
 		<Select.Content
-			class="absolute right-0 mt-2 w-48 rounded-lg border border-gray-200 bg-white/95 backdrop-blur-md shadow-lg z-50 max-h-80 overflow-y-auto p-2"
+			class="absolute right-0 mt-2 w-48 rounded-lg border border-border bg-card/95 backdrop-blur-md shadow-lg z-50 max-h-80 overflow-y-auto p-2"
 		>
 			<div
-				class="text-xs font-semibold montserrat-semibold text-gray-500 uppercase tracking-wide mb-2 px-2 py-1"
+				class="text-xs font-semibold montserrat-semibold text-muted-foreground uppercase tracking-wide mb-2 px-2 py-1"
 			>
 				{$t('selectLanguage')}
 			</div>
@@ -74,13 +74,13 @@
 			{#each selectOptions as option (option.value)}
 				<Select.Item
 					value={option.value}
-					class="flex items-center gap-3 px-3 py-2.5 text-sm montserrat-medium hover:bg-gray-50 text-left rounded cursor-pointer focus:bg-gray-50 focus:outline-none data-[highlighted]:bg-gray-50"
+					class="flex items-center gap-3 px-3 py-2.5 text-sm montserrat-medium hover:bg-muted text-left rounded cursor-pointer focus:bg-muted focus:outline-none data-[highlighted]:bg-muted"
 				>
 					{#snippet children({ selected })}
 						<span class="text-base">{option.flag}</span>
 						<span class="flex-1">{option.label}</span>
 						{#if selected}
-							<Check class="size-4 text-blue-600" />
+							<Check class="size-4 text-primary" />
 						{/if}
 					{/snippet}
 				</Select.Item>

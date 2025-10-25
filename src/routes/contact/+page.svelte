@@ -136,12 +136,12 @@
 	<!-- Page Header -->
 	<div class="text-center mb-8 sm:mb-12 lg:mb-16">
 		<h1
-			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-4"
+			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-4"
 		>
 			{$t('contactPage')}
 		</h1>
 		<p
-			class="text-sm sm:text-base lg:text-lg font-medium montserrat-medium text-gray-600 max-w-[70ch] mx-auto"
+			class="text-sm sm:text-base lg:text-lg font-medium montserrat-medium text-muted-foreground max-w-[70ch] mx-auto"
 		>
 			{$t('contactDescription')}
 		</p>
@@ -155,9 +155,9 @@
 
 		<!-- Contact Form -->
 		<div
-			class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 md:p-8 w-full"
+			class="bg-card/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border p-6 md:p-8 w-full"
 		>
-			<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-gray-900 mb-6">
+			<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-card-foreground mb-6">
 				{$t('getInTouch')}
 			</h2>
 
@@ -171,7 +171,7 @@
 					<div>
 						<Label.Root
 							for="name"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
 							{$t('name')}
 						</Label.Root>
@@ -179,13 +179,13 @@
 							type="text"
 							id="name"
 							bind:value={formData.name}
-							class="w-full bg-white border {formErrors.name
-								? 'border-red-500'
-								: 'border-gray-200'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 montserrat-medium"
+							class="w-full bg-card border {formErrors.name
+								? 'border-destructive'
+								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
 							placeholder={$t('name')}
 						/>
 						{#if formErrors.name}
-							<p class="mt-1 text-sm text-red-600 montserrat-medium">{formErrors.name}</p>
+							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.name}</p>
 						{/if}
 					</div>
 
@@ -193,7 +193,7 @@
 					<div>
 						<Label.Root
 							for="email"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
 							{$t('email')}
 						</Label.Root>
@@ -215,7 +215,7 @@
 					<div>
 						<Label.Root
 							for="subject"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
 							{$t('subject')}
 						</Label.Root>
@@ -237,7 +237,7 @@
 					<div>
 						<Label.Root
 							for="message"
-							class="block text-sm font-medium text-gray-700 montserrat-medium mb-2"
+							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
 							{$t('message')}
 						</Label.Root>
@@ -262,18 +262,18 @@
 				<!-- Progress Indicator -->
 				{#if isSubmitting}
 					<div class="mb-4">
-						<div class="flex justify-between text-sm text-gray-600 mb-2 montserrat-medium">
+						<div class="flex justify-between text-sm text-muted-foreground mb-2 montserrat-medium">
 							<span>{$t('sendingMessage') || 'Sending message...'}</span>
 							<span>{submissionProgress}%</span>
 						</div>
 						<Progress.Root
 							value={submissionProgress}
 							max={100}
-							class="w-full h-2 bg-gray-200 rounded-full overflow-hidden relative"
+							class="w-full h-2 bg-muted rounded-full overflow-hidden relative"
 							aria-labelledby="progress-label"
 						>
 							<div
-								class="h-full bg-gradient-to-r from-blue-500 to-indigo-500 transition-all duration-300 ease-out rounded-full"
+								class="h-full bg-gradient-to-r from-primary to-primary transition-all duration-300 ease-out rounded-full"
 								style={`transform: translateX(-${100 - (100 * (submissionProgress ?? 0)) / 100}%)`}
 							></div>
 						</Progress.Root>
@@ -284,7 +284,7 @@
 				<Button.Root
 					type="submit"
 					disabled={isSubmitting}
-					class="w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold rounded-lg transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 montserrat-semibold"
+					class="w-full px-6 py-3 bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground font-semibold rounded-lg transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2 montserrat-semibold"
 				>
 					{#if isSubmitting}
 						<div
@@ -358,13 +358,13 @@
 			class="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
 		/>
 		<AlertDialog.Content
-			class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-md translate-x-[-50%] translate-y-[-50%] gap-4 border bg-white p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg"
+			class="fixed left-[50%] top-[50%] z-50 grid w-full max-w-md translate-x-[-50%] translate-y-[-50%] gap-4 border border-border bg-card p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-lg"
 		>
 			<div class="flex flex-col space-y-2 text-center sm:text-left">
-				<AlertDialog.Title class="text-lg font-semibold text-gray-900 montserrat-semibold">
+				<AlertDialog.Title class="text-lg font-semibold text-card-foreground montserrat-semibold">
 					{$t('confirmSubmission') || 'Confirm Submission'}
 				</AlertDialog.Title>
-				<AlertDialog.Description class="text-sm text-gray-600 montserrat-medium">
+				<AlertDialog.Description class="text-sm text-muted-foreground montserrat-medium">
 					{$t('confirmSubmissionMessage') ||
 						'Are you sure you want to send this message? Your default email client will open with the message prepared.'}
 				</AlertDialog.Description>
@@ -373,13 +373,13 @@
 			<div class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
 				<AlertDialog.Cancel
 					onclick={cancelSubmission}
-					class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-900 ring-offset-white transition-colors hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-950 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 montserrat-medium"
+					class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-card-foreground ring-offset-background transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 montserrat-medium"
 				>
 					{$t('cancel') || 'Cancel'}
 				</AlertDialog.Cancel>
 				<AlertDialog.Action
 					onclick={confirmSubmission}
-					class="inline-flex h-10 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white ring-offset-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 montserrat-medium"
+					class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 montserrat-medium"
 				>
 					{$t('confirm') || 'Confirm'}
 				</AlertDialog.Action>

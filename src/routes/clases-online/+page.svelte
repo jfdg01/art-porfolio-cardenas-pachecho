@@ -25,7 +25,7 @@
 	<!-- Page Header -->
 	<div class="text-center mb-8 sm:mb-12 lg:mb-16">
 		<h1
-			class="text-3xl sm:text-4xl lg:text-5xl font-bold montserrat-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent mb-4"
+			class="text-3xl sm:text-4xl lg:text-5xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-4"
 		>
 			{$t('onlineClassesPage')}
 		</h1>
@@ -42,12 +42,12 @@
 			</span>
 		</div>
 		<h2
-			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold text-gray-900 mb-6 sm:mb-8"
+			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold text-foreground mb-6 sm:mb-8"
 		>
 			{$t('comingSoon')}
 		</h2>
 		<p
-			class="text-lg sm:text-xl lg:text-2xl font-medium montserrat-medium text-gray-600 leading-relaxed max-w-[70ch] mx-auto mb-8 sm:mb-12"
+			class="text-lg sm:text-xl lg:text-2xl font-medium montserrat-medium text-muted-foreground leading-relaxed max-w-[70ch] mx-auto mb-8 sm:mb-12"
 		>
 			{$t('onlineClassesInterest')}
 		</p>
@@ -57,7 +57,7 @@
 		<a
 			href="/contact"
 			data-sveltekit-preload-data="hover"
-			class="inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold rounded-xl min-h-[44px] min-w-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1 montserrat-semibold"
+			class="inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold rounded-xl min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1 montserrat-semibold"
 		>
 			{$t('contactForPreRegistration')}
 			<ArrowRight class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" />

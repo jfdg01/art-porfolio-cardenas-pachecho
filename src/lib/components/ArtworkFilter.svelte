@@ -72,8 +72,8 @@ Follows mobile-first design system with glass morphism and gradient accents
 		<button
 			onclick={toggleAvailability}
 			class="flex-1 flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 min-h-[44px] montserrat-semibold {galleryState.showOnlyAvailable
-				? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus-visible:ring-blue-500'
-				: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400 focus-visible:ring-blue-500'} md:text-base md:gap-3"
+				? 'bg-gradient-to-r from-primary to-primary text-primary-foreground border-transparent shadow-md hover:shadow-lg transform hover:-translate-y-0.5 focus-visible:ring-ring'
+				: 'bg-card text-card-foreground border-border hover:bg-muted hover:border-border focus-visible:ring-ring'} md:text-base md:gap-3"
 			aria-label={$t('showOnlyAvailable')}
 		>
 			<span class="text-base md:text-lg">{galleryState.showOnlyAvailable ? '✓' : '○'}</span>
@@ -83,9 +83,9 @@ Follows mobile-first design system with glass morphism and gradient accents
 		<!-- Options Toggle Button (Touch-Friendly) -->
 		<button
 			onclick={() => (optionsOpen = !optionsOpen)}
-			class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] montserrat-semibold {optionsOpen
-				? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white border-transparent shadow-md'
-				: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'} md:text-base md:px-6"
+			class="flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold rounded-xl border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] montserrat-semibold {optionsOpen
+				? 'bg-gradient-to-r from-primary to-primary text-primary-foreground border-transparent shadow-md'
+				: 'bg-card text-card-foreground border-border hover:bg-muted hover:border-border'} md:text-base md:px-6"
 			aria-label={$t('options')}
 			aria-expanded={optionsOpen}
 		>
@@ -100,23 +100,23 @@ Follows mobile-first design system with glass morphism and gradient accents
 			class="data-[state=open]:animate-collapsible-down data-[state=closed]:animate-collapsible-up overflow-hidden"
 		>
 			<div
-				class="space-y-3 bg-white/80 backdrop-blur-xl rounded-xl border border-gray-200/50 shadow-sm p-3 md:p-4"
+				class="space-y-3 bg-card/80 backdrop-blur-xl rounded-xl border border-border shadow-sm p-3 md:p-4"
 			>
 				<!-- Filter Button -->
 				<button
 					onclick={() => (filterOpen = !filterOpen)}
-					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {filterOpen
-						? 'bg-blue-50 text-blue-900 border-blue-300'
-						: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} md:text-base"
+					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {filterOpen
+						? 'bg-accent text-accent-foreground border-border'
+						: 'bg-card text-card-foreground border-border hover:bg-muted'} md:text-base"
 					aria-label={$t('filterByCategory')}
 					aria-expanded={filterOpen}
 				>
 					<div class="flex items-center gap-2 md:gap-3">
-						<Filter class="size-5 {filterOpen ? 'text-blue-600' : 'text-gray-600'}" />
+						<Filter class="size-5 {filterOpen ? 'text-primary' : 'text-muted-foreground'}" />
 						<span>{$t('filterByCategory')}</span>
 						{#if galleryState.selectedCategories.length > 0}
 							<span
-								class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-semibold bg-blue-600 text-white montserrat-semibold"
+								class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-semibold bg-primary text-primary-foreground montserrat-semibold"
 							>
 								{galleryState.selectedCategories.length}
 							</span>
@@ -137,7 +137,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 							{#if galleryState.selectedCategories.length > 0}
 								<button
 									onclick={clearFilters}
-									class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium md:text-base"
+									class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 min-h-[44px] montserrat-medium md:text-base"
 									aria-label={$t('clearFilters')}
 								>
 									<RotateCcw class="size-4" />
@@ -155,7 +155,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 								{#each galleryState.availableCategories as category (category)}
 									<ToggleGroup.Item
 										value={category}
-										class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 min-h-[44px] montserrat-medium data-[state=on]:bg-gradient-to-r data-[state=on]:from-blue-600 data-[state=on]:to-indigo-600 data-[state=on]:text-white data-[state=on]:border-transparent data-[state=on]:shadow-md hover:data-[state=on]:shadow-lg data-[state=on]:transform data-[state=on]:hover:-translate-y-0.5 data-[state=off]:bg-white data-[state=off]:text-gray-700 data-[state=off]:border-gray-300 data-[state=off]:hover:bg-gray-50 md:text-base"
+										class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 min-h-[44px] montserrat-medium data-[state=on]:bg-gradient-to-r data-[state=on]:from-primary data-[state=on]:to-primary data-[state=on]:text-primary-foreground data-[state=on]:border-transparent data-[state=on]:shadow-md hover:data-[state=on]:shadow-lg data-[state=on]:transform data-[state=on]:hover:-translate-y-0.5 data-[state=off]:bg-card data-[state=off]:text-card-foreground data-[state=off]:border-border data-[state=off]:hover:bg-muted md:text-base"
 										aria-label={$t('filterBy', {
 											values: { category: $t(`categories.${category}`) }
 										})}
@@ -172,14 +172,14 @@ Follows mobile-first design system with glass morphism and gradient accents
 				<!-- Sort Button -->
 				<button
 					onclick={() => (sortOpen = !sortOpen)}
-					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {sortOpen
-						? 'bg-blue-50 text-blue-900 border-blue-300'
-						: 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} md:text-base"
+					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {sortOpen
+						? 'bg-accent text-accent-foreground border-border'
+						: 'bg-card text-card-foreground border-border hover:bg-muted'} md:text-base"
 					aria-label={$t('sort.label')}
 					aria-expanded={sortOpen}
 				>
 					<div class="flex items-center gap-2 md:gap-3">
-						<ArrowUpDown class="size-5 {sortOpen ? 'text-blue-600' : 'text-gray-600'}" />
+						<ArrowUpDown class="size-5 {sortOpen ? 'text-primary' : 'text-muted-foreground'}" />
 						<span>{$t('sort.label')}</span>
 					</div>
 					<ChevronDown
@@ -202,7 +202,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 								{#each sortOptions as option (option.value)}
 									<ToggleGroup.Item
 										value={option.value}
-										class="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 min-h-[44px] montserrat-medium data-[state=on]:bg-gradient-to-r data-[state=on]:from-blue-600 data-[state=on]:to-indigo-600 data-[state=on]:text-white data-[state=on]:border-transparent data-[state=on]:shadow-md hover:data-[state=on]:shadow-lg data-[state=on]:transform data-[state=on]:hover:-translate-y-0.5 data-[state=off]:bg-white data-[state=off]:text-gray-700 data-[state=off]:border-gray-300 data-[state=off]:hover:bg-gray-50 md:text-base"
+										class="w-full flex items-center gap-3 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 min-h-[44px] montserrat-medium data-[state=on]:bg-gradient-to-r data-[state=on]:from-primary data-[state=on]:to-primary data-[state=on]:text-primary-foreground data-[state=on]:border-transparent data-[state=on]:shadow-md hover:data-[state=on]:shadow-lg data-[state=on]:transform data-[state=on]:hover:-translate-y-0.5 data-[state=off]:bg-card data-[state=off]:text-card-foreground data-[state=off]:border-border data-[state=off]:hover:bg-muted md:text-base"
 										aria-label={$t(option.labelKey)}
 									>
 										<span>{$t(option.labelKey)}</span>
@@ -218,10 +218,10 @@ Follows mobile-first design system with glass morphism and gradient accents
 
 	<!-- Results Count -->
 	<div class="mt-2">
-		<p class="text-sm text-gray-600 text-center md:text-base montserrat-medium">
+		<p class="text-sm text-muted-foreground text-center md:text-base montserrat-medium">
 			{$t('showingCount', { values: { count: galleryState.filteredArtworks.length } })}
 			{#if galleryState.selectedCategories.length > 0}
-				<span class="text-blue-600 font-medium montserrat-medium">
+				<span class="text-primary font-medium montserrat-medium">
 					{$t('in')}
 					{galleryState.selectedCategories.map((cat) => $t(`categories.${cat}`)).join(', ')}
 				</span>

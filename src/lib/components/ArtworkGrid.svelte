@@ -23,7 +23,7 @@
 {#if artworks.length === 0}
 	<!-- Empty State -->
 	<div class="text-center py-12">
-		<div class="mx-auto h-24 w-24 text-gray-400 mb-4">
+		<div class="mx-auto h-24 w-24 text-muted-foreground mb-4">
 			<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path
 					stroke-linecap="round"
@@ -33,10 +33,10 @@
 				></path>
 			</svg>
 		</div>
-		<h3 class="text-lg font-medium montserrat-medium text-gray-900 mb-2">
+		<h3 class="text-lg font-medium montserrat-medium text-foreground mb-2">
 			{$t('noArtworksTitle')}
 		</h3>
-		<p class="text-gray-500 montserrat-medium">{$t('noArtworksHint')}</p>
+		<p class="text-muted-foreground montserrat-medium">{$t('noArtworksHint')}</p>
 	</div>
 {:else}
 	<!-- Masonry Layout using CSS Columns -->
@@ -48,7 +48,7 @@
 
 	<!-- Results Count -->
 	<div class="mt-8 text-center">
-		<p class="text-sm text-gray-500 montserrat-medium">
+		<p class="text-sm text-muted-foreground montserrat-medium">
 			{$t('showingCount', { values: { count: artworks.length } })}
 		</p>
 	</div>

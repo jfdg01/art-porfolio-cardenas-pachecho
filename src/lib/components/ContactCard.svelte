@@ -15,10 +15,10 @@
 	export let showPhone = true;
 </script>
 
-<div
-	class="bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg border border-gray-200/50 p-6 md:p-8"
->
-	<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-gray-900 mb-6 text-center">
+<div class="bg-card/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border p-6 md:p-8">
+	<h2
+		class="text-lg md:text-xl font-semibold montserrat-semibold text-card-foreground mb-6 text-center"
+	>
 		{$t('contactInfo')}
 	</h2>
 
@@ -32,12 +32,12 @@
 					<Mail class="w-6 h-6 text-white" />
 				</div>
 				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-gray-700 montserrat-medium">
+					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
 						{$t('emailLabel')}
 					</h3>
 					<a
 						href="mailto:cardenaspachecocarmenalejandra@gmail.com"
-						class="text-gray-900 font-medium montserrat-medium break-all hover:text-blue-600 transition-colors duration-200"
+						class="text-card-foreground font-medium montserrat-medium break-all hover:text-primary transition-colors duration-200"
 					>
 						{$t('emailAddress')}
 					</a>
@@ -54,14 +54,14 @@
 					<Phone class="w-6 h-6 text-white" />
 				</div>
 				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-gray-700 montserrat-medium">
+					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
 						{$t('phoneNumberLabel')}
 					</h3>
 					<a
 						href="https://wa.me/34628672368"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
+						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
 						{$t('phoneNumber')}
 					</a>
@@ -78,14 +78,14 @@
 					<MessageCircle class="w-6 h-6 text-white" />
 				</div>
 				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-gray-700 montserrat-medium">
+					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
 						{$t('whatsapp')}
 					</h3>
 					<a
 						href="https://wa.me/34628672368"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
+						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
 						{$t('phoneNumber')}
 					</a>
@@ -102,12 +102,12 @@
 					<Instagram class="w-6 h-6 text-white" />
 				</div>
 				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-gray-700 montserrat-medium">Instagram</h3>
+					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">Instagram</h3>
 					<a
 						href="https://instagram.com/cardenas.pacheco"
 						target="_blank"
 						rel="noopener noreferrer"
-						class="text-gray-900 font-medium montserrat-medium break-all hover:text-pink-600 transition-colors duration-200"
+						class="text-card-foreground font-medium montserrat-medium break-all hover:text-pink-600 transition-colors duration-200"
 					>
 						{$t('instagram')}
 					</a>

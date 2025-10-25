@@ -179,12 +179,12 @@
 <GalleryHeader />
 
 <!-- Go Back Button -->
-<div class="bg-white/80 backdrop-blur-md border-b border-gray-200/50">
+<div class="bg-background/80 backdrop-blur-md border-b border-border">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="py-3 md:py-4">
 			<button
 				onclick={goBack}
-				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
+				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-primary hover:text-primary hover:bg-accent rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
 				aria-label={$t('goBack')}
 			>
 				<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
@@ -202,7 +202,7 @@
 	tabindex="-1"
 >
 	<div
-		class="bg-white/80 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-lg border border-gray-200/50 overflow-hidden w-full"
+		class="bg-card/80 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-lg border border-border overflow-hidden w-full"
 	>
 		<!-- Content Grid -->
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full">
@@ -241,8 +241,8 @@
 								{/if}
 							</div>
 						{:else}
-							<div class="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
-								<p class="text-gray-500">No image available</p>
+							<div class="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
+								<p class="text-muted-foreground">No image available</p>
 							</div>
 						{/if}
 
@@ -293,12 +293,12 @@
 			</div>
 
 			<!-- Details Section -->
-			<div class="p-4 md:p-6 lg:p-8 bg-gray-50/50">
+			<div class="p-4 md:p-6 lg:p-8 bg-muted/50">
 				<div class="space-y-4 md:space-y-6">
 					<!-- Title -->
 					<div>
 						<h1
-							class="text-xl md:text-2xl lg:text-3xl font-bold montserrat-bold bg-gradient-to-r from-gray-900 to-gray-600 bg-clip-text text-transparent"
+							class="text-xl md:text-2xl lg:text-3xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent"
 						>
 							{artwork.title}
 						</h1>
@@ -306,12 +306,14 @@
 					<!-- Price -->
 					{#if artwork.price}
 						<div class="flex items-start gap-3">
-							<Euro class="w-5 h-5 text-gray-400 mt-1" />
+							<Euro class="w-5 h-5 text-muted-foreground mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
+								<p
+									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
+								>
 									{$t('priceLabel')}
 								</p>
-								<p class="text-lg md:text-2xl font-bold montserrat-bold text-gray-900">
+								<p class="text-lg md:text-2xl font-bold montserrat-bold text-foreground">
 									{artwork.price}
 									{artwork.currency || 'EUR'}
 								</p>
@@ -322,12 +324,14 @@
 					<!-- Dimensions -->
 					{#if artwork.dimensions}
 						<div class="flex items-start gap-3">
-							<Ruler class="w-5 h-5 text-gray-400 mt-1" />
+							<Ruler class="w-5 h-5 text-muted-foreground mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
+								<p
+									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
+								>
 									{$t('dimensionsLabel')}
 								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-gray-900">
+								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
 									{artwork.dimensions.width} × {artwork.dimensions.height}
 									{artwork.dimensions.unit}
 								</p>
@@ -338,12 +342,14 @@
 					<!-- Year -->
 					{#if artwork.year}
 						<div class="flex items-start gap-3">
-							<Calendar class="w-5 h-5 text-gray-400 mt-1" />
+							<Calendar class="w-5 h-5 text-muted-foreground mt-1" />
 							<div class="flex-1">
-								<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-1">
+								<p
+									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
+								>
 									{$t('yearLabel')}
 								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-gray-900">
+								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
 									{artwork.year}
 								</p>
 							</div>
@@ -352,16 +358,18 @@
 
 					<!-- Category -->
 					<div class="flex items-start gap-3">
-						<Tag class="w-5 h-5 text-gray-400 mt-1" />
+						<Tag class="w-5 h-5 text-muted-foreground mt-1" />
 						<div class="flex-1">
-							<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-2">
+							<p
+								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
+							>
 								{$t('tagsLabel')}
 							</p>
 							<div class="flex flex-wrap gap-2">
 								{#if Array.isArray(artwork.category)}
 									{#each artwork.category as category (category)}
 										<span
-											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-blue-100 text-blue-800"
+											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
 										>
 											{$t('categories.' + category)}
 										</span>
@@ -380,11 +388,13 @@
 					<!-- Description -->
 					{#if artwork.description}
 						<div>
-							<p class="text-xs md:text-sm font-medium montserrat-medium text-gray-700 mb-2">
+							<p
+								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
+							>
 								{$t('descriptionLabel')}
 							</p>
 							<p
-								class="text-sm md:text-base montserrat-medium text-gray-600 leading-relaxed max-w-prose"
+								class="text-sm md:text-base montserrat-medium text-muted-foreground leading-relaxed max-w-prose"
 							>
 								{artwork.description}
 							</p>
@@ -435,13 +445,13 @@
 					{/if}
 
 					<!-- Artwork Navigation Controls -->
-					<div class="pt-4 md:pt-6 border-t border-gray-200/50">
+					<div class="pt-4 md:pt-6 border-t border-border">
 						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
 							<button
 								onclick={() => navigateToArtwork(navigation.prevId)}
 								disabled={!navigation.prevId || isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={$t('previousArtwork')}
 								title={$t('previousArtwork')}
 							>
@@ -452,7 +462,7 @@
 							<!-- Go Back to Gallery Button -->
 							<button
 								onclick={goBack}
-								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
+								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
 								aria-label={$t('goBack')}
 							>
 								<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
@@ -463,7 +473,7 @@
 							<button
 								onclick={() => navigateToArtwork(navigation.nextId)}
 								disabled={!navigation.nextId || isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-gray-700 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={$t('nextArtwork')}
 								title={$t('nextArtwork')}
 							>
