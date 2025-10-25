@@ -6,10 +6,9 @@
 -->
 
 <script lang="ts">
-	import { Mail, Home, ArrowUp, GraduationCap } from 'lucide-svelte';
+	import { Mail, Home, ArrowUp, GraduationCap, Moon } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import LanguageSelector from './LanguageSelector.svelte';
-	import NavigationSelect from './NavigationSelect.svelte';
 	import { page } from '$app/stores';
 
 	let showScrollToTop = $state(false);
@@ -111,11 +110,18 @@
 
 			<!-- Mobile Controls -->
 			<div class="flex md:hidden items-center gap-2">
+				<!-- Dark Theme Toggle - Mobile (Placeholder) -->
+				<button
+					disabled
+					class="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white/80 min-h-[44px] min-w-[44px] text-gray-700 opacity-50 cursor-not-allowed"
+					aria-label={$t('toggleDarkTheme')}
+					title={$t('comingSoon')}
+				>
+					<Moon class="size-5" />
+				</button>
+
 				<!-- Language Selector - Mobile -->
 				<LanguageSelector />
-
-				<!-- Navigation Select - Mobile -->
-				<NavigationSelect />
 			</div>
 		</div>
 	</div>
@@ -125,7 +131,7 @@
 <button
 	onclick={scrollToTop}
 	aria-label="Scroll to top"
-	class="fixed bottom-4 right-4 z-50 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full p-3 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
+	class="fixed bottom-20 md:bottom-4 right-4 z-50 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full p-3 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
 		? 'opacity-100 translate-y-0'
 		: 'opacity-0 translate-y-2 pointer-events-none'}"
 >

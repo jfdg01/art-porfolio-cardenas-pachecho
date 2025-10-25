@@ -6,6 +6,7 @@
 	import { locale } from 'svelte-i18n';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import BottomNavigation from '$lib/components/BottomNavigation.svelte';
 
 	// Initialize Vercel Speed Insights and Analytics
 	injectSpeedInsights();
@@ -34,5 +35,8 @@
 </script>
 
 <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
-	{@render children?.()}
+	<div class="pb-20 md:pb-0">
+		{@render children?.()}
+	</div>
+	<BottomNavigation />
 </div>
