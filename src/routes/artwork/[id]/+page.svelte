@@ -15,6 +15,7 @@
 	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import BiggerPicture from 'bigger-picture';
 	import { imageMapDetail } from '$lib/data/imageImports';
+	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -201,6 +202,11 @@
 	onkeydown={handleKeydown}
 	tabindex="-1"
 >
+	<!-- Artwork Carousel - Full width, flush with screen edges -->
+	<div class="-mx-4 sm:-mx-6 lg:-mx-8 mb-4">
+		<ArtworkCarousel />
+	</div>
+
 	<div
 		class="bg-card/80 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-lg border border-border overflow-hidden w-full"
 	>
