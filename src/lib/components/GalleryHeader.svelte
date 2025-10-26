@@ -6,7 +6,7 @@
 -->
 
 <script lang="ts">
-	import { Mail, Home, GraduationCap } from 'lucide-svelte';
+	import { Mail, Palette, GraduationCap } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
@@ -53,7 +53,7 @@
 						aria-label="View artworks"
 						aria-current={checkActivePath('/') ? 'page' : undefined}
 					>
-						<Home class="size-4" />
+						<Palette class="size-4" />
 						<span>{$t('artworks')}</span>
 					</a>
 					<a

@@ -16,13 +16,15 @@
 export const imageImportsDetail = import.meta.glob('$lib/assets/images/*.webp', {
 	import: 'default',
 	eager: true,
-	query: { as: 'detail' }
+	//query: { as: 'detail' }
+	query: { as: 'dev' }
 });
 
 export const imageImportsGallery = import.meta.glob('$lib/assets/images/*.webp', {
 	import: 'default',
 	eager: true,
-	query: { as: 'gallery' }
+	//query: { as: 'gallery' }
+	query: { as: 'dev' }
 });
 
 // Create filename-keyed maps for easy access
