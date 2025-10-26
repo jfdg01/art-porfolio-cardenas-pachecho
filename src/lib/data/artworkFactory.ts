@@ -4,28 +4,8 @@
  * with explicit validation to ensure images are correctly matched to their IDs
  */
 
-import type { Artwork } from '$lib/types/artwork';
+import type { Artwork, ArtworkMetadata } from '$lib/types/artwork';
 import { artworkImages } from './artworkImages';
-
-/**
- * Artwork metadata interface for factory input
- * Excludes the images field which will be automatically fetched by ID
- */
-export interface ArtworkMetadata {
-	id: string;
-	title: string;
-	description?: string;
-	year?: number;
-	category: string | string[];
-	isAvailable: boolean;
-	price?: number;
-	currency?: string;
-	dimensions?: {
-		width: number;
-		height: number;
-		unit: string;
-	};
-}
 
 /**
  * Factory function to create artwork objects

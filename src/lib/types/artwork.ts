@@ -29,3 +29,23 @@ export interface GalleryState {
 	artworks: Artwork[];
 	selectedArtwork: Artwork | null;
 }
+
+/**
+ * Artwork metadata interface for factory input
+ * Excludes the images field which will be automatically fetched by ID
+ */
+export interface ArtworkMetadata {
+	id: string;
+	title: string;
+	description?: string;
+	year?: number;
+	category: string | string[];
+	isAvailable: boolean;
+	price?: number;
+	currency?: string;
+	dimensions?: {
+		width: number;
+		height: number;
+		unit: string;
+	};
+}
