@@ -25,14 +25,26 @@
 	// Get all artworks from the gallery state (not filtered)
 	let artworks = $derived(galleryState.artworks);
 
-	// Create circular scroll illusion by duplicating artworks
-	let circularArtworks = $derived([...artworks, ...artworks, ...artworks]);
-
 	// Reference to the scroll container
 	let scrollContainer: HTMLDivElement;
 
 	// Track if content overflows container
 	let isScrollable = $state(false);
+
+	// Number of instances to render for circular effect (enough to allow smooth scrolling)
+	const INSTANCE_COUNT = 5;
+
+	// Generate enough indices to create circular effect
+	let indices = $derived.by(() => {
+		if (artworks.length === 0) return [];
+		const total = artworks.length * INSTANCE_COUNT;
+		return Array.from({ length: total }, (_, i) => i);
+	});
+
+	// Get the actual artwork using modulo for circular access
+	function getArtwork(index: number) {
+		return artworks[index % artworks.length];
+	}
 
 	// Check if content is scrollable
 	function checkScrollable() {
@@ -48,28 +60,27 @@
 	// Handle infinite scroll loop
 	let isScrolling = false;
 	function handleScroll() {
-		if (!scrollContainer || isScrolling) return;
+		if (!scrollContainer || isScrolling || artworks.length === 0) return;
 
 		const scrollLeft = scrollContainer.scrollLeft;
 		const scrollWidth = scrollContainer.scrollWidth;
 		const clientWidth = scrollContainer.clientWidth;
 
-		// Calculate approximate width for each set of artworks
-		const artworkCount = artworks.length;
-		const estimatedWidth = artworkCount * 120; // Approximate width per item (100px + 20px gaps/margins)
+		// Calculate width for one set of artworks
+		const singleSetWidth = scrollWidth / INSTANCE_COUNT;
 
-		// If scrolled to near the beginning, jump to the middle section
-		if (scrollLeft < clientWidth) {
+		// If scrolled to near the beginning, jump to the middle set
+		if (scrollLeft < singleSetWidth) {
 			isScrolling = true;
-			scrollContainer.scrollLeft += estimatedWidth;
+			scrollContainer.scrollLeft += singleSetWidth * 2; // Jump to middle set
 			setTimeout(() => {
 				isScrolling = false;
 			}, 0);
 		}
-		// If scrolled to near the end, jump to the middle section
+		// If scrolled to near the end, jump back to middle set
 		else if (scrollLeft > scrollWidth - 2 * clientWidth) {
 			isScrolling = true;
-			scrollContainer.scrollLeft -= estimatedWidth;
+			scrollContainer.scrollLeft -= singleSetWidth * 2; // Jump back
 			setTimeout(() => {
 				isScrolling = false;
 			}, 0);
@@ -114,18 +125,48 @@
 	function scrollToCurrent() {
 		if (!scrollContainer || !currentArtworkId || artworks.length === 0) return;
 
-		// Find the index of the current artwork in the first set
+		// Find the index of the current artwork
 		const currentIndex = artworks.findIndex((art) => art.id === currentArtworkId);
 		if (currentIndex === -1) return;
 
-		// Calculate position in the middle set (artworks.length to artworks.length * 2)
-		const middleIndex = artworks.length + currentIndex;
-
+		// Get all instances of this artwork across all sets
 		const thumbnails = scrollContainer.querySelectorAll('.artwork-item');
-		const currentThumbnail = thumbnails[middleIndex];
 
-		if (currentThumbnail) {
-			currentThumbnail.scrollIntoView({
+		let closestThumbnail: Element | null = null;
+		let minDistance = Infinity;
+
+		// Find all instances of the current artwork
+		for (let setIndex = 0; setIndex < INSTANCE_COUNT; setIndex++) {
+			const instanceIndex = setIndex * artworks.length + currentIndex;
+			const thumbnail = thumbnails[instanceIndex];
+
+			if (thumbnail) {
+				const containerRect = scrollContainer.getBoundingClientRect();
+
+				// Calculate position relative to container
+				const thumbnailLeft = thumbnail.getBoundingClientRect().left;
+				const thumbnailRight = thumbnail.getBoundingClientRect().right;
+				const containerLeft = containerRect.left;
+				const containerRight = containerRect.right;
+
+				// Calculate center position of thumbnail relative to container
+				const thumbnailCenter = (thumbnailLeft + thumbnailRight) / 2;
+				const containerCenter = (containerLeft + containerRight) / 2;
+
+				// Distance from current view position to thumbnail center
+				const distance = Math.abs(thumbnailCenter - containerCenter);
+
+				// If this thumbnail is closer, update closest
+				if (distance < minDistance) {
+					minDistance = distance;
+					closestThumbnail = thumbnail;
+				}
+			}
+		}
+
+		// Scroll to the closest instance
+		if (closestThumbnail) {
+			closestThumbnail.scrollIntoView({
 				behavior: 'smooth',
 				block: 'nearest',
 				inline: 'center'
@@ -154,10 +195,15 @@
 	// Initialize scroll position to the middle section
 	onMount(() => {
 		if (scrollContainer && artworks.length > 0) {
-			// Start at the middle section to allow scrolling in both directions
-			const estimatedWidth = artworks.length * 120; // Approximate width per item
+			// Calculate the width of a single set to scroll to the middle
+			const scrollWidth = scrollContainer.scrollWidth;
+			const singleSetWidth = scrollWidth / INSTANCE_COUNT;
+
+			// Start at the middle set (index 2, which is the 3rd instance)
+			const middleSetPosition = singleSetWidth * 2;
+
 			setTimeout(() => {
-				scrollContainer.scrollLeft = estimatedWidth;
+				scrollContainer.scrollLeft = middleSetPosition;
 			}, 0);
 		}
 
@@ -214,7 +260,8 @@
 		>
 			<!-- Scrollable content - circular scroll illusion -->
 			<div class="flex gap-3 py-2 px-4">
-				{#each circularArtworks as artwork, index (artwork.id + '-' + index)}
+				{#each indices as index (index)}
+					{@const artwork = getArtwork(index)}
 					{@const imageSrc = artwork.images?.[0]?.src}
 					{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
 					{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
