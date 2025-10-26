@@ -99,6 +99,7 @@
 	"tagsLabel": "Теги",
 	"viewDetails": "Просмотр деталей",
 	"viewDetailsFor": "Просмотр деталей для {title}",
+	"viewImage": "Просмотр изображения {num}",
 	"whatsapp": "WhatsApp",
 	"yearLabel": "Год"
 }

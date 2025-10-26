@@ -99,6 +99,7 @@
 	"tagsLabel": "태그",
 	"viewDetails": "세부 정보 보기",
 	"viewDetailsFor": "{title}의 세부 정보 보기",
+	"viewImage": "이미지 {num} 보기",
 	"whatsapp": "WhatsApp",
 	"yearLabel": "연도"
 }

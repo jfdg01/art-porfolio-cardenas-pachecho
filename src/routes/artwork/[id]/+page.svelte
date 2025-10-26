@@ -27,6 +27,7 @@
 	import BiggerPicture from 'bigger-picture';
 	import { imageMapDetail } from '$lib/data/imageImports';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
+	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
 	import { Label, Button } from 'bits-ui';
 
 	// Get artwork data from load function
@@ -159,11 +160,6 @@
 			isNavigating = false;
 		}
 	});
-
-	// Helper function to create range for navigation dots
-	function range(length: number): number[] {
-		return Array.from({ length }, (_, i) => i);
-	}
 
 	// Focus management
 	$effect(() => {
@@ -308,6 +304,15 @@
 						{/if}
 					</div>
 
+					<!-- Thumbnail Carousel for Image Navigation -->
+					{#if hasMultipleImages && artwork.images}
+						<ThumbnailCarousel
+							images={artwork.images}
+							selectedIndex={currentImageIndex}
+							onImageSelect={(index) => (currentImageIndex = index)}
+						/>
+					{/if}
+
 					<!-- Click to enlarge label -->
 					<div class="text-center">
 						<Label.Root
@@ -322,22 +327,6 @@
 							<span>{$t('clickToEnlarge')}</span>
 						</Label.Root>
 					</div>
-
-					<!-- Image Navigation Dots -->
-					{#if hasMultipleImages && artwork.images}
-						<div class="flex justify-center space-x-2">
-							{#each range(artwork.images.length) as index (index)}
-								<Button.Root
-									onclick={() => (currentImageIndex = index)}
-									class="w-3 h-3 rounded-full transition-all duration-200 {currentImageIndex ===
-									index
-										? 'bg-primary'
-										: 'bg-muted hover:bg-muted-foreground/30'}"
-									aria-label="View image {index + 1}"
-								></Button.Root>
-							{/each}
-						</div>
-					{/if}
 				</div>
 			</div>
 

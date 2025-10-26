@@ -99,6 +99,7 @@
 	"tagsLabel": "标签",
 	"viewDetails": "查看详情",
 	"viewDetailsFor": "查看 {title} 的详情",
+	"viewImage": "查看图片 {num}",
 	"whatsapp": "WhatsApp",
 	"yearLabel": "年份"
 }

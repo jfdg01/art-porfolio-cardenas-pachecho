@@ -99,6 +99,7 @@
 	"tagsLabel": "Etichette",
 	"viewDetails": "Visualizza dettagli",
 	"viewDetailsFor": "Visualizza dettagli per {title}",
+	"viewImage": "Visualizza immagine {num}",
 	"whatsapp": "WhatsApp",
 	"yearLabel": "Anno"
 }

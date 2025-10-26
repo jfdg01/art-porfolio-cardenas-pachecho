@@ -99,6 +99,7 @@
 	"tagsLabel": "Tags",
 	"viewDetails": "View details",
 	"viewDetailsFor": "View details for {title}",
+	"viewImage": "View image {num}",
 	"whatsapp": "WhatsApp",
 	"yearLabel": "Year"
 }

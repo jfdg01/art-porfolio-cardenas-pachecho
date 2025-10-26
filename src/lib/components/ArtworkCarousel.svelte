@@ -25,6 +25,20 @@
 	// Reference to the scroll container
 	let scrollContainer: HTMLDivElement;
 
+	// Track if content overflows container
+	let isScrollable = $state(false);
+
+	// Check if content is scrollable
+	function checkScrollable() {
+		if (!scrollContainer) {
+			isScrollable = false;
+			return;
+		}
+
+		// Check if scrollWidth exceeds clientWidth (with a small threshold)
+		isScrollable = scrollContainer.scrollWidth > scrollContainer.clientWidth + 5;
+	}
+
 	// Handle infinite scroll loop
 	let isScrolling = false;
 	function handleScroll() {
@@ -90,6 +104,15 @@
 		scrollContainer.scrollLeft += delta;
 	}
 
+	// Check if content is scrollable when artworks change
+	$effect(() => {
+		if (artworks.length > 0) {
+			setTimeout(() => {
+				checkScrollable();
+			}, 100);
+		}
+	});
+
 	// Initialize scroll position to the middle section
 	onMount(() => {
 		if (scrollContainer && artworks.length > 0) {
@@ -99,27 +122,45 @@
 				scrollContainer.scrollLeft = estimatedWidth;
 			}, 0);
 		}
+
+		// Check scrollable after mount
+		setTimeout(() => {
+			checkScrollable();
+		}, 200);
+
+		// Check scrollable on window resize
+		const handleResize = () => {
+			checkScrollable();
+		};
+
+		window.addEventListener('resize', handleResize);
+
+		return () => {
+			window.removeEventListener('resize', handleResize);
+		};
 	});
 </script>
 
 <!-- Carousel Container with Buttons -->
 <div class="relative w-full group">
-	<!-- Scroll Buttons - Desktop Only with gradient overlay -->
-	<Button.Root
-		onclick={scrollLeft}
-		class="hidden min-[850px]:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-		aria-label="Scroll left"
-	>
-		<ChevronLeft class="size-7 text-foreground drop-shadow-lg" />
-	</Button.Root>
+	<!-- Scroll Buttons - Desktop Only with gradient overlay (shown only if content is scrollable) -->
+	{#if isScrollable}
+		<Button.Root
+			onclick={scrollLeft}
+			class="hidden min-[850px]:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			aria-label="Scroll left"
+		>
+			<ChevronLeft class="size-7 text-foreground drop-shadow-lg" />
+		</Button.Root>
 
-	<Button.Root
-		onclick={scrollRight}
-		class="hidden min-[850px]:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-l from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-		aria-label="Scroll right"
-	>
-		<ChevronRight class="size-7 text-foreground drop-shadow-lg" />
-	</Button.Root>
+		<Button.Root
+			onclick={scrollRight}
+			class="hidden min-[850px]:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-l from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			aria-label="Scroll right"
+		>
+			<ChevronRight class="size-7 text-foreground drop-shadow-lg" />
+		</Button.Root>
+	{/if}
 
 	<!-- Carousel Container -->
 	<Tooltip.Provider>
