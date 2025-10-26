@@ -22,7 +22,7 @@
 
 <!-- Bottom Navigation Bar - Mobile Only -->
 <nav
-	class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-t border-border shadow-lg"
+	class="min-[850px]:hidden fixed bottom-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-t border-border shadow-lg"
 	aria-label="Main navigation"
 >
 	<div class="flex items-center justify-around px-4 pb-[env(safe-area-inset-bottom,0.5rem)] py-1">

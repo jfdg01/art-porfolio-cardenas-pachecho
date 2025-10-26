@@ -8,6 +8,7 @@
 <script lang="ts">
 	import { Mail, Home, ArrowUp, GraduationCap } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
+	import { onMount } from 'svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { page } from '$app/stores';
@@ -31,10 +32,16 @@
 		});
 	}
 
-	// Handle scroll events to show/hide scroll to top button
+	// Handle scroll events to show/hide scroll to top button (30% of viewport height)
 	function handleScroll() {
-		showScrollToTop = window.scrollY > 700;
+		const scrollThreshold = window.innerHeight * 0.5;
+		showScrollToTop = window.scrollY > scrollThreshold;
 	}
+
+	// Check initial scroll position on mount
+	onMount(() => {
+		handleScroll();
+	});
 </script>
 
 <svelte:window onscroll={handleScroll} />
@@ -58,7 +65,7 @@
 			</div>
 
 			<!-- Desktop Navigation and Controls -->
-			<div class="hidden md:flex items-center gap-3 lg:gap-4">
+			<div class="hidden min-[850px]:flex items-center gap-3 lg:gap-4">
 				<!-- Navigation Buttons - Desktop -->
 				<div class="flex items-center gap-1 lg:gap-2">
 					<a
@@ -73,7 +80,7 @@
 						aria-current={isActivePath('/') ? 'page' : undefined}
 					>
 						<Home class="size-4" />
-						<span class="hidden lg:inline">{$t('artworks')}</span>
+						<span>{$t('artworks')}</span>
 					</a>
 					<a
 						href="/clases-online"
@@ -87,7 +94,7 @@
 						aria-current={isActivePath('/clases-online') ? 'page' : undefined}
 					>
 						<GraduationCap class="size-4" />
-						<span class="hidden lg:inline">{$t('onlineClassesPage')}</span>
+						<span>{$t('onlineClassesPage')}</span>
 					</a>
 					<a
 						href="/contact"
@@ -101,16 +108,19 @@
 						aria-current={isActivePath('/contact') ? 'page' : undefined}
 					>
 						<Mail class="size-4" />
-						<span class="hidden lg:inline">{$t('contact')}</span>
+						<span>{$t('contact')}</span>
 					</a>
 				</div>
+
+				<!-- Theme Toggle - Desktop -->
+				<ThemeToggle />
 
 				<!-- Language Selector - Desktop -->
 				<LanguageSelector />
 			</div>
 
 			<!-- Mobile Controls -->
-			<div class="flex md:hidden items-center gap-2">
+			<div class="flex min-[850px]:hidden items-center gap-2">
 				<!-- Dark Theme Toggle - Mobile -->
 				<ThemeToggle />
 
@@ -125,8 +135,8 @@
 <button
 	onclick={scrollToTop}
 	aria-label="Scroll to top"
-	class="fixed bottom-20 md:bottom-4 right-4 z-50 bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground rounded-full p-3 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
-		? 'opacity-100 translate-y-0'
+	class="fixed bottom-20 min-[850px]:bottom-4 right-4 z-50 bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground rounded-full p-3 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
+		? 'opacity-100 translate-y-0 pointer-events-auto'
 		: 'opacity-0 translate-y-2 pointer-events-none'}"
 >
 	<ArrowUp class="size-5 group-hover:scale-110 transition-transform duration-300" />
