@@ -14,29 +14,8 @@
 	// Get gallery state to access all artworks
 	const galleryState = getGalleryState();
 
-	// Shuffle function using Fisher-Yates algorithm
-	function shuffleArray<T>(array: T[]): T[] {
-		const shuffled = [...array];
-		for (let i = shuffled.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-		}
-		return shuffled;
-	}
-
-	// Get all artworks from the gallery state (not filtered) and shuffle them
-	let artworks = $derived.by(() => {
-		console.log('-- Before shuffle --');
-		galleryState.artworks.forEach((artwork, idx) => {
-			console.log(`${idx}: ${artwork.title}`);
-		});
-		const shuffled = shuffleArray(galleryState.artworks);
-		console.log('-- After shuffle --');
-		shuffled.forEach((artwork, idx) => {
-			console.log(`${idx}: ${artwork.title}`);
-		});
-		return galleryState.artworks;
-	});
+	// Get all artworks from the gallery state (not filtered)
+	let artworks = $derived(galleryState.artworks);
 
 	// Create circular scroll illusion by duplicating artworks
 	let circularArtworks = $derived([...artworks, ...artworks, ...artworks]);
