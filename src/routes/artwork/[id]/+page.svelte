@@ -5,6 +5,7 @@
 
 <script lang="ts">
 	import type { PageData } from './$types';
+	import type { Artwork } from '$lib/types/artwork';
 	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
@@ -32,7 +33,7 @@
 	// Calculate next/prev based on current filter state
 	let navigation = $derived.by(() => {
 		const filteredArtworks = galleryState.filteredArtworks;
-		const currentIndex = filteredArtworks.findIndex((art) => art.id === artwork.id);
+		const currentIndex = filteredArtworks.findIndex((art: Artwork) => art.id === artwork.id);
 
 		if (currentIndex === -1) {
 			return { nextId: null, prevId: null };
@@ -108,18 +109,14 @@
 				const imageName = image.src.split('/').pop()?.replace('.webp', '');
 				const optimizedImage = imageName ? imageMapDetail[imageName] : undefined;
 
-				// If we have an optimized image, extract the fallback URL from it
-				// The optimizedImage.img.src contains the actual built URL
-				// @ts-expect-error - optimized image structure from vite-imagetools
-				const imgUrl = optimizedImage?.img?.src || image.src;
+				// Use the optimized image if available, otherwise fallback to original
+				const imgUrl = optimizedImage || image.src;
 
 				return {
 					img: imgUrl,
 					alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
-					// @ts-expect-error - optimized image structure from vite-imagetools
-					width: optimizedImage?.img?.w || 1920,
-					// @ts-expect-error - optimized image structure from vite-imagetools
-					height: optimizedImage?.img?.h || 1080
+					width: 1920,
+					height: 1080
 				};
 			}),
 			position: currentImageIndex
