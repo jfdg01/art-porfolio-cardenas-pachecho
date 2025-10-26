@@ -14,9 +14,9 @@
 
 <!-- Footer with extra padding on mobile to avoid overlap with BottomNavigation -->
 <footer
-	class="border-t border-border bg-background/80 backdrop-blur-xl text-muted-foreground text-sm pb-20 md:pb-0"
+	class="bg-background/80 backdrop-blur-xl text-muted-foreground text-sm pb-20 md:pb-0"
 >
-	<div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-6">
+	<div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-6">
 		<div class="text-center">
 			<p>
 				© {currentYear}

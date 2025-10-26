@@ -473,7 +473,7 @@
 					{/if}
 
 					<!-- Artwork Navigation Controls -->
-					<div class="pt-4 md:pt-6 border-t border-border">
+					<div class="pt-2">
 						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
 							<button
@@ -493,7 +493,6 @@
 								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
 								aria-label={$t('goBack')}
 							>
-								<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
 								<span class="whitespace-nowrap">{$t('goBack')}</span>
 							</button>
 
