@@ -197,7 +197,7 @@
 <GalleryHeader />
 
 <!-- Go Back Button -->
-<div class="bg-background/80 backdrop-blur-md border-b border-border">
+<div class="bg-background/80 backdrop-blur-md">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="py-3 md:py-4">
 			<button
@@ -215,7 +215,7 @@
 <!-- Main Content -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <main
-	class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 md:py-8 lg:py-12 focus:outline-none"
+	class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 focus:outline-none"
 	onkeydown={handleKeydown}
 	tabindex="-1"
 >
