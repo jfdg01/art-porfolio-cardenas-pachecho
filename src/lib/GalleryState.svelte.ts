@@ -67,34 +67,48 @@ export class GalleryStateClass {
 
 		switch (this.sortBy) {
 			case 'name-asc':
-				return sorted.sort((a, b) => a.title.localeCompare(b.title));
+				return sorted.sort((a, b) => {
+					const comparison = a.title.localeCompare(b.title);
+					// Use ID as tie-breaker for stability
+					return comparison !== 0 ? comparison : a.id.localeCompare(b.id);
+				});
 
 			case 'name-desc':
-				return sorted.sort((a, b) => b.title.localeCompare(a.title));
+				return sorted.sort((a, b) => {
+					const comparison = b.title.localeCompare(a.title);
+					// Use ID as tie-breaker for stability
+					return comparison !== 0 ? comparison : a.id.localeCompare(b.id);
+				});
 
 			case 'year-newest':
 				return sorted.sort((a, b) => {
 					// Handle missing years - place at end
-					if (!a.year && !b.year) return 0;
+					if (!a.year && !b.year) return a.id.localeCompare(b.id);
 					if (!a.year) return 1;
 					if (!b.year) return -1;
-					return b.year - a.year;
+					const yearComparison = b.year - a.year;
+					// Use ID as tie-breaker for stability
+					return yearComparison !== 0 ? yearComparison : a.id.localeCompare(b.id);
 				});
 
 			case 'year-oldest':
 				return sorted.sort((a, b) => {
 					// Handle missing years - place at end
-					if (!a.year && !b.year) return 0;
+					if (!a.year && !b.year) return a.id.localeCompare(b.id);
 					if (!a.year) return 1;
 					if (!b.year) return -1;
-					return a.year - b.year;
+					const yearComparison = a.year - b.year;
+					// Use ID as tie-breaker for stability
+					return yearComparison !== 0 ? yearComparison : a.id.localeCompare(b.id);
 				});
 
 			case 'category':
 				return sorted.sort((a, b) => {
 					const catA = Array.isArray(a.category) ? a.category[0] : a.category;
 					const catB = Array.isArray(b.category) ? b.category[0] : b.category;
-					return catA.localeCompare(catB);
+					const categoryComparison = catA.localeCompare(catB);
+					// Use ID as tie-breaker for stability
+					return categoryComparison !== 0 ? categoryComparison : a.id.localeCompare(b.id);
 				});
 
 			case 'availability':
@@ -102,16 +116,37 @@ export class GalleryStateClass {
 					// Available items first
 					if (a.isAvailable && !b.isAvailable) return -1;
 					if (!a.isAvailable && b.isAvailable) return 1;
-					return 0;
+					// Use ID as tie-breaker for stability when availability is the same
+					return a.id.localeCompare(b.id);
 				});
 
 			case 'random':
-				// Shuffle the array randomly
-				return sorted.sort(() => Math.random() - 0.5);
+				// Deterministic pseudo-random shuffle using ID as seed
+				// This ensures the same "random" order on both server and client
+				return sorted.sort((a, b) => {
+					// Create a deterministic hash from IDs
+					const hashA = this.simpleHash(a.id);
+					const hashB = this.simpleHash(b.id);
+					return hashA - hashB;
+				});
 
 			default:
 				return sorted;
 		}
+	}
+
+	/**
+	 * Simple deterministic hash function for pseudo-random sorting
+	 * This ensures the same "random" order across server and client renders
+	 */
+	private simpleHash(str: string): number {
+		let hash = 0;
+		for (let i = 0; i < str.length; i++) {
+			const char = str.charCodeAt(i);
+			hash = (hash << 5) - hash + char;
+			hash = hash & hash; // Convert to 32-bit integer
+		}
+		return hash;
 	}
 
 	availableCategories = $derived.by(() => {
@@ -160,22 +195,32 @@ export class GalleryStateClass {
 
 	/**
 	 * Get a random assortment of artworks
+	 * Uses deterministic pseudo-random ordering for SSR consistency
 	 * @param count - Number of artworks to return (defaults to 6)
 	 * @returns Random array of artworks
 	 */
 	getRandomArtworks(count: number = 6): Artwork[] {
-		const shuffled = [...this.artworks].sort(() => Math.random() - 0.5);
+		const shuffled = [...this.artworks].sort((a, b) => {
+			const hashA = this.simpleHash(a.id);
+			const hashB = this.simpleHash(b.id);
+			return hashA - hashB;
+		});
 		return shuffled.slice(0, Math.min(count, this.artworks.length));
 	}
 
 	/**
 	 * Get random artworks from filtered results
 	 * Respects current filters and returns a random selection
+	 * Uses deterministic pseudo-random ordering for SSR consistency
 	 * @param count - Number of artworks to return (defaults to 6)
 	 * @returns Random array of filtered artworks
 	 */
 	getRandomFilteredArtworks(count: number = 6): Artwork[] {
-		const shuffled = [...this.filteredArtworks].sort(() => Math.random() - 0.5);
+		const shuffled = [...this.filteredArtworks].sort((a, b) => {
+			const hashA = this.simpleHash(a.id);
+			const hashB = this.simpleHash(b.id);
+			return hashA - hashB;
+		});
 		return shuffled.slice(0, Math.min(count, this.filteredArtworks.length));
 	}
 }

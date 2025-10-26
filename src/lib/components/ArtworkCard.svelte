@@ -6,14 +6,12 @@
 -->
 
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import type { Artwork } from '$lib/types/artwork';
 	import { Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import Img from '@zerodevx/svelte-img';
 	import { imageMapGallery } from '$lib/data/imageImports';
-	import { onMount } from 'svelte';
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
@@ -23,13 +21,6 @@
 	}: {
 		artwork: Artwork;
 	} = $props();
-
-	// Track if component is mounted to avoid hydration mismatch
-	let mounted = $state(false);
-
-	onMount(() => {
-		mounted = true;
-	});
 
 	function handleClick() {
 		// Navigate without query parameters - state is preserved in GalleryState context
@@ -60,23 +51,13 @@
 				{@const imageSrc = artwork.images[0].src}
 				{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
 				{@const optimizedImage = imageName ? imageMapGallery[imageName] : undefined}
-				{#if mounted && optimizedImage && browser}
-					<!-- Only render optimized image on client to prevent hydration mismatch -->
-					<Img
-						src={optimizedImage}
-						alt={$t('artworkAlt', { values: { title: artwork.title } })}
-						class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
-						sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
-					/>
-				{:else}
-					<!-- Fallback for images not found in the mapping or during SSR -->
-					<img
-						src={imageSrc}
-						alt={$t('artworkAlt', { values: { title: artwork.title } })}
-						class="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-						loading="lazy"
-					/>
-				{/if}
+
+				<Img
+					src={optimizedImage ?? imageSrc}
+					alt={$t('artworkAlt', { values: { title: artwork.title } })}
+					class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+					sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
+				/>
 			{:else}
 				<div class="w-full h-48 bg-muted flex items-center justify-center">
 					<p class="text-muted-foreground">No image available</p>
