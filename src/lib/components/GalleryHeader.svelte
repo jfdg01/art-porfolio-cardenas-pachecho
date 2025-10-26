@@ -6,42 +6,19 @@
 -->
 
 <script lang="ts">
-	import { Mail, Home, ArrowUp, GraduationCap } from 'lucide-svelte';
+	import { Mail, Home, GraduationCap } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
-	import { onMount } from 'svelte';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
+	import ScrollToTop from './ScrollToTop.svelte';
 	import { page } from '$app/stores';
 	import { isActivePath } from '$lib/utils/navigation';
-
-	let showScrollToTop = $state(false);
 
 	// Check if a path is active using shared utility
 	function checkActivePath(path: string): boolean {
 		return isActivePath($page.url.pathname, path);
 	}
-
-	// Scroll to top functionality
-	function scrollToTop() {
-		window.scrollTo({
-			top: 0,
-			behavior: 'smooth'
-		});
-	}
-
-	// Handle scroll events to show/hide scroll to top button (30% of viewport height)
-	function handleScroll() {
-		const scrollThreshold = window.innerHeight * 0.5;
-		showScrollToTop = window.scrollY > scrollThreshold;
-	}
-
-	// Check initial scroll position on mount
-	onMount(() => {
-		handleScroll();
-	});
 </script>
-
-<svelte:window onscroll={handleScroll} />
 
 <header
 	class="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border shadow-sm"
@@ -129,12 +106,4 @@
 </header>
 
 <!-- Scroll to Top Button -->
-<button
-	onclick={scrollToTop}
-	aria-label="Scroll to top"
-	class="fixed bottom-20 min-[850px]:bottom-4 right-4 z-50 bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground rounded-full p-3 shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
-		? 'opacity-100 translate-y-0 pointer-events-auto'
-		: 'opacity-0 translate-y-2 pointer-events-none'}"
->
-	<ArrowUp class="size-5 group-hover:scale-110 transition-transform duration-300" />
-</button>
+<ScrollToTop />
