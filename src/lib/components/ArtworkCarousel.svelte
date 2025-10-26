@@ -6,7 +6,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
-	import { imageMapGallery } from '$lib/data/imageImports';
+	import { imageMapDetail } from '$lib/data/imageImports';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
@@ -88,7 +88,7 @@
 		{#each circularArtworks as artwork, index (artwork.id + '-' + index)}
 			{@const imageSrc = artwork.images?.[0]?.src}
 			{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-			{@const optimizedImage = imageName ? imageMapGallery[imageName] : undefined}
+			{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
 
 			{#if imageSrc}
 				<button
@@ -103,7 +103,7 @@
 							src={optimizedImage}
 							alt={$t('artworkAlt', { values: { title: artwork.title } })}
 							class="h-[100px] w-auto rounded-lg"
-							sizes="(max-width: 768px) 100px, 150px"
+							sizes="100px"
 						/>
 					{:else}
 						<img
