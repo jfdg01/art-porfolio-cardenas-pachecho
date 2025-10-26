@@ -5,7 +5,7 @@
  */
 
 import { getContext, setContext } from 'svelte';
-import { SvelteSet, SvelteDate } from 'svelte/reactivity';
+import { SvelteSet } from 'svelte/reactivity';
 import type { Artwork } from '$lib/types/artwork';
 import { artworkData } from '$lib/data/artworkData';
 
@@ -16,7 +16,6 @@ export type SortOption =
 	| 'name-desc'
 	| 'year-newest'
 	| 'year-oldest'
-	| 'random'
 	| 'category'
 	| 'availability';
 
@@ -28,11 +27,11 @@ export class GalleryStateClass {
 	// Reactive properties using $state rune
 	artworks = $state<Artwork[]>(artworkData);
 	selectedCategories = $state<string[]>([]);
-	sortBy = $state<SortOption>('random');
+	sortBy = $state<SortOption>('name-asc');
 	showOnlyAvailable = $state<boolean>(false);
 
-	// Getter methods for computed values
-	get filteredArtworks() {
+	// Computed properties using $derived
+	filteredArtworks = $derived.by(() => {
 		// First apply category filtering
 		let filtered: Artwork[];
 		if (this.selectedCategories.length === 0) {
@@ -54,20 +53,7 @@ export class GalleryStateClass {
 
 		// Then apply sorting
 		return this.sortArtworks(filtered);
-	}
-
-	/**
-	 * Generate a seed based on current date (truncated to the day)
-	 * This ensures the random order stays consistent throughout the day
-	 * and changes daily for variety
-	 */
-	private getDailyBasedSeed(): number {
-		const now = new SvelteDate();
-		// Combine year, month, day into a single number
-		// This creates a stable seed that only changes once per day
-		const seed = now.getFullYear() * 10000 + (now.getMonth() + 1) * 100 + now.getDate();
-		return seed;
-	}
+	});
 
 	/**
 	 * Sort artworks based on current sortBy state
@@ -100,17 +86,6 @@ export class GalleryStateClass {
 					return a.year - b.year;
 				});
 
-			case 'random': {
-				// Stable daily seed for consistent ordering throughout the day
-				let seed = this.getDailyBasedSeed();
-				return sorted.sort(() => {
-					// Seeded pseudo-random using daily seed
-					const hash = (seed * 9301 + 49297) % 233280;
-					seed = hash;
-					return hash / 233280 - 0.5;
-				});
-			}
-
 			case 'category':
 				return sorted.sort((a, b) => {
 					const catA = Array.isArray(a.category) ? a.category[0] : a.category;
@@ -131,7 +106,7 @@ export class GalleryStateClass {
 		}
 	}
 
-	get availableCategories() {
+	availableCategories = $derived.by(() => {
 		const categories = new SvelteSet<string>();
 		this.artworks.forEach((artwork) => {
 			if (Array.isArray(artwork.category)) {
@@ -141,7 +116,7 @@ export class GalleryStateClass {
 			}
 		});
 		return Array.from(categories).sort();
-	}
+	});
 
 	// Actions
 	setArtworks(artworks: Artwork[]) {
@@ -165,10 +140,10 @@ export class GalleryStateClass {
 		this.showOnlyAvailable = false;
 	}
 
-	// Legacy getter for backward compatibility (if needed)
-	get selectedCategory() {
-		return this.selectedCategories.length === 1 ? this.selectedCategories[0] : '';
-	}
+	// Legacy computed property for backward compatibility (if needed)
+	selectedCategory = $derived(
+		this.selectedCategories.length === 1 ? this.selectedCategories[0] : ''
+	);
 
 	// Utility methods
 	getArtworkById(id: string): Artwork | undefined {

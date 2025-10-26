@@ -152,8 +152,8 @@ export const artworkImages = {
 	inherente: [{ name: 'main', src: '/images/inherente.webp', alt: 'Inherente main view' }],
 	lechera: [{ name: 'main', src: '/images/lechera.webp', alt: 'Lechera main view' }],
 	notional: [
-		{ name: 'zoom-1', src: '/images/notional-zoom-1.webp', alt: 'Notional zoom detail 1' },
-		{ name: 'zoom-2', src: '/images/notional-zoom-2.webp', alt: 'Notional zoom detail 2' }
+		{ name: 'main', src: '/images/notional.webp', alt: 'Notional main view' },
+		{ name: 'zoom-1', src: '/images/notional-zoom-1.webp', alt: 'Notional zoom detail 1' }
 	],
 	'nuevos-acercamientos': [
 		{

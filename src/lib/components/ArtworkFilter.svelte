@@ -28,7 +28,6 @@ Follows mobile-first design system with glass morphism and gradient accents
 
 	// Sort options configuration
 	const sortOptions: { value: SortOption; labelKey: string }[] = [
-		{ value: 'random', labelKey: 'sort.random' },
 		{ value: 'name-asc', labelKey: 'sort.nameAsc' },
 		{ value: 'name-desc', labelKey: 'sort.nameDesc' },
 		{ value: 'category', labelKey: 'sort.category' }
