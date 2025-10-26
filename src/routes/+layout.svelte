@@ -16,8 +16,8 @@
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let { children, data }: { children: any; data: LayoutData } = $props();
 
-	// Set up global gallery state (artworks are already loaded from static data)
-	setGalleryState();
+	// Set up global gallery state with server-loaded artwork data
+	setGalleryState(data.artworkData);
 
 	// Set locale from load function data
 	locale.set(data.locale);

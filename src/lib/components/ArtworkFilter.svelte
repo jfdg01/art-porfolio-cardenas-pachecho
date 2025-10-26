@@ -30,7 +30,8 @@ Follows mobile-first design system with glass morphism and gradient accents
 	const sortOptions: { value: SortOption; labelKey: string }[] = [
 		{ value: 'name-asc', labelKey: 'sort.nameAsc' },
 		{ value: 'name-desc', labelKey: 'sort.nameDesc' },
-		{ value: 'category', labelKey: 'sort.category' }
+		{ value: 'category', labelKey: 'sort.category' },
+		{ value: 'random', labelKey: 'sort.random' }
 	];
 
 	// Count artworks per category

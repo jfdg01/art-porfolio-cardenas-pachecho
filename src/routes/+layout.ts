@@ -1,5 +1,6 @@
 import { waitLocale } from 'svelte-i18n';
 import { browser } from '$app/environment';
+import { artworkData } from '$lib/data/artworkData';
 
 // Define all supported language codes
 type SupportedLocale =
@@ -61,6 +62,7 @@ export async function load({ url }) {
 	await waitLocale(locale);
 
 	return {
-		locale
+		locale,
+		artworkData
 	};
 }

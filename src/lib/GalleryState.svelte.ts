@@ -7,7 +7,6 @@
 import { getContext, setContext } from 'svelte';
 import { SvelteSet } from 'svelte/reactivity';
 import type { Artwork } from '$lib/types/artwork';
-import { artworkData } from '$lib/data/artworkData';
 
 const GALLERY_KEY = Symbol('gallery_state');
 
@@ -17,7 +16,8 @@ export type SortOption =
 	| 'year-newest'
 	| 'year-oldest'
 	| 'category'
-	| 'availability';
+	| 'availability'
+	| 'random';
 
 /**
  * Gallery state management class using modern Svelte 5 classes paradigm
@@ -25,10 +25,14 @@ export type SortOption =
  */
 export class GalleryStateClass {
 	// Reactive properties using $state rune
-	artworks = $state<Artwork[]>(artworkData);
+	artworks = $state<Artwork[]>([]);
 	selectedCategories = $state<string[]>([]);
-	sortBy = $state<SortOption>('name-asc');
+	sortBy = $state<SortOption>('random');
 	showOnlyAvailable = $state<boolean>(false);
+
+	constructor(artworkData: Artwork[]) {
+		this.artworks = artworkData;
+	}
 
 	// Computed properties using $derived
 	filteredArtworks = $derived.by(() => {
@@ -101,6 +105,10 @@ export class GalleryStateClass {
 					return 0;
 				});
 
+			case 'random':
+				// Shuffle the array randomly
+				return sorted.sort(() => Math.random() - 0.5);
+
 			default:
 				return sorted;
 		}
@@ -149,22 +157,64 @@ export class GalleryStateClass {
 	getArtworkById(id: string): Artwork | undefined {
 		return this.artworks.find((artwork) => artwork.id === id);
 	}
+
+	/**
+	 * Get a random assortment of artworks
+	 * @param count - Number of artworks to return (defaults to 6)
+	 * @returns Random array of artworks
+	 */
+	getRandomArtworks(count: number = 6): Artwork[] {
+		const shuffled = [...this.artworks].sort(() => Math.random() - 0.5);
+		return shuffled.slice(0, Math.min(count, this.artworks.length));
+	}
+
+	/**
+	 * Get random artworks from filtered results
+	 * Respects current filters and returns a random selection
+	 * @param count - Number of artworks to return (defaults to 6)
+	 * @returns Random array of filtered artworks
+	 */
+	getRandomFilteredArtworks(count: number = 6): Artwork[] {
+		const shuffled = [...this.filteredArtworks].sort(() => Math.random() - 0.5);
+		return shuffled.slice(0, Math.min(count, this.filteredArtworks.length));
+	}
 }
 
 /**
  * Set gallery state in context (call in +layout.svelte)
- * Creates a new instance of GalleryStateClass and makes it available to all child components
+ * Creates a new instance of GalleryStateClass with server data and makes it available to all child components
+ * Uses a guard to prevent multiple instances in the same component tree
+ * @param artworkData - Artwork data from server load function
  */
-export function setGalleryState() {
-	const galleryState = new GalleryStateClass();
-	setContext(GALLERY_KEY, galleryState);
+export function setGalleryState(artworkData: Artwork[]) {
+	// Check if gallery state already exists in context
+	// This prevents creating multiple instances during re-renders
+	// getContext returns undefined if the key doesn't exist in context
+	let galleryState = getContext<GalleryStateClass | undefined>(GALLERY_KEY);
+
+	// Only create new instance if it doesn't exist
+	if (!galleryState) {
+		galleryState = new GalleryStateClass(artworkData);
+		setContext(GALLERY_KEY, galleryState);
+	}
+
 	return galleryState;
 }
 
 /**
  * Get gallery state from context (call in components)
  * Retrieves the shared gallery state instance from the context
+ * Throws an error if called outside of the component tree where setGalleryState was called
  */
 export function getGalleryState() {
-	return getContext<GalleryStateClass>(GALLERY_KEY);
+	const galleryState = getContext<GalleryStateClass | undefined>(GALLERY_KEY);
+
+	if (!galleryState) {
+		throw new Error(
+			'GalleryState not found in context. ' +
+				'Make sure setGalleryState() is called in +layout.svelte before using getGalleryState().'
+		);
+	}
+
+	return galleryState;
 }

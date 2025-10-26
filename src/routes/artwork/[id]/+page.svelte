@@ -4,6 +4,7 @@
 -->
 
 <script lang="ts">
+	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
 	import type { Artwork } from '$lib/types/artwork';
 	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-svelte';
@@ -20,6 +21,9 @@
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
+
+	// Track if component is mounted to avoid hydration mismatch
+	let mounted = $state(false);
 
 	// Make artwork reactive to data changes
 	let artwork = $derived(data.artwork);
@@ -149,6 +153,7 @@
 
 	// Initialize BiggerPicture lightbox
 	onMount(() => {
+		mounted = true;
 		bp = BiggerPicture({
 			target: document.body
 		});
@@ -225,7 +230,8 @@
 								tabindex="0"
 								aria-label={$t('expandImage', { default: 'Expand image' })}
 							>
-								{#if optimizedImage}
+								{#if mounted && optimizedImage && browser}
+									<!-- Only render optimized image on client to prevent hydration mismatch -->
 									<Img
 										src={optimizedImage}
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
@@ -233,7 +239,7 @@
 										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
 									/>
 								{:else}
-									<!-- Fallback for images not found in the mapping -->
+									<!-- Fallback for images not found in the mapping or during SSR -->
 									<img
 										src={imageSrc}
 										alt={$t('artworkAlt', { values: { title: artwork.title } })}
