@@ -4,14 +4,14 @@
 	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';
 	import { locale } from 'svelte-i18n';
-	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
-	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	// import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+	// import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import BottomNavigation from '$lib/components/BottomNavigation.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	// Initialize Vercel Speed Insights and Analytics
-	injectSpeedInsights();
-	injectAnalytics();
+	// injectSpeedInsights();
+	// injectAnalytics();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let { children, data }: { children: any; data: LayoutData } = $props();
