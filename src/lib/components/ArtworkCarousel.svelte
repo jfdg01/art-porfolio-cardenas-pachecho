@@ -13,6 +13,12 @@
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button, Tooltip } from 'bits-ui';
 
+	interface Props {
+		currentArtworkId?: string;
+	}
+
+	let { currentArtworkId }: Props = $props();
+
 	// Get gallery state to access all artworks
 	const galleryState = getGalleryState();
 
@@ -104,12 +110,44 @@
 		scrollContainer.scrollLeft += delta;
 	}
 
+	// Scroll to current artwork when it changes
+	function scrollToCurrent() {
+		if (!scrollContainer || !currentArtworkId || artworks.length === 0) return;
+
+		// Find the index of the current artwork in the first set
+		const currentIndex = artworks.findIndex((art) => art.id === currentArtworkId);
+		if (currentIndex === -1) return;
+
+		// Calculate position in the middle set (artworks.length to artworks.length * 2)
+		const middleIndex = artworks.length + currentIndex;
+
+		const thumbnails = scrollContainer.querySelectorAll('.artwork-item');
+		const currentThumbnail = thumbnails[middleIndex];
+
+		if (currentThumbnail) {
+			currentThumbnail.scrollIntoView({
+				behavior: 'smooth',
+				block: 'nearest',
+				inline: 'center'
+			});
+		}
+	}
+
 	// Check if content is scrollable when artworks change
 	$effect(() => {
 		if (artworks.length > 0) {
 			setTimeout(() => {
 				checkScrollable();
 			}, 100);
+		}
+	});
+
+	// Scroll to current artwork when it changes
+	$effect(() => {
+		if (currentArtworkId && scrollContainer) {
+			setTimeout(() => {
+				scrollToCurrent();
+			}, 150);
 		}
 	});
 
@@ -126,6 +164,10 @@
 		// Check scrollable after mount
 		setTimeout(() => {
 			checkScrollable();
+			// Scroll to current artwork if specified
+			if (currentArtworkId) {
+				scrollToCurrent();
+			}
 		}, 200);
 
 		// Check scrollable on window resize
@@ -176,6 +218,7 @@
 					{@const imageSrc = artwork.images?.[0]?.src}
 					{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
 					{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
+					{@const isCurrentArtwork = artwork.id === currentArtworkId}
 
 					{#if imageSrc}
 						<Tooltip.Root>
@@ -185,8 +228,11 @@
 										{...props}
 										onclick={() => navigateToArtwork(artwork.id)}
 										onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
-										class="flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted"
+										class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted border-2 {isCurrentArtwork
+											? 'border-primary shadow-lg scale-105'
+											: 'border-transparent hover:border-muted-foreground/30'}"
 										aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
+										aria-pressed={isCurrentArtwork}
 										tabindex={0}
 									>
 										{#if optimizedImage}

@@ -227,7 +227,7 @@
 >
 	<!-- Artwork Carousel - Full width, flush with screen edges -->
 	<div class="-mx-4 sm:-mx-6 lg:-mx-8 mb-4">
-		<ArtworkCarousel />
+		<ArtworkCarousel currentArtworkId={artwork?.id} />
 	</div>
 
 	<div
