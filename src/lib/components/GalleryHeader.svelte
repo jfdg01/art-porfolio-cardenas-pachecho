@@ -12,16 +12,13 @@
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import { page } from '$app/stores';
+	import { isActivePath } from '$lib/utils/navigation';
 
 	let showScrollToTop = $state(false);
 
-	// Check if a path is active
-	function isActivePath(path: string): boolean {
-		if (path === '/') {
-			// For home, only match exact path or artwork detail pages
-			return $page.url.pathname === '/' || $page.url.pathname.startsWith('/artwork/');
-		}
-		return $page.url.pathname === path;
+	// Check if a path is active using shared utility
+	function checkActivePath(path: string): boolean {
+		return isActivePath($page.url.pathname, path);
 	}
 
 	// Scroll to top functionality
@@ -71,13 +68,13 @@
 					<a
 						href="/"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/'
 						)
 							? 'text-primary bg-accent'
 							: 'text-foreground hover:text-primary hover:bg-accent'}"
 						aria-label="View artworks"
-						aria-current={isActivePath('/') ? 'page' : undefined}
+						aria-current={checkActivePath('/') ? 'page' : undefined}
 					>
 						<Home class="size-4" />
 						<span>{$t('artworks')}</span>
@@ -85,13 +82,13 @@
 					<a
 						href="/clases-online"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/clases-online'
 						)
 							? 'text-primary bg-accent'
 							: 'text-foreground hover:text-primary hover:bg-accent'}"
 						aria-label="Online classes"
-						aria-current={isActivePath('/clases-online') ? 'page' : undefined}
+						aria-current={checkActivePath('/clases-online') ? 'page' : undefined}
 					>
 						<GraduationCap class="size-4" />
 						<span>{$t('onlineClassesPage')}</span>
@@ -99,13 +96,13 @@
 					<a
 						href="/contact"
 						data-sveltekit-preload-data="hover"
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {isActivePath(
+						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/contact'
 						)
 							? 'text-primary bg-accent'
 							: 'text-foreground hover:text-primary hover:bg-accent'}"
 						aria-label="Contact information"
-						aria-current={isActivePath('/contact') ? 'page' : undefined}
+						aria-current={checkActivePath('/contact') ? 'page' : undefined}
 					>
 						<Mail class="size-4" />
 						<span>{$t('contact')}</span>
