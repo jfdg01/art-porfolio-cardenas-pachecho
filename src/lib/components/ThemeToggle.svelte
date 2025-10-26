@@ -1,6 +1,6 @@
 <!--
 @component ThemeToggle
-@description Toggle component for switching between light and dark themes
+@description Toggle button for switching between light and dark themes
 @example
   <ThemeToggle />
 -->
@@ -11,13 +11,17 @@
 	import { t } from 'svelte-i18n';
 
 	function handleToggle() {
-		themeStore.toggle();
+		if (themeStore.theme === 'dark') {
+			themeStore.theme = 'light';
+		} else {
+			themeStore.theme = 'dark';
+		}
 	}
 </script>
 
 <button
 	onclick={handleToggle}
-	class="inline-flex items-center justify-center rounded-lg border border-border bg-card min-h-[44px] min-w-[44px] text-foreground hover:bg-muted transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+	class="inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 min-h-[44px] min-w-[44px] text-foreground"
 	aria-label={$t('toggleDarkTheme')}
 	title={$t('toggleDarkTheme')}
 >
