@@ -7,7 +7,16 @@
 	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
 	import type { Artwork } from '$lib/types/artwork';
-	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft } from 'lucide-svelte';
+	import {
+		Euro,
+		Calendar,
+		Ruler,
+		Tag,
+		ChevronLeft,
+		ChevronRight,
+		ArrowLeft,
+		Eye
+	} from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -18,6 +27,7 @@
 	import BiggerPicture from 'bigger-picture';
 	import { imageMapDetail } from '$lib/data/imageImports';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
+	import { Label, Button } from 'bits-ui';
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -200,14 +210,14 @@
 <div class="bg-background/80 backdrop-blur-md">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="py-3 md:py-4">
-			<button
+			<Button.Root
 				onclick={goBack}
 				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-primary hover:text-primary hover:bg-accent rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
 				aria-label={$t('goBack')}
 			>
 				<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
 				<span>{$t('goBack')}</span>
-			</button>
+			</Button.Root>
 		</div>
 	</div>
 </div>
@@ -272,21 +282,21 @@
 
 						<!-- Navigation Controls -->
 						{#if hasMultipleImages}
-							<button
+							<Button.Root
 								onclick={previousImage}
 								class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
 								aria-label="Previous image"
 							>
 								<ChevronLeft class="w-6 h-6" />
-							</button>
+							</Button.Root>
 
-							<button
+							<Button.Root
 								onclick={nextImage}
 								class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
 								aria-label="Next image"
 							>
 								<ChevronRight class="w-6 h-6" />
-							</button>
+							</Button.Root>
 						{/if}
 
 						{#if !artwork.isAvailable}
@@ -298,18 +308,33 @@
 						{/if}
 					</div>
 
+					<!-- Click to enlarge label -->
+					<div class="text-center">
+						<Label.Root
+							onclick={openLightbox}
+							onkeydown={(e) => e.key === 'Enter' && openLightbox()}
+							class="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground montserrat-medium cursor-pointer hover:text-primary transition-colors duration-200"
+							role="button"
+							tabindex={0}
+							aria-label={$t('clickToEnlarge')}
+						>
+							<Eye class="w-4 h-4 md:w-5 md:h-5" />
+							<span>{$t('clickToEnlarge')}</span>
+						</Label.Root>
+					</div>
+
 					<!-- Image Navigation Dots -->
 					{#if hasMultipleImages && artwork.images}
 						<div class="flex justify-center space-x-2">
 							{#each range(artwork.images.length) as index (index)}
-								<button
+								<Button.Root
 									onclick={() => (currentImageIndex = index)}
 									class="w-3 h-3 rounded-full transition-all duration-200 {currentImageIndex ===
 									index
 										? 'bg-primary'
 										: 'bg-muted hover:bg-muted-foreground/30'}"
 									aria-label="View image {index + 1}"
-								></button>
+								></Button.Root>
 							{/each}
 						</div>
 					{/if}
@@ -436,14 +461,13 @@
 							>
 								{$t('availableInfo')}
 							</p>
-							<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-							<a
+							<Button.Root
 								href="/contact"
 								data-sveltekit-preload-data="hover"
 								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 							>
 								{$t('contactArtist')}
-							</a>
+							</Button.Root>
 						</div>
 					{:else}
 						<div class="bg-muted/50 border border-border rounded-xl p-4 md:p-6">
@@ -459,14 +483,13 @@
 									{$t('soldInfo')}
 								</p>
 								<div class="pt-2 flex justify-center">
-									<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
-									<a
+									<Button.Root
 										href="/contact"
 										data-sveltekit-preload-data="hover"
 										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 									>
 										{$t('contactArtist')}
-									</a>
+									</Button.Root>
 								</div>
 							</div>
 						</div>
@@ -476,7 +499,7 @@
 					<div class="pt-2">
 						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
-							<button
+							<Button.Root
 								onclick={() => navigateToArtwork(navigation.prevId)}
 								disabled={!navigation.prevId || isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
@@ -485,19 +508,19 @@
 							>
 								<ChevronLeft class="w-5 h-5" />
 								<span class="hidden lg:inline">{$t('previousArtwork')}</span>
-							</button>
+							</Button.Root>
 
 							<!-- Go Back to Gallery Button -->
-							<button
+							<Button.Root
 								onclick={goBack}
 								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
 								aria-label={$t('goBack')}
 							>
 								<span class="whitespace-nowrap">{$t('goBack')}</span>
-							</button>
+							</Button.Root>
 
 							<!-- Next Artwork Button -->
-							<button
+							<Button.Root
 								onclick={() => navigateToArtwork(navigation.nextId)}
 								disabled={!navigation.nextId || isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
@@ -506,7 +529,7 @@
 							>
 								<span class="hidden lg:inline">{$t('nextArtwork')}</span>
 								<ChevronRight class="w-5 h-5" />
-							</button>
+							</Button.Root>
 						</div>
 					</div>
 				</div>

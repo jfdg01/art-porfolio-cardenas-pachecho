@@ -11,6 +11,7 @@
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
+	import { Button, Tooltip } from 'bits-ui';
 
 	// Get gallery state to access all artworks
 	const galleryState = getGalleryState();
@@ -77,6 +78,18 @@
 		scrollContainer.scrollBy({ left: 300, behavior: 'smooth' });
 	}
 
+	// Handle mouse wheel scroll
+	function handleWheel(event: WheelEvent) {
+		if (!scrollContainer) return;
+
+		// Prevent default vertical scroll
+		event.preventDefault();
+
+		// Convert vertical scroll to horizontal scroll
+		const delta = event.deltaY;
+		scrollContainer.scrollLeft += delta;
+	}
+
 	// Initialize scroll position to the middle section
 	onMount(() => {
 		if (scrollContainer && artworks.length > 0) {
@@ -92,63 +105,81 @@
 <!-- Carousel Container with Buttons -->
 <div class="relative w-full group">
 	<!-- Scroll Buttons - Desktop Only with gradient overlay -->
-	<button
+	<Button.Root
 		onclick={scrollLeft}
 		class="hidden min-[850px]:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 		aria-label="Scroll left"
 	>
 		<ChevronLeft class="size-7 text-foreground drop-shadow-lg" />
-	</button>
+	</Button.Root>
 
-	<button
+	<Button.Root
 		onclick={scrollRight}
 		class="hidden min-[850px]:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-l from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
 		aria-label="Scroll right"
 	>
 		<ChevronRight class="size-7 text-foreground drop-shadow-lg" />
-	</button>
+	</Button.Root>
 
 	<!-- Carousel Container -->
-	<div
-		class="w-full overflow-x-auto scrollbar-hide"
-		bind:this={scrollContainer}
-		onscroll={handleScroll}
-	>
-		<!-- Scrollable content - circular scroll illusion -->
-		<div class="flex gap-3 py-2 px-4">
-			{#each circularArtworks as artwork, index (artwork.id + '-' + index)}
-				{@const imageSrc = artwork.images?.[0]?.src}
-				{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-				{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
+	<Tooltip.Provider>
+		<div
+			class="w-full overflow-x-auto scrollbar-hide"
+			bind:this={scrollContainer}
+			onscroll={handleScroll}
+			onwheel={handleWheel}
+		>
+			<!-- Scrollable content - circular scroll illusion -->
+			<div class="flex gap-3 py-2 px-4">
+				{#each circularArtworks as artwork, index (artwork.id + '-' + index)}
+					{@const imageSrc = artwork.images?.[0]?.src}
+					{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
+					{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
 
-				{#if imageSrc}
-					<button
-						onclick={() => navigateToArtwork(artwork.id)}
-						onkeydown={(e) => handleKeydown(e, artwork.id)}
-						class="flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted"
-						aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
-						tabindex="0"
-					>
-						{#if optimizedImage}
-							<Img
-								src={optimizedImage}
-								alt={$t('artworkAlt', { values: { title: artwork.title } })}
-								class="h-[100px] w-auto rounded-lg"
-								sizes="100px"
-							/>
-						{:else}
-							<img
-								src={imageSrc}
-								alt={$t('artworkAlt', { values: { title: artwork.title } })}
-								class="h-[100px] w-auto rounded-lg"
-								loading="lazy"
-							/>
-						{/if}
-					</button>
-				{/if}
-			{/each}
+					{#if imageSrc}
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								{#snippet child({ props })}
+									<Button.Root
+										{...props}
+										onclick={() => navigateToArtwork(artwork.id)}
+										onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
+										class="flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted"
+										aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
+										tabindex={0}
+									>
+										{#if optimizedImage}
+											<Img
+												src={optimizedImage}
+												alt={$t('artworkAlt', { values: { title: artwork.title } })}
+												class="h-[100px] w-auto rounded-lg"
+												sizes="100px"
+											/>
+										{:else}
+											<img
+												src={imageSrc}
+												alt={$t('artworkAlt', { values: { title: artwork.title } })}
+												class="h-[100px] w-auto rounded-lg"
+												loading="lazy"
+											/>
+										{/if}
+									</Button.Root>
+								{/snippet}
+							</Tooltip.Trigger>
+							<Tooltip.Portal>
+								<Tooltip.Content
+									sideOffset={8}
+									class="rounded-md bg-popover text-popover-foreground px-3 py-1.5 text-sm shadow-md"
+								>
+									{artwork.title}
+								</Tooltip.Content>
+							</Tooltip.Portal>
+						</Tooltip.Root>
+					{/if}
+				{/each}
+			</div>
 		</div>
-	</div>
+	</Tooltip.Provider>
 </div>
 
 <style>
