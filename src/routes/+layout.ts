@@ -1,6 +1,7 @@
 import { waitLocale } from 'svelte-i18n';
 import { browser } from '$app/environment';
 import { artworkData } from '$lib/data/artworkData';
+import type { Artwork } from '$lib/types/artwork';
 
 // Define all supported language codes
 type SupportedLocale =
@@ -36,6 +37,33 @@ function isValidLocale(locale: string): locale is SupportedLocale {
 	return supportedLocales.includes(locale as SupportedLocale);
 }
 
+/**
+ * Simple deterministic hash function for pseudo-random sorting
+ * This ensures the same "random" order across server and client renders
+ */
+function simpleHash(str: string): number {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		const char = str.charCodeAt(i);
+		hash = (hash << 5) - hash + char;
+		hash = hash & hash; // Convert to 32-bit integer
+	}
+	return hash;
+}
+
+/**
+ * Stable deterministic sort for artworks
+ * Uses a pseudo-random hash based on artwork ID to create a consistent "random" order
+ * This prevents hydration errors by ensuring server and client see the same order
+ */
+function stableSortArtworks(artworks: Artwork[]): Artwork[] {
+	return [...artworks].sort((a, b) => {
+		const hashA = simpleHash(a.id);
+		const hashB = simpleHash(b.id);
+		return hashA - hashB;
+	});
+}
+
 export async function load({ url }) {
 	// Determine the locale from URL params, localStorage, or default to 'es'
 	let locale: SupportedLocale = 'es'; // Default locale
@@ -61,8 +89,12 @@ export async function load({ url }) {
 	// Wait for the locale to be loaded before proceeding
 	await waitLocale(locale);
 
+	// Apply stable deterministic sorting to prevent hydration errors
+	// This ensures server and client have the same initial order
+	const sortedArtworkData = stableSortArtworks(artworkData);
+
 	return {
 		locale,
-		artworkData
+		artworkData: sortedArtworkData
 	};
 }
