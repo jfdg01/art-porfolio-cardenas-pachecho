@@ -6,7 +6,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
-	import { imageMapDetail } from '$lib/data/imageImports';
+	import { imageMapCarousel } from '$lib/data/imageImports';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
@@ -264,7 +264,7 @@
 					{@const artwork = getArtwork(index)}
 					{@const imageSrc = artwork.images?.[0]?.src}
 					{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-					{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
+					{@const optimizedImage = imageName ? imageMapCarousel[imageName] : undefined}
 					{@const isCurrentArtwork = artwork.id === currentArtworkId}
 
 					{#if imageSrc}
@@ -286,8 +286,8 @@
 											<Img
 												src={optimizedImage}
 												alt={$t('artworkAlt', { values: { title: artwork.title } })}
-												class="h-[100px] w-auto rounded-lg"
-												sizes="100px"
+												class="h-[120px] w-auto rounded-lg"
+												sizes="(min-width: 1540px) 100px, (min-width: 1280px) 100px, 100px"
 											/>
 										{:else}
 											<img

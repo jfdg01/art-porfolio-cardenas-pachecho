@@ -41,8 +41,9 @@
 {:else}
 	<!-- Masonry Layout using CSS Columns -->
 	<div class="artwork-grid masonry-columns">
-		{#each artworks as artwork (artwork.id)}
-			<ArtworkCard {artwork} />
+		{#each artworks as artwork, index (artwork.id)}
+			<!-- Prioritize first 6 images (above-the-fold) for LCP optimization -->
+			<ArtworkCard {artwork} isPriority={index < 6} eager={index < 6} />
 		{/each}
 	</div>
 

@@ -15,11 +15,17 @@
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
+	 * @prop {boolean} isPriority - Whether this is an above-the-fold image that should be prioritized
+	 * @prop {boolean} eager - Whether to disable lazy loading for this image
 	 */
 	let {
-		artwork
+		artwork,
+		isPriority = false,
+		eager = false
 	}: {
 		artwork: Artwork;
+		isPriority?: boolean;
+		eager?: boolean;
 	} = $props();
 
 	function handleClick() {
@@ -57,6 +63,8 @@
 					alt={$t('artworkAlt', { values: { title: artwork.title } })}
 					class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
 					sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
+					fetchpriority={isPriority ? 'high' : undefined}
+					loading={eager ? 'eager' : 'lazy'}
 				/>
 			{:else}
 				<div class="w-full h-48 bg-muted flex items-center justify-center">

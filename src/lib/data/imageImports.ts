@@ -12,33 +12,62 @@
  * import { imageMapGallery, imageMapDetail } from '$lib/data/imageImports';
  */
 
+// Toggle this to switch between dev and production image loading
+const dev = false;
+
 // Import all images with specific query parameters for different contexts
-export const imageImportsDetail = import.meta.glob('$lib/assets/images/*.webp', {
+const imageImportsDetail = import.meta.glob('$lib/assets/images/*.webp', {
 	import: 'default',
 	eager: true,
 	query: { as: 'detail' }
-	//query: { as: 'dev' }
 });
 
-export const imageImportsGallery = import.meta.glob('$lib/assets/images/*.webp', {
+const imageImportsGallery = import.meta.glob('$lib/assets/images/*.webp', {
 	import: 'default',
 	eager: true,
 	query: { as: 'gallery' }
-	//query: { as: 'dev' }
+});
+
+const imageImportsDev = import.meta.glob('$lib/assets/images/*.webp', {
+	import: 'default',
+	eager: true,
+	query: { as: 'dev' }
+});
+
+const imageImportsCarousel = import.meta.glob('$lib/assets/images/*.webp', {
+	import: 'default',
+	eager: true,
+	query: { as: 'carousel' }
 });
 
 // Create filename-keyed maps for easy access
 export const imageMapDetail: Record<string, string> = {};
 export const imageMapGallery: Record<string, string> = {};
+export const imageMapCarousel: Record<string, string> = {};
 
-// Populate detail image map
-Object.entries(imageImportsDetail).forEach(([path, image]) => {
-	const filename = path.split('/').pop()?.replace('.webp', '') || '';
-	imageMapDetail[filename] = image as string;
-});
+// Populate maps based on dev mode
+if (dev) {
+	// In dev mode, use dev images for both detail and gallery
+	Object.entries(imageImportsDev).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMapDetail[filename] = image as string;
+		imageMapGallery[filename] = image as string;
+		imageMapCarousel[filename] = image as string;
+	});
+} else {
+	// In production mode, use optimized images for each context
+	Object.entries(imageImportsDetail).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMapDetail[filename] = image as string;
+	});
 
-// Populate gallery image map
-Object.entries(imageImportsGallery).forEach(([path, image]) => {
-	const filename = path.split('/').pop()?.replace('.webp', '') || '';
-	imageMapGallery[filename] = image as string;
-});
+	Object.entries(imageImportsGallery).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMapGallery[filename] = image as string;
+	});
+
+	Object.entries(imageImportsCarousel).forEach(([path, image]) => {
+		const filename = path.split('/').pop()?.replace('.webp', '') || '';
+		imageMapCarousel[filename] = image as string;
+	});
+}

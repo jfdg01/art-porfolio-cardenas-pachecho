@@ -1,6 +1,32 @@
 import type { PageServerLoad } from './$types';
+import { artworkData } from '$lib/data/artworkData';
 
 export const load: PageServerLoad = async ({ url }) => {
+	// Create ImageGallery structured data for better SEO
+	const imageObjects = artworkData
+		.slice(0, 10)
+		.map((artwork) => {
+			const image = artwork.images?.[0];
+			if (!image) return null;
+
+			return {
+				'@type': 'ImageObject',
+				name: artwork.title,
+				contentUrl: `${url.origin}${image.src}`,
+				description: artwork.description || `${artwork.title} by Carmen Cárdenas Pacheco`,
+				author: {
+					'@type': 'Person',
+					name: 'Carmen Cárdenas Pacheco'
+				},
+				copyrightHolder: {
+					'@type': 'Person',
+					name: 'Carmen Cárdenas Pacheco'
+				},
+				dateCreated: artwork.year?.toString()
+			};
+		})
+		.filter(Boolean);
+
 	const seo = {
 		title: 'Carmen Cárdenas Pacheco - Portfolio de Arte',
 		description:
@@ -10,10 +36,10 @@ export const load: PageServerLoad = async ({ url }) => {
 		url: url.href,
 		structuredData: {
 			'@context': 'https://schema.org',
-			'@type': 'WebSite',
-			name: 'Carmen Cárdenas Pacheco',
+			'@type': 'ImageGallery',
+			name: 'Carmen Cárdenas Pacheco - Art Portfolio',
 			description: 'Portfolio de arte de Carmen Cárdenas Pacheco',
-			url: 'https://cardenaspacheco.es',
+			url: url.href,
 			author: {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
@@ -23,11 +49,7 @@ export const load: PageServerLoad = async ({ url }) => {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco'
 			},
-			mainEntity: {
-				'@type': 'ItemList',
-				name: 'Portfolio by Carmen Cárdenas Pacheco',
-				description: 'Collection of contemporary art'
-			}
+			image: imageObjects
 		}
 	};
 
