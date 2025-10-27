@@ -88,7 +88,7 @@
 	}
 
 	function navigateToArtwork(artworkId: string) {
-		goto(`/artwork/${artworkId}`);
+		goto(`/artwork/${artworkId}`, { noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent, artworkId: string) {

@@ -30,7 +30,7 @@
 
 	function handleClick() {
 		// Navigate without query parameters - state is preserved in GalleryState context
-		goto(`/artwork/${artwork.id}`);
+		goto(`/artwork/${artwork.id}`, { noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {

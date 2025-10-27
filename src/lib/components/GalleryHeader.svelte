@@ -31,6 +31,7 @@
 				<a
 					href="/"
 					data-sveltekit-preload-data="hover"
+					data-sveltekit-noscroll
 					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold montserrat-semibold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent hover:from-primary hover:to-primary transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
 					aria-label="Go to home page"
 				>
@@ -45,6 +46,7 @@
 					<a
 						href="/"
 						data-sveltekit-preload-data="hover"
+						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/'
 						)
@@ -59,6 +61,7 @@
 					<a
 						href="/clases-online"
 						data-sveltekit-preload-data="hover"
+						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/clases-online'
 						)
@@ -73,6 +76,7 @@
 					<a
 						href="/contact"
 						data-sveltekit-preload-data="hover"
+						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
 							'/contact'
 						)

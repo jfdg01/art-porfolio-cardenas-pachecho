@@ -74,13 +74,13 @@
 	let hasMultipleImages = $derived(artwork && artwork.images ? artwork.images.length > 1 : false);
 
 	function goBack() {
-		goto('/');
+		goto('/', { noScroll: true });
 	}
 
 	function navigateToArtwork(artworkId: string | null) {
 		if (!artworkId || isNavigating) return;
 		isNavigating = true;
-		goto(`/artwork/${artworkId}`, { replaceState: false });
+		goto(`/artwork/${artworkId}`, { replaceState: false, noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -453,6 +453,7 @@
 							<Button.Root
 								href="/contact"
 								data-sveltekit-preload-data="hover"
+								data-sveltekit-noscroll
 								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 							>
 								{$t('contactArtist')}
@@ -475,6 +476,7 @@
 									<Button.Root
 										href="/contact"
 										data-sveltekit-preload-data="hover"
+										data-sveltekit-noscroll
 										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 									>
 										{$t('contactArtist')}
