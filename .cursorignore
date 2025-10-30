@@ -1,0 +1,51 @@
+# Dependencies
+node_modules
+
+# Build outputs
+.svelte-kit
+.output
+build
+dist
+
+# Generated files
+*.generated.*
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.test
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories
+.vscode/*
+!.vscode/extensions.json
+.idea
+
+# Deployment
+.vercel
+.netlify
+.wrangler
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+
+# Large binary assets (if needed)
+# static/images/**
+# src/lib/assets/images/**
+
