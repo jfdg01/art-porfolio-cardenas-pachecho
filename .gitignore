@@ -44,3 +44,13 @@ lerna-debug.log*
 # Temporary files
 *.tmp
 *.temp
+
+# Linter cache
+.eslintcache
+
+# Prettier cache
+.prettier-cache
+node_modules/.cache
+
+# TypeScript incremental build info
+*.tsbuildinfo
