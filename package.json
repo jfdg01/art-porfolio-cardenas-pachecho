@@ -23,6 +23,7 @@
 		"i18n:check-empty": "node scripts/i18n-check-empty.mjs",
 		"i18n:auto-fix": "node scripts/i18n-auto-fix.mjs",
 		"images:convert": "node scripts/convert-to-webp.mjs",
+		"optimize-images": "node scripts/optimize-images.mjs",
 		"generate-artwork-images": "node scripts/generate-artwork-images.mjs",
 		"generate-artwork-data": "node scripts/generate-artwork-data.mjs",
 		"generate-artwork-all": "npm run generate-artwork-images && npm run generate-artwork-data",

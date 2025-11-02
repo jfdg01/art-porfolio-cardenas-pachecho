@@ -54,3 +54,10 @@ node_modules/.cache
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+# Images
+src/lib/assets/imagesRaw/
+src/lib/assets/imagesTest/
+static/imagesRaw/
+static/images/
+static/imagesTest/
