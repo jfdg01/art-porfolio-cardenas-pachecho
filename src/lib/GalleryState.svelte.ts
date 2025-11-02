@@ -7,6 +7,7 @@
 import { getContext, setContext } from 'svelte';
 import { SvelteSet } from 'svelte/reactivity';
 import type { Artwork } from '$lib/types/artwork';
+import { getOptimizedImage } from '$lib/data/imageImports';
 
 const GALLERY_KEY = Symbol('gallery_state');
 
@@ -244,6 +245,34 @@ export class GalleryStateClass {
 			return hashA - hashB;
 		});
 		return shuffled.slice(0, Math.min(count, this.filteredArtworks.length));
+	}
+
+	/**
+	 * Get optimized image for a specific image source
+	 * Lazy loads the image on-demand, only loading what's needed
+	 * @param imageSrc - The image source path (e.g., "/images/artwork-1.webp")
+	 * @param context - The optimization context (detail, carousel, gallery)
+	 * @returns Promise that resolves to the optimized image source
+	 */
+	async getOptimizedImageForSrc(
+		imageSrc: string,
+		context: 'detail' | 'carousel' | 'gallery' = 'detail'
+	): Promise<string> {
+		// Extract filename from path
+		const filename = imageSrc.split('/').pop()?.replace('.webp', '');
+
+		if (!filename) {
+			console.warn('Invalid image source:', imageSrc);
+			return imageSrc;
+		}
+
+		try {
+			const optimizedImage = await getOptimizedImage(filename, context);
+			return optimizedImage || imageSrc;
+		} catch (error) {
+			console.error('Error loading optimized image:', error);
+			return imageSrc;
+		}
 	}
 
 	/**

@@ -11,10 +11,11 @@
 
 	import { t } from 'svelte-i18n';
 
-	// import ArtworkDetails from '$lib/components/ArtworkDetails.svelte';
+	import ArtworkDetails from '$lib/components/ArtworkDetails.svelte';
+	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
+	import SEO from '$lib/components/SEO.svelte';
 
 	import Img from '@zerodevx/svelte-img';
-	import { imageMapDetail } from '$lib/data/imageImports';
 	import BiggerPicture from 'bigger-picture';
 
 	import { getGalleryState } from '$lib/GalleryState.svelte';
@@ -34,25 +35,29 @@
 	// BiggerPicture lightbox instance
 	let bp: ReturnType<typeof BiggerPicture> | null = null;
 
-	// Calculate next/prev based on current filter state
-	// let navigation = $derived(galleryState.getArtworkNavigation(artwork.id));
-
-	// Navigation state
-	// let isNavigating = $state(false);
-
 	// Computed values
 	let currentImage = $derived(artwork?.images?.[galleryState.currentImageIndex] || null);
 	let hasMultipleImages = $derived(artwork && artwork.images ? artwork.images.length > 1 : false);
 
+	// Optimized image source - loaded lazily through GalleryState
+	let optimizedImageSrc = $state<string | undefined>(undefined);
+
+	// Load optimized image when current image changes
+	$effect(() => {
+		if (currentImage?.src) {
+			// Reset to undefined first to show loading state
+			optimizedImageSrc = undefined;
+
+			// Load optimized image asynchronously
+			galleryState.getOptimizedImageForSrc(currentImage.src, 'detail').then((src) => {
+				optimizedImageSrc = src;
+			});
+		}
+	});
+
 	function goBack() {
 		goto('/', { noScroll: true });
 	}
-
-	// function navigateToArtwork(artworkId: string | null) {
-	// 	if (!artworkId || isNavigating) return;
-	// 	isNavigating = true;
-	// 	goto(`/artwork/${artworkId}`, { replaceState: false, noScroll: true });
-	// }
 
 	function nextImage() {
 		if (artwork && artwork.images) {
@@ -78,17 +83,18 @@
 			};
 		};
 
-		// Load images to get their actual dimensions
+		// Load images to get their actual dimensions - using lazy loading through GalleryState
 		const items = await Promise.all(
 			artwork.images.map(
-				(image): Promise<{ img: string; alt: string; width: number; height: number }> => {
+				async (image): Promise<{ img: string; alt: string; width: number; height: number }> => {
+					// Get optimized image through GalleryState
+					const optimizedSrc = await galleryState.getOptimizedImageForSrc(image.src, 'detail');
+					const optimizedSrcObj = optimizedSrc;
+
 					return new Promise((resolve) => {
 						const img = new Image();
-						// Extract image name
-						const imageName = image.src.split('/').pop()?.replace('.webp', '') || '';
-						const optimizedSrcObj = imageMapDetail[imageName];
 
-						// Extract the largest image URL from the srcset object or use original
+						// Extract the largest image URL from the srcset object or use the optimized source
 						let imageSrc: string;
 						if (optimizedSrcObj && typeof optimizedSrcObj === 'object') {
 							// @zerodevx/svelte-img returns an object with img and sources
@@ -151,7 +157,6 @@
 	$effect(() => {
 		if (artwork) {
 			galleryState.resetImageIndex();
-			// isNavigating = false;
 		}
 	});
 
@@ -179,11 +184,9 @@
 	});
 </script>
 
-<!-- <SEO seo={data.seo} />
- -->
-<!-- Header -->
-<!-- <GalleryHeader />
- -->
+<SEO seo={data.seo} />
+<GalleryHeader />
+
 <!-- Go Back Button -->
 <div class="bg-background/80 backdrop-blur-md">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -218,9 +221,6 @@
 				<div class="space-y-4">
 					<div class="relative">
 						{#if currentImage && currentImage.src}
-							{@const imageSrc = currentImage.src}
-							{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-							{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
 							<div
 								onclick={openLightbox}
 								onkeydown={(e) => e.key === 'Enter' && openLightbox()}
@@ -229,9 +229,9 @@
 								tabindex="0"
 								aria-label={$t('expandImage', { default: 'Expand image' })}
 							>
-								<!-- Always render the same element on both SSR and client to avoid hydration mismatch -->
+								<!-- Lazy loaded optimized image through GalleryState -->
 								<Img
-									src={optimizedImage ?? imageSrc}
+									src={optimizedImageSrc ?? currentImage.src}
 									alt={$t('artworkAlt', { values: { title: artwork.title } })}
 									class="w-full h-auto rounded-lg shadow-md"
 									sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
@@ -300,13 +300,7 @@
 			</div>
 
 			<!-- Details Section -->
-			<!-- <ArtworkDetails
-				{artwork}
-				{navigation}
-				{isNavigating}
-				onGoBack={goBack}
-				onNavigateToArtwork={navigateToArtwork}
-			/> -->
+			<ArtworkDetails {artwork} />
 		</div>
 	</div>
 </main>

@@ -4,12 +4,12 @@
 -->
 
 <script lang="ts">
-	import { imageMapDetail } from '$lib/data/imageImports';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from 'bits-ui';
+	import { getGalleryState } from '$lib/GalleryState.svelte';
 
 	interface Props {
 		images: Array<{ src: string; alt?: string }>;
@@ -18,6 +18,27 @@
 	}
 
 	let { images, selectedIndex = 0, onImageSelect }: Props = $props();
+
+	// Get gallery state for lazy image loading
+	const galleryState = getGalleryState();
+
+	// Cache for loaded optimized images
+	let optimizedImages = $state<Record<number, string>>({});
+
+	// Load optimized images for visible thumbnails
+	async function loadOptimizedImage(index: number, src: string) {
+		if (!optimizedImages[index]) {
+			const optimized = await galleryState.getOptimizedImageForSrc(src, 'detail');
+			optimizedImages[index] = optimized;
+		}
+	}
+
+	// Preload images when component mounts or images change
+	$effect(() => {
+		images.forEach((image, index) => {
+			loadOptimizedImage(index, image.src);
+		});
+	});
 
 	// Reference to the scroll container
 	let scrollContainer: HTMLDivElement;
@@ -133,10 +154,6 @@
 		<!-- Thumbnail Content -->
 		<div class="flex gap-2 py-2 px-4 justify-center">
 			{#each images as image, index (index)}
-				{@const imageSrc = image.src}
-				{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-				{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
-
 				<Button.Root
 					onclick={() => handleImageClick(index)}
 					class="thumbnail-item flex-shrink-0 transition-all duration-200 overflow-hidden rounded-lg bg-muted border-2 {selectedIndex ===
@@ -146,16 +163,16 @@
 					aria-label={$t('viewImage', { values: { num: index + 1 } })}
 					aria-pressed={selectedIndex === index}
 				>
-					{#if optimizedImage}
+					{#if optimizedImages[index]}
 						<Img
-							src={optimizedImage}
+							src={optimizedImages[index]}
 							alt={image.alt || $t('artworkAlt', { values: { title: index + 1 } })}
 							class="h-20 w-auto rounded"
 							sizes="80px"
 						/>
 					{:else}
 						<img
-							src={imageSrc}
+							src={image.src}
 							alt={image.alt || $t('artworkAlt', { values: { title: index + 1 } })}
 							class="h-20 w-auto rounded"
 							loading="lazy"

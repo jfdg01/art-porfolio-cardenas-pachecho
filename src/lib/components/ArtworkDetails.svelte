@@ -5,22 +5,44 @@
 
 <script lang="ts">
 	import type { Artwork } from '$lib/types/artwork';
+	import { getGalleryState } from '$lib/GalleryState.svelte';
+	import { goto } from '$app/navigation';
 	import { t } from 'svelte-i18n';
 	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from 'bits-ui';
 
 	interface Props {
 		artwork: Artwork;
-		navigation: {
-			nextId: string | null;
-			prevId: string | null;
-		};
-		isNavigating: boolean;
-		onGoBack: () => void;
-		onNavigateToArtwork: (artworkId: string | null) => void;
 	}
 
-	let { artwork, navigation, isNavigating, onGoBack, onNavigateToArtwork }: Props = $props();
+	let { artwork }: Props = $props();
+
+	// Get gallery state from context
+	const galleryState = getGalleryState();
+
+	// Derive navigation from gallery state
+	const navigation = $derived(galleryState.getArtworkNavigation(artwork.id));
+
+	// Navigation state
+	let isNavigating = $state(false);
+
+	// Navigation functions
+	function goBack() {
+		goto('/', { noScroll: true });
+	}
+
+	function navigateToArtwork(artworkId: string | null) {
+		if (!artworkId || isNavigating) return;
+		isNavigating = true;
+		goto(`/artwork/${artworkId}`, { replaceState: false, noScroll: true });
+	}
+
+	// Reset navigating state when artwork changes
+	$effect(() => {
+		if (artwork) {
+			isNavigating = false;
+		}
+	});
 </script>
 
 <div class="p-4 md:p-6 lg:p-8 bg-muted/50">
@@ -167,7 +189,7 @@
 			<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 				<!-- Previous Artwork Button -->
 				<Button.Root
-					onclick={() => onNavigateToArtwork(navigation.prevId)}
+					onclick={() => navigateToArtwork(navigation.prevId)}
 					disabled={!navigation.prevId || isNavigating}
 					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 					aria-label={$t('previousArtwork')}
@@ -179,7 +201,7 @@
 
 				<!-- Go Back to Gallery Button -->
 				<Button.Root
-					onclick={onGoBack}
+					onclick={goBack}
 					class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
 					aria-label={$t('goBack')}
 				>
@@ -188,7 +210,7 @@
 
 				<!-- Next Artwork Button -->
 				<Button.Root
-					onclick={() => onNavigateToArtwork(navigation.nextId)}
+					onclick={() => navigateToArtwork(navigation.nextId)}
 					disabled={!navigation.nextId || isNavigating}
 					class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 					aria-label={$t('nextArtwork')}
