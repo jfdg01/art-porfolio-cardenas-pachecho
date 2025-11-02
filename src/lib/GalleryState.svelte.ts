@@ -29,10 +29,7 @@ export class GalleryStateClass {
 	selectedCategories = $state<string[]>([]);
 	sortBy = $state<SortOption>('random');
 	showOnlyAvailable = $state<boolean>(false);
-
-	constructor(artworkData: Artwork[]) {
-		this.artworks = artworkData;
-	}
+	currentImageIndex = $state<number>(0);
 
 	// Computed properties using $derived
 	filteredArtworks = $derived.by(() => {
@@ -58,6 +55,22 @@ export class GalleryStateClass {
 		// Then apply sorting
 		return this.sortArtworks(filtered);
 	});
+
+	availableCategories = $derived.by(() => {
+		const categories = new SvelteSet<string>();
+		this.artworks.forEach((artwork) => {
+			if (Array.isArray(artwork.category)) {
+				artwork.category.forEach((cat) => categories.add(cat));
+			} else {
+				categories.add(artwork.category);
+			}
+		});
+		return Array.from(categories).sort();
+	});
+
+	constructor(artworkData: Artwork[]) {
+		this.artworks = artworkData;
+	}
 
 	/**
 	 * Sort artworks based on current sortBy state
@@ -149,18 +162,6 @@ export class GalleryStateClass {
 		return hash;
 	}
 
-	availableCategories = $derived.by(() => {
-		const categories = new SvelteSet<string>();
-		this.artworks.forEach((artwork) => {
-			if (Array.isArray(artwork.category)) {
-				artwork.category.forEach((cat) => categories.add(cat));
-			} else {
-				categories.add(artwork.category);
-			}
-		});
-		return Array.from(categories).sort();
-	});
-
 	// Actions
 	setArtworks(artworks: Artwork[]) {
 		this.artworks = artworks;
@@ -183,6 +184,27 @@ export class GalleryStateClass {
 		this.showOnlyAvailable = false;
 	}
 
+	setCurrentImageIndex(index: number) {
+		this.currentImageIndex = index;
+	}
+
+	nextImage(totalImages: number) {
+		if (totalImages > 1) {
+			this.currentImageIndex = (this.currentImageIndex + 1) % totalImages;
+		}
+	}
+
+	prevImage(totalImages: number) {
+		if (totalImages > 1) {
+			this.currentImageIndex =
+				this.currentImageIndex === 0 ? totalImages - 1 : this.currentImageIndex - 1;
+		}
+	}
+
+	resetImageIndex() {
+		this.currentImageIndex = 0;
+	}
+
 	// Legacy computed property for backward compatibility (if needed)
 	selectedCategory = $derived(
 		this.selectedCategories.length === 1 ? this.selectedCategories[0] : ''
@@ -196,10 +218,10 @@ export class GalleryStateClass {
 	/**
 	 * Get a random assortment of artworks
 	 * Uses deterministic pseudo-random ordering for SSR consistency
-	 * @param count - Number of artworks to return (defaults to 6)
+	 * @param count - Number of artworks to return (defaults to max)
 	 * @returns Random array of artworks
 	 */
-	getRandomArtworks(count: number = 6): Artwork[] {
+	getRandomArtworks(count: number = 999): Artwork[] {
 		const shuffled = [...this.artworks].sort((a, b) => {
 			const hashA = this.simpleHash(a.id);
 			const hashB = this.simpleHash(b.id);
@@ -212,16 +234,38 @@ export class GalleryStateClass {
 	 * Get random artworks from filtered results
 	 * Respects current filters and returns a random selection
 	 * Uses deterministic pseudo-random ordering for SSR consistency
-	 * @param count - Number of artworks to return (defaults to 6)
+	 * @param count - Number of artworks to return (defaults to max)
 	 * @returns Random array of filtered artworks
 	 */
-	getRandomFilteredArtworks(count: number = 6): Artwork[] {
+	getRandomFilteredArtworks(count: number = 999): Artwork[] {
 		const shuffled = [...this.filteredArtworks].sort((a, b) => {
 			const hashA = this.simpleHash(a.id);
 			const hashB = this.simpleHash(b.id);
 			return hashA - hashB;
 		});
 		return shuffled.slice(0, Math.min(count, this.filteredArtworks.length));
+	}
+
+	/**
+	 * Get navigation information for an artwork (next/previous IDs)
+	 * Calculates based on current filter state and wraps around at edges
+	 * @param artworkId - ID of the current artwork
+	 * @returns Object with nextId and prevId (null if artwork not found in filtered results)
+	 */
+	getArtworkNavigation(artworkId: string): { nextId: string | null; prevId: string | null } {
+		const currentIndex = this.filteredArtworks.findIndex((art) => art.id === artworkId);
+
+		if (currentIndex === -1) {
+			return { nextId: null, prevId: null };
+		}
+
+		const nextIndex = currentIndex === this.filteredArtworks.length - 1 ? 0 : currentIndex + 1;
+		const prevIndex = currentIndex === 0 ? this.filteredArtworks.length - 1 : currentIndex - 1;
+
+		return {
+			nextId: this.filteredArtworks[nextIndex]?.id || null,
+			prevId: this.filteredArtworks[prevIndex]?.id || null
+		};
 	}
 }
 

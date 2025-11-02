@@ -13,7 +13,7 @@
  */
 
 // Toggle this to switch between dev and production image loading
-const dev = true;
+const dev = false;
 
 // Import all images with specific query parameters for different contexts
 const imageImportsDetail = import.meta.glob('$lib/assets/images/*.webp', {

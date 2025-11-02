@@ -5,6 +5,7 @@
 
 <script lang="ts">
 	import Img from '@zerodevx/svelte-img';
+	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 
 	const modules = import.meta.glob('$lib/assets/imagesRaw/*', {
 		import: 'default',
@@ -19,6 +20,8 @@
 		.filter(([path]) => path.toLowerCase().includes(name))
 		.map(([, img]) => img);
 </script>
+
+<GalleryHeader />
 
 <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
 	<h1 class="text-3xl font-bold mb-4">Test Page</h1>

@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Configuration
-const LOCALES_DIR = path.join(__dirname, '../src/lib/locales');
+const LOCALES_DIR = path.join(__dirname, '../../src/lib/locales');
 const REFERENCE_LOCALE = 'en.json';
 
 // ANSI color codes
