@@ -25,7 +25,7 @@
 	import Img from '@zerodevx/svelte-img';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import BiggerPicture from 'bigger-picture';
-	import { imageMapDetail } from '$lib/data/imageImports';
+	import { imageMapDetail } from '$lib/data/imageImportsDetail';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
 	import { Label, Button } from 'bits-ui';

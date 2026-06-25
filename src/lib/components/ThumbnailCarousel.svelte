@@ -4,7 +4,7 @@
 -->
 
 <script lang="ts">
-	import { imageMapDetail } from '$lib/data/imageImports';
+	import { imageMapDetail } from '$lib/data/imageImportsDetail';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';

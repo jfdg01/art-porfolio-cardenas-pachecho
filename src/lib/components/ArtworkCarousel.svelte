@@ -6,7 +6,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
-	import { imageMapCarousel } from '$lib/data/imageImports';
+	import { imageMapCarousel } from '$lib/data/imageImportsDetail';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
