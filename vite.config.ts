@@ -9,9 +9,9 @@ export default defineConfig({
 		sveltekit(),
 		imagetools({
 			profiles: {
-				gallery: new URLSearchParams('w=350&format=webp;jpg'),
-				detail: new URLSearchParams('w=800;1200&format=webp;jpg'),
-				carousel: new URLSearchParams('w=100;200&format=webp;jpg')
+				gallery: new URLSearchParams('w=350&format=avif;webp;jpg'),
+				detail: new URLSearchParams('w=800;1200&format=avif;webp;jpg'),
+				carousel: new URLSearchParams('w=100;200&format=avif;webp;jpg')
 			}
 		})
 	]
