@@ -9,6 +9,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import sharp from 'sharp';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -78,7 +79,7 @@ function generateTitle(id) {
 /**
  * Scan images directory and group by artwork ID
  */
-function scanImages() {
+async function scanImages() {
 	const files = fs.readdirSync(staticImagesPath);
 	const artworks = new Map();
 
@@ -97,18 +98,25 @@ function scanImages() {
 
 		const artwork = artworks.get(artworkId);
 
+		// Precompute natural pixel dimensions so the lightbox doesn't probe at runtime
+		const { width, height } = await sharp(path.join(staticImagesPath, file)).metadata();
+
 		if (isZoom) {
 			const zoomNumber = getZoomNumber(file);
 			artwork.images.push({
 				name: `zoom-${zoomNumber}`,
 				src: `/images/${file}`,
-				alt: `${generateTitle(artworkId)} zoom detail ${zoomNumber}`
+				alt: `${generateTitle(artworkId)} zoom detail ${zoomNumber}`,
+				width,
+				height
 			});
 		} else {
 			artwork.images.push({
 				name: 'main',
 				src: `/images/${file}`,
-				alt: `${generateTitle(artworkId)} main view`
+				alt: `${generateTitle(artworkId)} main view`,
+				width,
+				height
 			});
 		}
 	}
@@ -145,7 +153,10 @@ ${artworks
 	.map(
 		(artwork) =>
 			`\t'${artwork.id}': [\n${artwork.images
-				.map((img) => `\t\t{ name: '${img.name}', src: '${img.src}', alt: '${img.alt}' }`)
+				.map(
+					(img) =>
+						`\t\t{ name: '${img.name}', src: '${img.src}', alt: '${img.alt}', width: ${img.width}, height: ${img.height} }`
+				)
 				.join(',\n')}\n\t]`
 	)
 	.join(',\n')}
@@ -161,12 +172,12 @@ export type ArtworkImages = typeof artworkImages;
 /**
  * Main execution
  */
-function main() {
+async function main() {
 	console.log('🖼️  Generating artwork images from static images...');
 
 	try {
 		// Scan images directory
-		const artworks = scanImages();
+		const artworks = await scanImages();
 		console.log(
 			`📁 Found ${artworks.length} artworks with ${artworks.reduce((sum, a) => sum + a.images.length, 0)} total images`
 		);

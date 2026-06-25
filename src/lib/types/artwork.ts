@@ -6,6 +6,8 @@ export interface ImageVariant {
 	name: string; // e.g., "main", "zoom-1", "zoom-2"
 	src: string; // Image source URL
 	alt?: string; // Alt text for accessibility
+	width?: number; // Natural pixel width (precomputed for lightbox)
+	height?: number; // Natural pixel height (precomputed for lightbox)
 }
 
 export interface Artwork {

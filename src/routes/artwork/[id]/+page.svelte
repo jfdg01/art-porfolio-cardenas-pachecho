@@ -115,37 +115,17 @@
 		}
 	}
 
-	async function openLightbox() {
+	function openLightbox() {
 		if (!bp) return;
 
-		// Load images to get their actual dimensions
-		const items = await Promise.all(
-			artwork.images.map(
-				(image): Promise<{ img: string; alt: string; width: number; height: number }> => {
-					return new Promise((resolve) => {
-						const img = new Image();
-						img.onload = () => {
-							resolve({
-								img: image.src,
-								alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
-								width: img.naturalWidth,
-								height: img.naturalHeight
-							});
-						};
-						img.onerror = () => {
-							// Fallback if image fails to load
-							resolve({
-								img: image.src,
-								alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
-								width: 1920,
-								height: 1080
-							});
-						};
-						img.src = image.src;
-					});
-				}
-			)
-		);
+		// Dimensions are precomputed at build time (see generate-artwork-images.mjs),
+		// so no runtime Image() probing is needed.
+		const items = artwork.images.map((image) => ({
+			img: image.src,
+			alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
+			width: image.width ?? 1920,
+			height: image.height ?? 1080
+		}));
 
 		bp.open({
 			items,

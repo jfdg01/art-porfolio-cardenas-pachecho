@@ -5,188 +5,152 @@
  */
 
 export const artworkImages = {
-	albor: [
-		{ name: 'main', src: '/images/albor.webp', alt: 'Albor main view' },
-		{ name: 'zoom-1', src: '/images/albor-zoom-1.webp', alt: 'Albor zoom detail 1' }
+	'albor': [
+		{ name: 'main', src: '/images/albor.webp', alt: 'Albor main view', width: 864, height: 1536 },
+		{ name: 'zoom-1', src: '/images/albor-zoom-1.webp', alt: 'Albor zoom detail 1', width: 864, height: 1536 }
 	],
 	'alcon-collage': [
-		{ name: 'main', src: '/images/alcon-collage.webp', alt: 'Alcon Collage main view' }
+		{ name: 'main', src: '/images/alcon-collage.webp', alt: 'Alcon Collage main view', width: 1153, height: 1536 }
 	],
 	'apunte-abstracto-1': [
-		{ name: 'main', src: '/images/apunte-abstracto-1.webp', alt: 'Apunte Abstracto 1 main view' }
+		{ name: 'main', src: '/images/apunte-abstracto-1.webp', alt: 'Apunte Abstracto 1 main view', width: 864, height: 1536 }
 	],
 	'apunte-abstracto-2': [
-		{ name: 'main', src: '/images/apunte-abstracto-2.webp', alt: 'Apunte Abstracto 2 main view' }
+		{ name: 'main', src: '/images/apunte-abstracto-2.webp', alt: 'Apunte Abstracto 2 main view', width: 1535, height: 1072 }
 	],
 	'apunte-abstracto-3': [
-		{ name: 'main', src: '/images/apunte-abstracto-3.webp', alt: 'Apunte Abstracto 3 main view' }
+		{ name: 'main', src: '/images/apunte-abstracto-3.webp', alt: 'Apunte Abstracto 3 main view', width: 1536, height: 1137 }
 	],
 	'apunte-acrilico-1': [
-		{ name: 'main', src: '/images/apunte-acrilico-1.webp', alt: 'Apunte Acrilico 1 main view' }
+		{ name: 'main', src: '/images/apunte-acrilico-1.webp', alt: 'Apunte Acrilico 1 main view', width: 1536, height: 1152 }
 	],
 	'apunte-acrilico-2': [
-		{ name: 'main', src: '/images/apunte-acrilico-2.webp', alt: 'Apunte Acrilico 2 main view' },
-		{
-			name: 'zoom-1',
-			src: '/images/apunte-acrilico-2-zoom-1.webp',
-			alt: 'Apunte Acrilico 2 zoom detail 1'
-		}
+		{ name: 'main', src: '/images/apunte-acrilico-2.webp', alt: 'Apunte Acrilico 2 main view', width: 1096, height: 1536 },
+		{ name: 'zoom-1', src: '/images/apunte-acrilico-2-zoom-1.webp', alt: 'Apunte Acrilico 2 zoom detail 1', width: 1152, height: 1536 }
 	],
 	'apunte-acrilico-3': [
-		{ name: 'main', src: '/images/apunte-acrilico-3.webp', alt: 'Apunte Acrilico 3 main view' }
+		{ name: 'main', src: '/images/apunte-acrilico-3.webp', alt: 'Apunte Acrilico 3 main view', width: 1099, height: 1536 }
 	],
 	'apunte-acrilico-4': [
-		{ name: 'main', src: '/images/apunte-acrilico-4.webp', alt: 'Apunte Acrilico 4 main view' }
+		{ name: 'main', src: '/images/apunte-acrilico-4.webp', alt: 'Apunte Acrilico 4 main view', width: 1536, height: 1162 }
 	],
 	'apunte-acuarela-paloma': [
-		{
-			name: 'main',
-			src: '/images/apunte-acuarela-paloma.webp',
-			alt: 'Apunte Acuarela Paloma main view'
-		}
+		{ name: 'main', src: '/images/apunte-acuarela-paloma.webp', alt: 'Apunte Acuarela Paloma main view', width: 1088, height: 1535 }
 	],
 	'apunte-baeza-acuerela': [
-		{
-			name: 'main',
-			src: '/images/apunte-baeza-acuerela.webp',
-			alt: 'Apunte Baeza Acuerela main view'
-		}
+		{ name: 'main', src: '/images/apunte-baeza-acuerela.webp', alt: 'Apunte Baeza Acuerela main view', width: 1054, height: 1536 }
 	],
 	'apunte-grafito': [
-		{ name: 'main', src: '/images/apunte-grafito.webp', alt: 'Apunte Grafito main view' }
+		{ name: 'main', src: '/images/apunte-grafito.webp', alt: 'Apunte Grafito main view', width: 1028, height: 1536 }
 	],
 	'apunte-paisaje-acuarela-1': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-acuarela-1.webp',
-			alt: 'Apunte Paisaje Acuarela 1 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-acuarela-1.webp', alt: 'Apunte Paisaje Acuarela 1 main view', width: 1144, height: 1536 }
 	],
 	'apunte-paisaje-acuarela-3': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-acuarela-3.webp',
-			alt: 'Apunte Paisaje Acuarela 3 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-acuarela-3.webp', alt: 'Apunte Paisaje Acuarela 3 main view', width: 1536, height: 1109 }
 	],
 	'apunte-paisaje-acuarela-4': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-acuarela-4.webp',
-			alt: 'Apunte Paisaje Acuarela 4 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-acuarela-4.webp', alt: 'Apunte Paisaje Acuarela 4 main view', width: 1536, height: 1048 }
 	],
 	'apunte-paisaje-acuarela-5': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-acuarela-5.webp',
-			alt: 'Apunte Paisaje Acuarela 5 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-acuarela-5.webp', alt: 'Apunte Paisaje Acuarela 5 main view', width: 1055, height: 1535 }
 	],
 	'apunte-paisaje-collage-1': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-collage-1.webp',
-			alt: 'Apunte Paisaje Collage 1 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-collage-1.webp', alt: 'Apunte Paisaje Collage 1 main view', width: 1536, height: 1232 }
 	],
 	'apunte-paisaje-collage-2': [
-		{
-			name: 'main',
-			src: '/images/apunte-paisaje-collage-2.webp',
-			alt: 'Apunte Paisaje Collage 2 main view'
-		}
+		{ name: 'main', src: '/images/apunte-paisaje-collage-2.webp', alt: 'Apunte Paisaje Collage 2 main view', width: 1536, height: 1172 }
 	],
-	belong: [{ name: 'main', src: '/images/belong.webp', alt: 'Belong main view' }],
+	'belong': [
+		{ name: 'main', src: '/images/belong.webp', alt: 'Belong main view', width: 1150, height: 1535 }
+	],
 	'celebes-sea': [
-		{ name: 'main', src: '/images/celebes-sea.webp', alt: 'Celebes Sea main view' },
-		{ name: 'zoom-1', src: '/images/celebes-sea-zoom-1.webp', alt: 'Celebes Sea zoom detail 1' },
-		{ name: 'zoom-2', src: '/images/celebes-sea-zoom-2.webp', alt: 'Celebes Sea zoom detail 2' },
-		{ name: 'zoom-3', src: '/images/celebes-sea-zoom-3.webp', alt: 'Celebes Sea zoom detail 3' }
+		{ name: 'main', src: '/images/celebes-sea.webp', alt: 'Celebes Sea main view', width: 1171, height: 1536 },
+		{ name: 'zoom-1', src: '/images/celebes-sea-zoom-1.webp', alt: 'Celebes Sea zoom detail 1', width: 1152, height: 1536 },
+		{ name: 'zoom-2', src: '/images/celebes-sea-zoom-2.webp', alt: 'Celebes Sea zoom detail 2', width: 1152, height: 1536 },
+		{ name: 'zoom-3', src: '/images/celebes-sea-zoom-3.webp', alt: 'Celebes Sea zoom detail 3', width: 1152, height: 1536 }
 	],
 	'dama-acuarela': [
-		{ name: 'main', src: '/images/dama-acuarela.webp', alt: 'Dama Acuarela main view' },
-		{ name: 'zoom-1', src: '/images/dama-acuarela-zoom-1.webp', alt: 'Dama Acuarela zoom detail 1' }
+		{ name: 'main', src: '/images/dama-acuarela.webp', alt: 'Dama Acuarela main view', width: 1477, height: 1536 },
+		{ name: 'zoom-1', src: '/images/dama-acuarela-zoom-1.webp', alt: 'Dama Acuarela zoom detail 1', width: 1170, height: 1536 }
 	],
-	dama: [{ name: 'main', src: '/images/dama.webp', alt: 'Dama main view' }],
+	'dama': [
+		{ name: 'main', src: '/images/dama.webp', alt: 'Dama main view', width: 1163, height: 1536 }
+	],
 	'estudio-anatomia': [
-		{ name: 'main', src: '/images/estudio-anatomia.webp', alt: 'Estudio Anatomia main view' },
-		{
-			name: 'zoom-1',
-			src: '/images/estudio-anatomia-zoom-1.webp',
-			alt: 'Estudio Anatomia zoom detail 1'
-		}
+		{ name: 'main', src: '/images/estudio-anatomia.webp', alt: 'Estudio Anatomia main view', width: 1152, height: 1536 },
+		{ name: 'zoom-1', src: '/images/estudio-anatomia-zoom-1.webp', alt: 'Estudio Anatomia zoom detail 1', width: 1152, height: 1536 }
 	],
 	'estudio-retrato-1': [
-		{ name: 'main', src: '/images/estudio-retrato-1.webp', alt: 'Estudio Retrato 1 main view' },
-		{
-			name: 'zoom-1',
-			src: '/images/estudio-retrato-1-zoom-1.webp',
-			alt: 'Estudio Retrato 1 zoom detail 1'
-		},
-		{
-			name: 'zoom-2',
-			src: '/images/estudio-retrato-1-zoom-2.webp',
-			alt: 'Estudio Retrato 1 zoom detail 2'
-		}
+		{ name: 'main', src: '/images/estudio-retrato-1.webp', alt: 'Estudio Retrato 1 main view', width: 1025, height: 1535 },
+		{ name: 'zoom-1', src: '/images/estudio-retrato-1-zoom-1.webp', alt: 'Estudio Retrato 1 zoom detail 1', width: 1152, height: 1536 },
+		{ name: 'zoom-2', src: '/images/estudio-retrato-1-zoom-2.webp', alt: 'Estudio Retrato 1 zoom detail 2', width: 1152, height: 1536 }
 	],
 	'estudio-retrato-2': [
-		{ name: 'main', src: '/images/estudio-retrato-2.webp', alt: 'Estudio Retrato 2 main view' },
-		{
-			name: 'zoom-1',
-			src: '/images/estudio-retrato-2-zoom-1.webp',
-			alt: 'Estudio Retrato 2 zoom detail 1'
-		},
-		{
-			name: 'zoom-2',
-			src: '/images/estudio-retrato-2-zoom-2.webp',
-			alt: 'Estudio Retrato 2 zoom detail 2'
-		}
+		{ name: 'main', src: '/images/estudio-retrato-2.webp', alt: 'Estudio Retrato 2 main view', width: 1027, height: 1536 },
+		{ name: 'zoom-1', src: '/images/estudio-retrato-2-zoom-1.webp', alt: 'Estudio Retrato 2 zoom detail 1', width: 1152, height: 1536 },
+		{ name: 'zoom-2', src: '/images/estudio-retrato-2-zoom-2.webp', alt: 'Estudio Retrato 2 zoom detail 2', width: 1152, height: 1536 }
 	],
 	'grafito-catedral': [
-		{ name: 'main', src: '/images/grafito-catedral.webp', alt: 'Grafito Catedral main view' }
+		{ name: 'main', src: '/images/grafito-catedral.webp', alt: 'Grafito Catedral main view', width: 1536, height: 1071 }
 	],
 	'hombre-con-barba': [
-		{ name: 'main', src: '/images/hombre-con-barba.webp', alt: 'Hombre Con Barba main view' }
+		{ name: 'main', src: '/images/hombre-con-barba.webp', alt: 'Hombre Con Barba main view', width: 1193, height: 1535 }
 	],
-	inherente: [{ name: 'main', src: '/images/inherente.webp', alt: 'Inherente main view' }],
-	lechera: [{ name: 'main', src: '/images/lechera.webp', alt: 'Lechera main view' }],
-	notional: [
-		{ name: 'main', src: '/images/notional.webp', alt: 'Notional main view' },
-		{ name: 'zoom-1', src: '/images/notional-zoom-1.webp', alt: 'Notional zoom detail 1' }
+	'inherente': [
+		{ name: 'main', src: '/images/inherente.webp', alt: 'Inherente main view', width: 1096, height: 1536 }
+	],
+	'lechera': [
+		{ name: 'main', src: '/images/lechera.webp', alt: 'Lechera main view', width: 1536, height: 1124 }
+	],
+	'notional': [
+		{ name: 'main', src: '/images/notional.webp', alt: 'Notional main view', width: 1152, height: 1536 },
+		{ name: 'zoom-1', src: '/images/notional-zoom-1.webp', alt: 'Notional zoom detail 1', width: 1152, height: 1536 }
 	],
 	'nuevos-acercamientos': [
-		{
-			name: 'main',
-			src: '/images/nuevos-acercamientos.webp',
-			alt: 'Nuevos Acercamientos main view'
-		}
+		{ name: 'main', src: '/images/nuevos-acercamientos.webp', alt: 'Nuevos Acercamientos main view', width: 769, height: 1024 }
 	],
-	perpetuidad: [{ name: 'main', src: '/images/perpetuidad.webp', alt: 'Perpetuidad main view' }],
-	provecto: [
-		{ name: 'main', src: '/images/provecto.webp', alt: 'Provecto main view' },
-		{ name: 'zoom-1', src: '/images/provecto-zoom-1.webp', alt: 'Provecto zoom detail 1' }
+	'perpetuidad': [
+		{ name: 'main', src: '/images/perpetuidad.webp', alt: 'Perpetuidad main view', width: 1152, height: 1536 }
+	],
+	'provecto': [
+		{ name: 'main', src: '/images/provecto.webp', alt: 'Provecto main view', width: 1139, height: 1535 },
+		{ name: 'zoom-1', src: '/images/provecto-zoom-1.webp', alt: 'Provecto zoom detail 1', width: 1152, height: 1536 }
 	],
 	'retrato-del-fayum': [
-		{ name: 'main', src: '/images/retrato-del-fayum.webp', alt: 'Retrato Del Fayum main view' }
+		{ name: 'main', src: '/images/retrato-del-fayum.webp', alt: 'Retrato Del Fayum main view', width: 1010, height: 1536 }
 	],
 	'retrato-sanguina': [
-		{ name: 'main', src: '/images/retrato-sanguina.webp', alt: 'Retrato Sanguina main view' }
+		{ name: 'main', src: '/images/retrato-sanguina.webp', alt: 'Retrato Sanguina main view', width: 1152, height: 1536 }
 	],
-	summary: [{ name: 'main', src: '/images/summary.webp', alt: 'Summary main view' }],
-	'the-joke': [{ name: 'main', src: '/images/the-joke.webp', alt: 'The Joke main view' }],
-	'the-rockero': [{ name: 'main', src: '/images/the-rockero.webp', alt: 'The Rockero main view' }],
-	theophany: [{ name: 'main', src: '/images/theophany.webp', alt: 'Theophany main view' }],
+	'summary': [
+		{ name: 'main', src: '/images/summary.webp', alt: 'Summary main view', width: 1129, height: 1536 }
+	],
+	'the-joke': [
+		{ name: 'main', src: '/images/the-joke.webp', alt: 'The Joke main view', width: 1232, height: 1536 }
+	],
+	'the-rockero': [
+		{ name: 'main', src: '/images/the-rockero.webp', alt: 'The Rockero main view', width: 1152, height: 1536 }
+	],
+	'theophany': [
+		{ name: 'main', src: '/images/theophany.webp', alt: 'Theophany main view', width: 1168, height: 1536 }
+	],
 	'time-after-time': [
-		{ name: 'main', src: '/images/time-after-time.webp', alt: 'Time After Time main view' }
+		{ name: 'main', src: '/images/time-after-time.webp', alt: 'Time After Time main view', width: 1536, height: 1132 }
 	],
-	tragaluz: [{ name: 'main', src: '/images/tragaluz.webp', alt: 'Tragaluz main view' }],
-	vetusto: [
-		{ name: 'main', src: '/images/vetusto.webp', alt: 'Vetusto main view' },
-		{ name: 'zoom-1', src: '/images/vetusto-zoom-1.webp', alt: 'Vetusto zoom detail 1' }
+	'tragaluz': [
+		{ name: 'main', src: '/images/tragaluz.webp', alt: 'Tragaluz main view', width: 1224, height: 1535 }
 	],
-	xauen: [{ name: 'main', src: '/images/xauen.webp', alt: 'Xauen main view' }],
-	zalema: [{ name: 'main', src: '/images/zalema.webp', alt: 'Zalema main view' }]
+	'vetusto': [
+		{ name: 'main', src: '/images/vetusto.webp', alt: 'Vetusto main view', width: 1152, height: 1536 },
+		{ name: 'zoom-1', src: '/images/vetusto-zoom-1.webp', alt: 'Vetusto zoom detail 1', width: 1152, height: 1536 }
+	],
+	'xauen': [
+		{ name: 'main', src: '/images/xauen.webp', alt: 'Xauen main view', width: 1020, height: 606 }
+	],
+	'zalema': [
+		{ name: 'main', src: '/images/zalema.webp', alt: 'Zalema main view', width: 998, height: 1457 }
+	]
 };
 
 export type ArtworkImages = typeof artworkImages;
