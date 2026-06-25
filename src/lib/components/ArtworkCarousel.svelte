@@ -32,7 +32,9 @@
 	let isScrollable = $state(false);
 
 	// Number of instances to render for circular effect (enough to allow smooth scrolling)
-	const INSTANCE_COUNT = 5;
+	const INSTANCE_COUNT = 3;
+	// Index of the middle set we recenter on (kept off both edges)
+	const MIDDLE_SET = Math.floor(INSTANCE_COUNT / 2);
 
 	// Generate enough indices to create circular effect
 	let indices = $derived.by(() => {
@@ -72,7 +74,7 @@
 		// If scrolled to near the beginning, jump to the middle set
 		if (scrollLeft < singleSetWidth) {
 			isScrolling = true;
-			scrollContainer.scrollLeft += singleSetWidth * 2; // Jump to middle set
+			scrollContainer.scrollLeft += singleSetWidth * MIDDLE_SET; // Jump to middle set
 			setTimeout(() => {
 				isScrolling = false;
 			}, 0);
@@ -80,7 +82,7 @@
 		// If scrolled to near the end, jump back to middle set
 		else if (scrollLeft > scrollWidth - 2 * clientWidth) {
 			isScrolling = true;
-			scrollContainer.scrollLeft -= singleSetWidth * 2; // Jump back
+			scrollContainer.scrollLeft -= singleSetWidth * MIDDLE_SET; // Jump back
 			setTimeout(() => {
 				isScrolling = false;
 			}, 0);
@@ -199,8 +201,8 @@
 			const scrollWidth = scrollContainer.scrollWidth;
 			const singleSetWidth = scrollWidth / INSTANCE_COUNT;
 
-			// Start at the middle set (index 2, which is the 3rd instance)
-			const middleSetPosition = singleSetWidth * 2;
+			// Start at the middle set so we can scroll either direction before recentering
+			const middleSetPosition = singleSetWidth * MIDDLE_SET;
 
 			setTimeout(() => {
 				scrollContainer.scrollLeft = middleSetPosition;
