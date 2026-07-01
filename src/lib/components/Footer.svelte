@@ -1,30 +1,33 @@
 <!--
 @component Footer
-@description Footer component with copyright disclaimer
-@example
-  <Footer />
+@description Minimal footer: name, copyright, Instagram.
 -->
 
 <script lang="ts">
 	import { t } from 'svelte-i18n';
+	import { Instagram } from 'lucide-svelte';
 
-	// Get current year
 	const currentYear = new Date().getFullYear();
 </script>
 
-<!-- Footer with extra padding on mobile to avoid overlap with BottomNavigation -->
-<footer
-	class="bg-background/80 backdrop-blur-xl text-muted-foreground text-sm pb-20 min-[850px]:pb-4"
->
-	<div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl pt-6">
-		<div class="text-center">
-			<p>
-				© {currentYear}
-				<span class="font-semibold montserrat-semibold">Carmen Cárdenas Pacheco</span><br />
-				<span class="text-muted-foreground">
-					{$t('copyrightNotice') || 'All rights reserved.'}</span
-				>
-			</p>
-		</div>
+<!-- Extra bottom padding on mobile clears the fixed BottomNavigation -->
+<footer class="border-t border-border pb-24 min-[850px]:pb-8">
+	<div
+		class="mx-auto flex max-w-7xl flex-col items-center gap-3 px-4 pt-8 text-center text-sm text-muted-foreground sm:px-6 lg:px-8"
+	>
+		<a
+			href="https://instagram.com/cardenas.pacheco"
+			target="_blank"
+			rel="noopener noreferrer"
+			class="flex items-center gap-2 transition-colors duration-200 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+			aria-label="Instagram"
+		>
+			<Instagram class="size-4" />
+			@cardenas.pacheco
+		</a>
+		<p>
+			© {currentYear} <span class="font-serif text-foreground">Carmen Cárdenas Pacheco</span>
+			· {$t('copyrightNotice')}
+		</p>
 	</div>
 </footer>

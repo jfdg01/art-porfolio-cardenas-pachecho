@@ -36,7 +36,7 @@
 			aria-current={checkActivePath('/') ? 'page' : undefined}
 		>
 			<Palette class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('artworks')}</span>
+			<span class="text-xs font-medium">{$t('artworks')}</span>
 		</a>
 
 		<!-- Online Classes -->
@@ -52,7 +52,7 @@
 			aria-current={checkActivePath('/clases-online') ? 'page' : undefined}
 		>
 			<GraduationCap class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('onlineClassesPage')}</span>
+			<span class="text-xs font-medium">{$t('onlineClassesPage')}</span>
 		</a>
 
 		<!-- Contact -->
@@ -68,7 +68,7 @@
 			aria-current={checkActivePath('/contact') ? 'page' : undefined}
 		>
 			<Mail class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('contact')}</span>
+			<span class="text-xs font-medium">{$t('contact')}</span>
 		</a>
 	</div>
 </nav>

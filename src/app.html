@@ -1,7 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="es">
 	<head>
 		<meta charset="utf-8" />
+		<script>
+			// Apply dark mode before first paint to avoid a light-mode flash
+			try {
+				const t = localStorage.getItem('theme');
+				if (t === 'dark' || (t !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches))
+					document.documentElement.classList.add('dark');
+			} catch {}
+		</script>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="google-site-verification" content="lY3T9wYvW0MIBngfpj9vswTsWN6Ya8HVyhdjPId4bBc" />
 
@@ -13,9 +21,9 @@
 		<meta name="apple-mobile-web-app-title" content="Cardenas Pacheco" />
 		<link rel="manifest" href="/site.webmanifest" />
 
-		<!-- Theme and App Meta -->
-		<meta name="theme-color" content="var(--color-background)" />
-		<meta name="msapplication-TileColor" content="var(--color-background)" />
+		<!-- Theme and App Meta (CSS vars don't work here; use real colors) -->
+		<meta name="theme-color" content="#faf9f7" media="(prefers-color-scheme: light)" />
+		<meta name="theme-color" content="#161311" media="(prefers-color-scheme: dark)" />
 
 		%sveltekit.head%
 	</head>

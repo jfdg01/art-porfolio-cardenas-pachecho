@@ -9,7 +9,6 @@
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import { Button } from 'bits-ui';
 
 	interface Props {
 		images: Array<{ src: string; alt?: string }>;
@@ -111,21 +110,21 @@
 <div class="relative w-full">
 	<!-- Scroll Buttons - Desktop Only (shown only if content is scrollable) -->
 	{#if isScrollable}
-		<Button.Root
+		<button
 			onclick={scrollLeft}
 			class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-background/90 hover:bg-background shadow-md hover:shadow-lg transition-all duration-200"
 			aria-label="Scroll left"
 		>
 			<ChevronLeft class="w-5 h-5 text-foreground" />
-		</Button.Root>
+		</button>
 
-		<Button.Root
+		<button
 			onclick={scrollRight}
 			class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-background/90 hover:bg-background shadow-md hover:shadow-lg transition-all duration-200"
 			aria-label="Scroll right"
 		>
 			<ChevronRight class="w-5 h-5 text-foreground" />
-		</Button.Root>
+		</button>
 	{/if}
 
 	<!-- Scrollable Container -->
@@ -137,7 +136,7 @@
 				{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
 				{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
 
-				<Button.Root
+				<button
 					onclick={() => handleImageClick(index)}
 					class="thumbnail-item flex-shrink-0 transition-all duration-200 overflow-hidden rounded-lg bg-muted border-2 {selectedIndex ===
 					index
@@ -161,7 +160,7 @@
 							loading="lazy"
 						/>
 					{/if}
-				</Button.Root>
+				</button>
 			{/each}
 		</div>
 	</div>

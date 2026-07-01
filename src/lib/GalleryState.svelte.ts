@@ -1,7 +1,5 @@
 /**
- * Gallery state management using modern Svelte 5 classes paradigm
- * This file implements the state management for the gallery application
- * using classes with runes and context API for global state sharing.
+ * Gallery state shared via Svelte context: filtering, sorting, categories.
  */
 
 import { getContext, setContext } from 'svelte';
@@ -10,21 +8,27 @@ import type { Artwork } from '$lib/types/artwork';
 
 const GALLERY_KEY = Symbol('gallery_state');
 
-export type SortOption =
-	| 'name-asc'
-	| 'name-desc'
-	| 'year-newest'
-	| 'year-oldest'
-	| 'category'
-	| 'availability'
-	| 'random';
+export type SortOption = 'name-asc' | 'name-desc' | 'category' | 'random';
 
 /**
- * Gallery state management class using modern Svelte 5 classes paradigm
- * Encapsulates all gallery-related state and methods using runes
+ * Deterministic hash so "random" order is identical on server and client
+ * (a real shuffle would cause hydration mismatches).
  */
+function simpleHash(str: string): number {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		hash = (hash << 5) - hash + str.charCodeAt(i);
+		hash = hash & hash;
+	}
+	return hash;
+}
+
+/** Deterministic pseudo-random ordering, stable across SSR and client. */
+export function stableShuffle(artworks: Artwork[]): Artwork[] {
+	return [...artworks].sort((a, b) => simpleHash(a.id) - simpleHash(b.id));
+}
+
 export class GalleryStateClass {
-	// Reactive properties using $state rune
 	artworks = $state<Artwork[]>([]);
 	selectedCategories = $state<string[]>([]);
 	sortBy = $state<SortOption>('random');
@@ -34,137 +38,58 @@ export class GalleryStateClass {
 		this.artworks = artworkData;
 	}
 
-	// Computed properties using $derived
 	filteredArtworks = $derived.by(() => {
-		// First apply category filtering
-		let filtered: Artwork[];
-		if (this.selectedCategories.length === 0) {
-			filtered = [...this.artworks];
-		} else {
-			filtered = this.artworks.filter((artwork) => {
-				const artworkCategories = Array.isArray(artwork.category)
-					? artwork.category
-					: [artwork.category];
-				// Check if artwork has ANY of the selected categories
-				return artworkCategories.some((cat) => this.selectedCategories.includes(cat));
+		let filtered = this.artworks;
+
+		if (this.selectedCategories.length > 0) {
+			filtered = filtered.filter((artwork) => {
+				const cats = Array.isArray(artwork.category) ? artwork.category : [artwork.category];
+				return cats.some((cat) => this.selectedCategories.includes(cat));
 			});
 		}
 
-		// Then apply availability filtering
 		if (this.showOnlyAvailable) {
 			filtered = filtered.filter((artwork) => artwork.isAvailable);
 		}
 
-		// Then apply sorting
 		return this.sortArtworks(filtered);
 	});
 
-	/**
-	 * Sort artworks based on current sortBy state
-	 */
 	private sortArtworks(artworks: Artwork[]): Artwork[] {
 		const sorted = [...artworks];
 
 		switch (this.sortBy) {
 			case 'name-asc':
-				return sorted.sort((a, b) => {
-					const comparison = a.title.localeCompare(b.title);
-					// Use ID as tie-breaker for stability
-					return comparison !== 0 ? comparison : a.id.localeCompare(b.id);
-				});
+				return sorted.sort(
+					(a, b) => a.title.localeCompare(b.title) || a.id.localeCompare(b.id)
+				);
 
 			case 'name-desc':
-				return sorted.sort((a, b) => {
-					const comparison = b.title.localeCompare(a.title);
-					// Use ID as tie-breaker for stability
-					return comparison !== 0 ? comparison : a.id.localeCompare(b.id);
-				});
-
-			case 'year-newest':
-				return sorted.sort((a, b) => {
-					// Handle missing years - place at end
-					if (!a.year && !b.year) return a.id.localeCompare(b.id);
-					if (!a.year) return 1;
-					if (!b.year) return -1;
-					const yearComparison = b.year - a.year;
-					// Use ID as tie-breaker for stability
-					return yearComparison !== 0 ? yearComparison : a.id.localeCompare(b.id);
-				});
-
-			case 'year-oldest':
-				return sorted.sort((a, b) => {
-					// Handle missing years - place at end
-					if (!a.year && !b.year) return a.id.localeCompare(b.id);
-					if (!a.year) return 1;
-					if (!b.year) return -1;
-					const yearComparison = a.year - b.year;
-					// Use ID as tie-breaker for stability
-					return yearComparison !== 0 ? yearComparison : a.id.localeCompare(b.id);
-				});
+				return sorted.sort(
+					(a, b) => b.title.localeCompare(a.title) || a.id.localeCompare(b.id)
+				);
 
 			case 'category':
 				return sorted.sort((a, b) => {
 					const catA = Array.isArray(a.category) ? a.category[0] : a.category;
 					const catB = Array.isArray(b.category) ? b.category[0] : b.category;
-					const categoryComparison = catA.localeCompare(catB);
-					// Use ID as tie-breaker for stability
-					return categoryComparison !== 0 ? categoryComparison : a.id.localeCompare(b.id);
-				});
-
-			case 'availability':
-				return sorted.sort((a, b) => {
-					// Available items first
-					if (a.isAvailable && !b.isAvailable) return -1;
-					if (!a.isAvailable && b.isAvailable) return 1;
-					// Use ID as tie-breaker for stability when availability is the same
-					return a.id.localeCompare(b.id);
+					return catA.localeCompare(catB) || a.id.localeCompare(b.id);
 				});
 
 			case 'random':
-				// Deterministic pseudo-random shuffle using ID as seed
-				// This ensures the same "random" order on both server and client
-				return sorted.sort((a, b) => {
-					// Create a deterministic hash from IDs
-					const hashA = this.simpleHash(a.id);
-					const hashB = this.simpleHash(b.id);
-					return hashA - hashB;
-				});
-
 			default:
-				return sorted;
+				return stableShuffle(sorted);
 		}
-	}
-
-	/**
-	 * Simple deterministic hash function for pseudo-random sorting
-	 * This ensures the same "random" order across server and client renders
-	 */
-	private simpleHash(str: string): number {
-		let hash = 0;
-		for (let i = 0; i < str.length; i++) {
-			const char = str.charCodeAt(i);
-			hash = (hash << 5) - hash + char;
-			hash = hash & hash; // Convert to 32-bit integer
-		}
-		return hash;
 	}
 
 	availableCategories = $derived.by(() => {
 		const categories = new SvelteSet<string>();
 		this.artworks.forEach((artwork) => {
-			if (Array.isArray(artwork.category)) {
-				artwork.category.forEach((cat) => categories.add(cat));
-			} else {
-				categories.add(artwork.category);
-			}
+			const cats = Array.isArray(artwork.category) ? artwork.category : [artwork.category];
+			cats.forEach((cat) => categories.add(cat));
 		});
 		return Array.from(categories).sort();
 	});
-
-	// Actions
-	setArtworks(artworks: Artwork[]) {
-		this.artworks = artworks;
-	}
 
 	setCategoryFilter(categories: string[]) {
 		this.selectedCategories = categories;
@@ -182,84 +107,22 @@ export class GalleryStateClass {
 		this.selectedCategories = [];
 		this.showOnlyAvailable = false;
 	}
-
-	// Legacy computed property for backward compatibility (if needed)
-	selectedCategory = $derived(
-		this.selectedCategories.length === 1 ? this.selectedCategories[0] : ''
-	);
-
-	// Utility methods
-	getArtworkById(id: string): Artwork | undefined {
-		return this.artworks.find((artwork) => artwork.id === id);
-	}
-
-	/**
-	 * Get a random assortment of artworks
-	 * Uses deterministic pseudo-random ordering for SSR consistency
-	 * @param count - Number of artworks to return (defaults to 6)
-	 * @returns Random array of artworks
-	 */
-	getRandomArtworks(count: number = 6): Artwork[] {
-		const shuffled = [...this.artworks].sort((a, b) => {
-			const hashA = this.simpleHash(a.id);
-			const hashB = this.simpleHash(b.id);
-			return hashA - hashB;
-		});
-		return shuffled.slice(0, Math.min(count, this.artworks.length));
-	}
-
-	/**
-	 * Get random artworks from filtered results
-	 * Respects current filters and returns a random selection
-	 * Uses deterministic pseudo-random ordering for SSR consistency
-	 * @param count - Number of artworks to return (defaults to 6)
-	 * @returns Random array of filtered artworks
-	 */
-	getRandomFilteredArtworks(count: number = 6): Artwork[] {
-		const shuffled = [...this.filteredArtworks].sort((a, b) => {
-			const hashA = this.simpleHash(a.id);
-			const hashB = this.simpleHash(b.id);
-			return hashA - hashB;
-		});
-		return shuffled.slice(0, Math.min(count, this.filteredArtworks.length));
-	}
 }
 
-/**
- * Set gallery state in context (call in +layout.svelte)
- * Creates a new instance of GalleryStateClass with server data and makes it available to all child components
- * Uses a guard to prevent multiple instances in the same component tree
- * @param artworkData - Artwork data from server load function
- */
+/** Create the gallery state once (in +layout.svelte) and share it via context. */
 export function setGalleryState(artworkData: Artwork[]) {
-	// Check if gallery state already exists in context
-	// This prevents creating multiple instances during re-renders
-	// getContext returns undefined if the key doesn't exist in context
 	let galleryState = getContext<GalleryStateClass | undefined>(GALLERY_KEY);
-
-	// Only create new instance if it doesn't exist
 	if (!galleryState) {
 		galleryState = new GalleryStateClass(artworkData);
 		setContext(GALLERY_KEY, galleryState);
 	}
-
 	return galleryState;
 }
 
-/**
- * Get gallery state from context (call in components)
- * Retrieves the shared gallery state instance from the context
- * Throws an error if called outside of the component tree where setGalleryState was called
- */
 export function getGalleryState() {
 	const galleryState = getContext<GalleryStateClass | undefined>(GALLERY_KEY);
-
 	if (!galleryState) {
-		throw new Error(
-			'GalleryState not found in context. ' +
-				'Make sure setGalleryState() is called in +layout.svelte before using getGalleryState().'
-		);
+		throw new Error('GalleryState not found in context. Call setGalleryState() in +layout.svelte first.');
 	}
-
 	return galleryState;
 }

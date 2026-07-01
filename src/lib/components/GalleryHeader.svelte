@@ -1,12 +1,9 @@
 <!--
 @component GalleryHeader
-@description Responsive header component with navigation and language selection
-@example
-  <GalleryHeader />
+@description Minimal sticky header: serif wordmark, text navigation, theme + language controls.
 -->
 
 <script lang="ts">
-	import { Mail, Palette, GraduationCap } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import LanguageSelector from './LanguageSelector.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
@@ -14,100 +11,50 @@
 	import { page } from '$app/stores';
 	import { isActivePath } from '$lib/utils/navigation';
 
-	// Check if a path is active using shared utility
-	function checkActivePath(path: string): boolean {
-		return isActivePath($page.url.pathname, path);
-	}
+	const links = [
+		{ path: '/', labelKey: 'artworks' },
+		{ path: '/clases-online', labelKey: 'onlineClassesPage' },
+		{ path: '/contact', labelKey: 'contact' }
+	];
 </script>
 
-<header
-	class="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border shadow-sm"
->
-	<div class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-		<!-- Main Header Content - Mobile First -->
-		<div class="flex items-center justify-between gap-3 py-3 md:gap-4 md:py-4 lg:gap-6 lg:py-6">
-			<!-- Logo/Title - Mobile First -->
-			<div class="shrink-0">
-				<a
-					href="/"
-					data-sveltekit-preload-data="hover"
-					data-sveltekit-noscroll
-					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold montserrat-semibold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent hover:from-primary hover:to-primary transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
-					aria-label="Go to home page"
-				>
-					Carmen Cárdenas Pacheco
-				</a>
-			</div>
+<header class="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-xl">
+	<div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
+		<a
+			href="/"
+			data-sveltekit-preload-data="hover"
+			data-sveltekit-noscroll
+			class="font-serif text-xl font-medium tracking-tight text-foreground transition-colors duration-200 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none md:text-2xl"
+			aria-label="Carmen Cárdenas Pacheco — home"
+		>
+			Carmen Cárdenas <span class="italic text-primary">Pacheco</span>
+		</a>
 
-			<!-- Desktop Navigation and Controls -->
-			<div class="hidden min-[850px]:flex items-center gap-3 lg:gap-4">
-				<!-- Navigation Buttons - Desktop -->
-				<div class="flex items-center gap-1 lg:gap-2">
+		<div class="flex items-center gap-2 lg:gap-6">
+			<!-- Desktop nav; mobile uses BottomNavigation -->
+			<nav class="hidden items-center gap-6 min-[850px]:flex" aria-label="Main navigation">
+				{#each links as link (link.path)}
+					{@const active = isActivePath($page.url.pathname, link.path)}
 					<a
-						href="/"
+						href={link.path}
 						data-sveltekit-preload-data="hover"
 						data-sveltekit-noscroll
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
-							'/'
-						)
-							? 'text-primary bg-accent'
-							: 'text-foreground hover:text-primary hover:bg-accent'}"
-						aria-label="View artworks"
-						aria-current={checkActivePath('/') ? 'page' : undefined}
+						class="text-sm tracking-wide uppercase transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none {active
+							? 'font-semibold text-primary underline decoration-2 underline-offset-8'
+							: 'font-medium text-muted-foreground hover:text-foreground'}"
+						aria-current={active ? 'page' : undefined}
 					>
-						<Palette class="size-4" />
-						<span>{$t('artworks')}</span>
+						{$t(link.labelKey)}
 					</a>
-					<a
-						href="/clases-online"
-						data-sveltekit-preload-data="hover"
-						data-sveltekit-noscroll
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
-							'/clases-online'
-						)
-							? 'text-primary bg-accent'
-							: 'text-foreground hover:text-primary hover:bg-accent'}"
-						aria-label="Online classes"
-						aria-current={checkActivePath('/clases-online') ? 'page' : undefined}
-					>
-						<GraduationCap class="size-4" />
-						<span>{$t('onlineClassesPage')}</span>
-					</a>
-					<a
-						href="/contact"
-						data-sveltekit-preload-data="hover"
-						data-sveltekit-noscroll
-						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
-							'/contact'
-						)
-							? 'text-primary bg-accent'
-							: 'text-foreground hover:text-primary hover:bg-accent'}"
-						aria-label="Contact information"
-						aria-current={checkActivePath('/contact') ? 'page' : undefined}
-					>
-						<Mail class="size-4" />
-						<span>{$t('contact')}</span>
-					</a>
-				</div>
+				{/each}
+			</nav>
 
-				<!-- Theme Toggle - Desktop -->
+			<div class="flex items-center gap-2">
 				<ThemeToggle />
-
-				<!-- Language Selector - Desktop -->
-				<LanguageSelector />
-			</div>
-
-			<!-- Mobile Controls -->
-			<div class="flex min-[850px]:hidden items-center gap-2">
-				<!-- Dark Theme Toggle - Mobile -->
-				<ThemeToggle />
-
-				<!-- Language Selector - Mobile -->
 				<LanguageSelector />
 			</div>
 		</div>
 	</div>
 </header>
 
-<!-- Scroll to Top Button -->
 <ScrollToTop />

@@ -1,5 +1,7 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
+	import '@fontsource-variable/inter';
+	import '@fontsource-variable/fraunces';
 	import '../app.css';
 	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';

@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
 @import 'bigger-picture/css';
 
 @theme {
@@ -11,74 +10,62 @@
 	--breakpoint-xl: 1440px;
 	--breakpoint-2xl: 2560px;
 
-	/* Light mode colors */
-	--color-background: #ffffff;
-	--color-foreground: #0f172a;
-	--color-muted: #f1f5f9;
-	--color-muted-foreground: #64748b;
-	--color-border: #e2e8f0;
-	--color-primary: #3b82f6;
+	--font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+	--font-serif: 'Fraunces Variable', Georgia, serif;
+
+	/* Light mode — warm gallery palette */
+	--color-background: #faf9f7;
+	--color-foreground: #211d1a;
+	--color-muted: #f1ede7;
+	--color-muted-foreground: #7d746a;
+	--color-border: #e5dfd6;
+	--color-primary: #9a4b2e;
 	--color-primary-foreground: #ffffff;
 	--color-card: #ffffff;
-	--color-card-foreground: #0f172a;
+	--color-card-foreground: #211d1a;
 	--color-popover: #ffffff;
-	--color-popover-foreground: #0f172a;
-	--color-accent: #f1f5f9;
-	--color-accent-foreground: #0f172a;
-	--color-destructive: rgb(190, 49, 49);
+	--color-popover-foreground: #211d1a;
+	--color-accent: #f1ede7;
+	--color-accent-foreground: #211d1a;
+	--color-destructive: #b3362e;
 	--color-destructive-foreground: #ffffff;
-	--color-ring: #3b82f6;
-	--color-success: #22c55e;
+	--color-ring: #9a4b2e;
+	--color-success: #3f7d4e;
 	--color-success-foreground: #ffffff;
-
-	/* Collapsible animations */
-	--animate-collapsible-down: collapsible-down 200ms ease-out;
-	--animate-collapsible-up: collapsible-up 200ms ease-out;
 }
 
 @layer theme {
 	.dark {
-		/* Dark mode colors using Tailwind's neutral palette */
-		--color-background: #171717; /* neutral-900 */
-		--color-foreground: #fafafa; /* neutral-50 */
-		--color-muted: #262626; /* neutral-800 */
-		--color-muted-foreground: #a3a3a3; /* neutral-400 */
-		--color-border: #404040; /* neutral-700 */
-		--color-primary: #60a5fa;
-		--color-primary-foreground: #0f172a;
-		--color-card: #262626; /* neutral-800 */
-		--color-card-foreground: #fafafa; /* neutral-50 */
-		--color-popover: #262626; /* neutral-800 */
-		--color-popover-foreground: #fafafa; /* neutral-50 */
-		--color-accent: #262626; /* neutral-800 */
-		--color-accent-foreground: #fafafa; /* neutral-50 */
-		--color-destructive: rgb(190, 49, 49);
+		/* Dark mode — warm charcoal */
+		--color-background: #161311;
+		--color-foreground: #ece7e1;
+		--color-muted: #241f1c;
+		--color-muted-foreground: #a39a90;
+		--color-border: #38312c;
+		--color-primary: #d98a68;
+		--color-primary-foreground: #23120b;
+		--color-card: #1e1a17;
+		--color-card-foreground: #ece7e1;
+		--color-popover: #1e1a17;
+		--color-popover-foreground: #ece7e1;
+		--color-accent: #2a241f;
+		--color-accent-foreground: #ece7e1;
+		--color-destructive: #e05d52;
 		--color-destructive-foreground: #ffffff;
-		--color-ring: #60a5fa;
-		--color-success: #4ade80;
-		--color-success-foreground: #ffffff;
+		--color-ring: #d98a68;
+		--color-success: #6fbf82;
+		--color-success-foreground: #10241a;
 	}
 }
 
-/* Collapsible keyframes */
-@keyframes collapsible-down {
-	from {
-		height: 0;
-		opacity: 0;
+@layer base {
+	body {
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
 	}
-	to {
-		height: var(--bits-collapsible-content-height);
-		opacity: 1;
-	}
-}
 
-@keyframes collapsible-up {
-	from {
-		height: var(--bits-collapsible-content-height);
-		opacity: 1;
-	}
-	to {
-		height: 0;
-		opacity: 0;
+	::selection {
+		background-color: var(--color-primary);
+		color: var(--color-primary-foreground);
 	}
 }

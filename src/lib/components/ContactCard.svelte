@@ -1,118 +1,69 @@
 <!--
 @component ContactCard
-@description Reusable contact information card with hover effects
-@example
-  <ContactCard />
+@description Contact channels: email, phone/WhatsApp, Instagram.
 -->
 
 <script lang="ts">
 	import { t } from 'svelte-i18n';
 	import { Mail, Phone, Instagram, MessageCircle } from 'lucide-svelte';
 
-	export let showWhatsApp = true;
-	export let showInstagram = true;
-	export let showEmail = true;
-	export let showPhone = true;
+	const channels = [
+		{
+			icon: Mail,
+			labelKey: 'emailLabel',
+			valueKey: 'emailAddress',
+			href: 'mailto:cardenaspachecocarmenalejandra@gmail.com'
+		},
+		{
+			icon: Phone,
+			labelKey: 'phoneNumberLabel',
+			valueKey: 'phoneNumber',
+			href: 'https://wa.me/34628672368'
+		},
+		{
+			icon: MessageCircle,
+			labelKey: 'whatsapp',
+			valueKey: 'phoneNumber',
+			href: 'https://wa.me/34628672368'
+		},
+		{
+			icon: Instagram,
+			labelKey: 'instagramLabel',
+			valueKey: 'instagram',
+			href: 'https://instagram.com/cardenas.pacheco'
+		}
+	];
 </script>
 
-<div class="bg-card/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border p-6 md:p-8">
-	<h2
-		class="text-lg md:text-xl font-semibold montserrat-semibold text-card-foreground mb-6 text-center"
-	>
-		{$t('contactInfo')}
-	</h2>
+<div class="rounded-2xl border border-border bg-card p-6 md:p-8">
+	<h2 class="mb-6 font-serif text-xl text-card-foreground">{$t('contactInfo')}</h2>
 
-	<div class="space-y-6">
-		<!-- Email -->
-		{#if showEmail}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
+	<ul class="space-y-5">
+		{#each channels as channel (channel.labelKey)}
+			<li>
+				<a
+					href={channel.href}
+					target={channel.href.startsWith('http') ? '_blank' : undefined}
+					rel={channel.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+					class="group flex items-center gap-4 focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
 				>
-					<Mail class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('emailLabel')}
-					</h3>
-					<a
-						href="mailto:cardenaspachecocarmenalejandra@gmail.com"
-						class="text-card-foreground font-medium montserrat-medium break-all hover:text-primary transition-colors duration-200"
+					<span
+						class="flex size-11 shrink-0 items-center justify-center rounded-xl border border-border text-primary transition-colors duration-200 group-hover:border-primary group-hover:bg-primary group-hover:text-primary-foreground"
 					>
-						{$t('emailAddress')}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- Phone -->
-		{#if showPhone}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<Phone class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('phoneNumberLabel')}
-					</h3>
-					<a
-						href="https://wa.me/34628672368"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
-					>
-						{$t('phoneNumber')}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- WhatsApp -->
-		{#if showWhatsApp}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<MessageCircle class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('whatsapp')}
-					</h3>
-					<a
-						href="https://wa.me/34628672368"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
-					>
-						{$t('phoneNumber')}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- Instagram -->
-		{#if showInstagram}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<Instagram class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">Instagram</h3>
-					<a
-						href="https://instagram.com/cardenas.pacheco"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium montserrat-medium break-all hover:text-pink-600 transition-colors duration-200"
-					>
-						{$t('instagram')}
-					</a>
-				</div>
-			</div>
-		{/if}
-	</div>
+						<channel.icon class="size-5" />
+					</span>
+					<span class="min-w-0">
+						<span class="block text-xs tracking-wide text-muted-foreground uppercase">
+							{$t(channel.labelKey, { default: 'Instagram' })}
+						</span>
+						<span
+							class="block truncate font-medium text-card-foreground transition-colors duration-200 group-hover:text-primary"
+						>
+							{$t(channel.valueKey)}
+						</span>
+					</span>
+				</a>
+			</li>
+		{/each}
+	</ul>
 </div>

@@ -1,22 +1,13 @@
 <!--
 @component ArtworkPage
-@description Dedicated page for displaying detailed artwork information
+@description Artwork detail: large image with lightbox, thumbnails, metadata, prev/next navigation.
 -->
 
 <script lang="ts">
 	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
 	import type { Artwork } from '$lib/types/artwork';
-	import {
-		Euro,
-		Calendar,
-		Ruler,
-		Tag,
-		ChevronLeft,
-		ChevronRight,
-		ArrowLeft,
-		Eye
-	} from 'lucide-svelte';
+	import { Euro, Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft, Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -28,48 +19,34 @@
 	import { imageMapDetail } from '$lib/data/imageImportsDetail';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
-	import { Label, Button } from 'bits-ui';
 
-	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
 
-	// Track if component is mounted to avoid hydration mismatch
+	// Avoid hydration mismatch: optimized <Img> renders client-side only
 	let mounted = $state(false);
 
-	// Make artwork reactive to data changes
 	let artwork = $derived(data.artwork);
 
-	// Get gallery state for calculating next/prev
 	const galleryState = getGalleryState();
 
-	// BiggerPicture lightbox instance
 	let bp: ReturnType<typeof BiggerPicture> | null = null;
 
-	// Calculate next/prev based on current filter state
+	// Prev/next respect the current gallery filters
 	let navigation = $derived.by(() => {
 		const filteredArtworks = galleryState.filteredArtworks;
 		const currentIndex = filteredArtworks.findIndex((art: Artwork) => art.id === artwork.id);
-
-		if (currentIndex === -1) {
-			return { nextId: null, prevId: null };
-		}
-
-		const nextIndex = currentIndex === filteredArtworks.length - 1 ? 0 : currentIndex + 1;
-		const prevIndex = currentIndex === 0 ? filteredArtworks.length - 1 : currentIndex - 1;
-
+		if (currentIndex === -1) return { nextId: null, prevId: null };
+		const nextIndex = (currentIndex + 1) % filteredArtworks.length;
+		const prevIndex = (currentIndex - 1 + filteredArtworks.length) % filteredArtworks.length;
 		return {
 			nextId: filteredArtworks[nextIndex]?.id || null,
 			prevId: filteredArtworks[prevIndex]?.id || null
 		};
 	});
 
-	// Current image index for cycling through variants
 	let currentImageIndex = $state(0);
-
-	// Navigation state
 	let isNavigating = $state(false);
 
-	// Computed values
 	let currentImage = $derived(artwork?.images?.[currentImageIndex] || null);
 	let hasMultipleImages = $derived(artwork && artwork.images ? artwork.images.length > 1 : false);
 
@@ -84,16 +61,13 @@
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
-		// Ctrl+Arrow for artwork navigation
 		if (event.ctrlKey && event.key === 'ArrowLeft') {
 			event.preventDefault();
 			navigateToArtwork(navigation.prevId);
 		} else if (event.ctrlKey && event.key === 'ArrowRight') {
 			event.preventDefault();
 			navigateToArtwork(navigation.nextId);
-		}
-		// Plain arrow keys for image cycling (only if multiple images)
-		else if (event.key === 'ArrowLeft' && hasMultipleImages) {
+		} else if (event.key === 'ArrowLeft' && hasMultipleImages) {
 			event.preventDefault();
 			previousImage();
 		} else if (event.key === 'ArrowRight' && hasMultipleImages) {
@@ -103,37 +77,31 @@
 	}
 
 	function nextImage() {
-		if (artwork && artwork.images && hasMultipleImages) {
+		if (hasMultipleImages && artwork.images) {
 			currentImageIndex = (currentImageIndex + 1) % artwork.images.length;
 		}
 	}
 
 	function previousImage() {
-		if (artwork && artwork.images && hasMultipleImages) {
+		if (hasMultipleImages && artwork.images) {
 			currentImageIndex =
-				currentImageIndex === 0 ? artwork.images.length - 1 : currentImageIndex - 1;
+				(currentImageIndex - 1 + artwork.images.length) % artwork.images.length;
 		}
 	}
 
 	function openLightbox() {
 		if (!bp) return;
-
-		// Dimensions are precomputed at build time (see generate-artwork-images.mjs),
-		// so no runtime Image() probing is needed.
+		// Dimensions are precomputed at build time (generate-artwork-images.mjs)
 		const items = artwork.images.map((image) => ({
 			img: image.src,
 			alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
 			width: image.width ?? 1920,
 			height: image.height ?? 1080
 		}));
-
-		bp.open({
-			items,
-			position: currentImageIndex
-		});
+		bp.open({ items, position: currentImageIndex });
 	}
 
-	// Reset image index and navigation state when artwork changes
+	// Reset image index when navigating between artworks
 	$effect(() => {
 		if (artwork) {
 			currentImageIndex = 0;
@@ -141,369 +109,245 @@
 		}
 	});
 
-	// Focus management
-	$effect(() => {
-		if (artwork) {
-			// Focus the main element when it loads
-			const mainElement = document.querySelector('main') as HTMLElement;
-			if (mainElement) {
-				mainElement.focus();
-			}
-		}
-	});
-
-	// Initialize BiggerPicture lightbox
 	onMount(() => {
 		mounted = true;
-		bp = BiggerPicture({
-			target: document.body
-		});
-
-		// Cleanup on unmount
+		bp = BiggerPicture({ target: document.body });
 		return () => {
-			if (bp) {
-				try {
-					// Only close if the instance is still valid and has the close method
-					if (typeof bp.close === 'function') {
-						bp.close();
-					}
-				} catch {
-					// Ignore errors during cleanup - BiggerPicture may have already cleaned up
-					// This can happen during navigation when the component is being destroyed
-				}
-				bp = null;
+			try {
+				bp?.close?.();
+			} catch {
+				// BiggerPicture may have already cleaned up during navigation
 			}
+			bp = null;
 		};
 	});
 </script>
 
 <SEO seo={data.seo} />
 
-<!-- Header -->
 <GalleryHeader />
 
-<!-- Go Back Button -->
-<div class="bg-background/80 backdrop-blur-md">
-	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-		<div class="py-3 md:py-4">
-			<Button.Root
-				onclick={goBack}
-				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-primary hover:text-primary hover:bg-accent rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
-				aria-label={$t('goBack')}
-			>
-				<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
-				<span>{$t('goBack')}</span>
-			</Button.Root>
-		</div>
-	</div>
-</div>
-
-<!-- Main Content -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 <main
-	class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 focus:outline-none"
+	class="mx-auto max-w-7xl px-4 focus:outline-none sm:px-6 lg:px-8"
 	onkeydown={handleKeydown}
 	tabindex="-1"
 >
-	<!-- Artwork Carousel - Full width, flush with screen edges -->
-	<div class="-mx-4 sm:-mx-6 lg:-mx-8 mb-4">
+	<div class="py-3 md:py-4">
+		<button
+			onclick={goBack}
+			class="inline-flex min-h-[44px] items-center gap-2 rounded-lg px-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+			aria-label={$t('goBack')}
+		>
+			<ArrowLeft class="size-4" />
+			<span>{$t('goBack')}</span>
+		</button>
+	</div>
+
+	<!-- All-artworks strip, flush with screen edges -->
+	<div class="-mx-4 mb-6 sm:-mx-6 lg:-mx-8">
 		<ArtworkCarousel currentArtworkId={artwork?.id} />
 	</div>
 
-	<div
-		class="bg-card/80 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-lg border border-border overflow-hidden w-full"
-	>
-		<!-- Content Grid -->
-		<div class="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full">
-			<!-- Image Section -->
-			<div class="p-4 md:p-6 lg:p-8">
-				<div class="space-y-4">
-					<div class="relative">
-						{#if currentImage && currentImage.src}
-							{@const imageSrc = currentImage.src}
-							{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-							{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
-							<div
-								onclick={openLightbox}
-								onkeydown={(e) => e.key === 'Enter' && openLightbox()}
-								class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
-								role="button"
-								tabindex="0"
-								aria-label={$t('expandImage', { default: 'Expand image' })}
-							>
-								{#if mounted && optimizedImage && browser}
-									<!-- Only render optimized image on client to prevent hydration mismatch -->
-									<Img
-										src={optimizedImage}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
-									/>
-								{:else}
-									<!-- Fallback for images not found in the mapping or during SSR -->
-									<img
-										src={imageSrc}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										loading="lazy"
-										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
-									/>
-								{/if}
-							</div>
+	<div class="grid w-full grid-cols-1 gap-10 pb-16 lg:grid-cols-2 lg:gap-14">
+		<!-- Image column -->
+		<div class="space-y-4">
+			<div class="relative">
+				{#if currentImage && currentImage.src}
+					{@const imageSrc = currentImage.src}
+					{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
+					{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
+					<div
+						onclick={openLightbox}
+						onkeydown={(e) => e.key === 'Enter' && openLightbox()}
+						class="cursor-zoom-in rounded-lg focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:outline-none"
+						role="button"
+						tabindex="0"
+						aria-label={$t('expandImage', { default: 'Expand image' })}
+					>
+						{#if mounted && optimizedImage && browser}
+							<Img
+								src={optimizedImage}
+								alt={$t('artworkAlt', { values: { title: artwork.title } })}
+								class="w-full h-auto rounded-lg shadow-md"
+								sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
+							/>
 						{:else}
-							<div class="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
-								<p class="text-muted-foreground">No image available</p>
-							</div>
-						{/if}
-
-						<!-- Navigation Controls -->
-						{#if hasMultipleImages}
-							<Button.Root
-								onclick={previousImage}
-								class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
-								aria-label="Previous image"
-							>
-								<ChevronLeft class="w-6 h-6" />
-							</Button.Root>
-
-							<Button.Root
-								onclick={nextImage}
-								class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
-								aria-label="Next image"
-							>
-								<ChevronRight class="w-6 h-6" />
-							</Button.Root>
-						{/if}
-
-						{#if !artwork.isAvailable}
-							<div
-								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
-							>
-								{$t('sold')}
-							</div>
+							<img
+								src={imageSrc}
+								alt={$t('artworkAlt', { values: { title: artwork.title } })}
+								class="h-auto w-full rounded-lg shadow-md"
+								loading="lazy"
+								sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
+							/>
 						{/if}
 					</div>
-
-					<!-- Thumbnail Carousel for Image Navigation -->
-					{#if hasMultipleImages && artwork.images}
-						<ThumbnailCarousel
-							images={artwork.images}
-							selectedIndex={currentImageIndex}
-							onImageSelect={(index) => (currentImageIndex = index)}
-						/>
-					{/if}
-
-					<!-- Click to enlarge label -->
-					<div class="text-center">
-						<Label.Root
-							onclick={openLightbox}
-							onkeydown={(e) => e.key === 'Enter' && openLightbox()}
-							class="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground montserrat-medium cursor-pointer hover:text-primary transition-colors duration-200"
-							role="button"
-							tabindex={0}
-							aria-label={$t('clickToEnlarge')}
-						>
-							<Eye class="w-4 h-4 md:w-5 md:h-5" />
-							<span>{$t('clickToEnlarge')}</span>
-						</Label.Root>
+				{:else}
+					<div class="flex h-64 w-full items-center justify-center rounded-lg bg-muted">
+						<p class="text-muted-foreground">No image available</p>
 					</div>
-				</div>
+				{/if}
+
+				{#if hasMultipleImages}
+					<button
+						onclick={previousImage}
+						class="absolute top-1/2 left-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-colors duration-200 hover:bg-black/70"
+						aria-label="Previous image"
+					>
+						<ChevronLeft class="size-6" />
+					</button>
+					<button
+						onclick={nextImage}
+						class="absolute top-1/2 right-4 -translate-y-1/2 rounded-full bg-black/50 p-2 text-white transition-colors duration-200 hover:bg-black/70"
+						aria-label="Next image"
+					>
+						<ChevronRight class="size-6" />
+					</button>
+				{/if}
+
+				{#if !artwork.isAvailable}
+					<div
+						class="absolute top-4 right-4 rounded-full bg-foreground/80 px-3 py-1 text-sm font-medium text-background backdrop-blur-sm"
+					>
+						{$t('sold')}
+					</div>
+				{/if}
 			</div>
 
-			<!-- Details Section -->
-			<div class="p-4 md:p-6 lg:p-8 bg-muted/50">
-				<div class="space-y-4 md:space-y-6">
-					<!-- Title -->
-					<div>
-						<h1
-							class="text-xl md:text-2xl lg:text-3xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent"
-						>
-							{artwork.title}
-						</h1>
+			{#if hasMultipleImages && artwork.images}
+				<ThumbnailCarousel
+					images={artwork.images}
+					selectedIndex={currentImageIndex}
+					onImageSelect={(index) => (currentImageIndex = index)}
+				/>
+			{/if}
+
+			<div class="text-center">
+				<button
+					onclick={openLightbox}
+					class="inline-flex cursor-zoom-in items-center gap-2 text-xs text-muted-foreground transition-colors duration-200 hover:text-primary md:text-sm"
+					aria-label={$t('clickToEnlarge')}
+				>
+					<Eye class="size-4" />
+					<span>{$t('clickToEnlarge')}</span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Details column -->
+		<div class="space-y-6">
+			<h1 class="font-serif text-3xl leading-tight font-light text-foreground md:text-4xl">
+				{artwork.title}
+			</h1>
+
+			<dl class="space-y-4 border-y border-border py-6">
+				{#if artwork.price}
+					<div class="flex items-center gap-3">
+						<Euro class="size-4 shrink-0 text-primary" aria-hidden="true" />
+						<dt class="w-28 text-sm text-muted-foreground">{$t('priceLabel')}</dt>
+						<dd class="font-medium text-foreground">
+							{artwork.price} {artwork.currency || 'EUR'}
+						</dd>
 					</div>
-					<!-- Price -->
-					{#if artwork.price}
-						<div class="flex items-start gap-3">
-							<Euro class="w-5 h-5 text-muted-foreground mt-1" />
-							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
-									{$t('priceLabel')}
-								</p>
-								<p class="text-lg md:text-2xl font-bold montserrat-bold text-foreground">
-									{artwork.price}
-									{artwork.currency || 'EUR'}
-								</p>
-							</div>
-						</div>
-					{/if}
+				{/if}
 
-					<!-- Dimensions -->
-					{#if artwork.dimensions}
-						<div class="flex items-start gap-3">
-							<Ruler class="w-5 h-5 text-muted-foreground mt-1" />
-							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
-									{$t('dimensionsLabel')}
-								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
-									{artwork.dimensions.width} × {artwork.dimensions.height}
-									{artwork.dimensions.unit}
-								</p>
-							</div>
-						</div>
-					{/if}
-
-					<!-- Year -->
-					{#if artwork.year}
-						<div class="flex items-start gap-3">
-							<Calendar class="w-5 h-5 text-muted-foreground mt-1" />
-							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
-									{$t('yearLabel')}
-								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
-									{artwork.year}
-								</p>
-							</div>
-						</div>
-					{/if}
-
-					<!-- Category -->
-					<div class="flex items-start gap-3">
-						<Tag class="w-5 h-5 text-muted-foreground mt-1" />
-						<div class="flex-1">
-							<p
-								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
-							>
-								{$t('tagsLabel')}
-							</p>
-							<div class="flex flex-wrap gap-2">
-								{#if Array.isArray(artwork.category)}
-									{#each artwork.category as category (category)}
-										<span
-											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
-										>
-											{$t('categories.' + category)}
-										</span>
-									{/each}
-								{:else}
-									<span
-										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-primary/10 text-primary"
-									>
-										{$t('categories.' + artwork.category)}
-									</span>
-								{/if}
-							</div>
-						</div>
+				{#if artwork.dimensions}
+					<div class="flex items-center gap-3">
+						<Ruler class="size-4 shrink-0 text-primary" aria-hidden="true" />
+						<dt class="w-28 text-sm text-muted-foreground">{$t('dimensionsLabel')}</dt>
+						<dd class="font-medium text-foreground">
+							{artwork.dimensions.width} × {artwork.dimensions.height}
+							{artwork.dimensions.unit}
+						</dd>
 					</div>
+				{/if}
 
-					<!-- Description -->
-					{#if artwork.description}
-						<div>
-							<p
-								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
-							>
-								{$t('descriptionLabel')}
-							</p>
-							<p
-								class="text-sm md:text-base montserrat-medium text-muted-foreground leading-relaxed max-w-prose"
-							>
-								{artwork.description}
-							</p>
-						</div>
-					{/if}
-
-					<!-- Contact Information -->
-					{#if artwork.isAvailable}
-						<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-6">
-							<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-primary mb-2">
-								{$t('interestedHeading')}
-							</h3>
-							<p
-								class="text-muted-foreground text-xs md:text-sm montserrat-medium mb-4 leading-relaxed"
-							>
-								{$t('availableInfo')}
-							</p>
-							<Button.Root
-								href="/contact"
-								data-sveltekit-preload-data="hover"
-								data-sveltekit-noscroll
-								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
-							>
-								{$t('contactArtist')}
-							</Button.Root>
-						</div>
-					{:else}
-						<div class="bg-muted/50 border border-border rounded-xl p-4 md:p-6">
-							<div class="space-y-3">
-								<h3
-									class="text-base md:text-lg font-semibold montserrat-semibold text-muted-foreground"
-								>
-									{$t('soldHeading')}
-								</h3>
-								<p
-									class="text-muted-foreground text-xs md:text-sm montserrat-medium leading-relaxed"
-								>
-									{$t('soldInfo')}
-								</p>
-								<div class="pt-2 flex justify-center">
-									<Button.Root
-										href="/contact"
-										data-sveltekit-preload-data="hover"
-										data-sveltekit-noscroll
-										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
-									>
-										{$t('contactArtist')}
-									</Button.Root>
-								</div>
-							</div>
-						</div>
-					{/if}
-
-					<!-- Artwork Navigation Controls -->
-					<div class="pt-2">
-						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
-							<!-- Previous Artwork Button -->
-							<Button.Root
-								onclick={() => navigateToArtwork(navigation.prevId)}
-								disabled={!navigation.prevId || isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
-								aria-label={$t('previousArtwork')}
-								title={$t('previousArtwork')}
-							>
-								<ChevronLeft class="w-5 h-5" />
-								<span class="hidden lg:inline">{$t('previousArtwork')}</span>
-							</Button.Root>
-
-							<!-- Go Back to Gallery Button -->
-							<Button.Root
-								onclick={goBack}
-								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
-								aria-label={$t('goBack')}
-							>
-								<span class="whitespace-nowrap">{$t('goBack')}</span>
-							</Button.Root>
-
-							<!-- Next Artwork Button -->
-							<Button.Root
-								onclick={() => navigateToArtwork(navigation.nextId)}
-								disabled={!navigation.nextId || isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
-								aria-label={$t('nextArtwork')}
-								title={$t('nextArtwork')}
-							>
-								<span class="hidden lg:inline">{$t('nextArtwork')}</span>
-								<ChevronRight class="w-5 h-5" />
-							</Button.Root>
-						</div>
+				{#if artwork.year}
+					<div class="flex items-center gap-3">
+						<Calendar class="size-4 shrink-0 text-primary" aria-hidden="true" />
+						<dt class="w-28 text-sm text-muted-foreground">{$t('yearLabel')}</dt>
+						<dd class="font-medium text-foreground">{artwork.year}</dd>
 					</div>
+				{/if}
+
+				<div class="flex items-center gap-3">
+					<Tag class="size-4 shrink-0 text-primary" aria-hidden="true" />
+					<dt class="w-28 text-sm text-muted-foreground">{$t('tagsLabel')}</dt>
+					<dd class="flex flex-wrap gap-2">
+						{#each Array.isArray(artwork.category) ? artwork.category : [artwork.category] as category (category)}
+							<span
+								class="inline-flex items-center rounded-full bg-accent px-3 py-1 text-xs font-medium text-accent-foreground"
+							>
+								{$t('categories.' + category)}
+							</span>
+						{/each}
+					</dd>
 				</div>
+			</dl>
+
+			{#if artwork.description}
+				<p class="max-w-prose text-sm leading-relaxed text-muted-foreground md:text-base">
+					{artwork.description}
+				</p>
+			{/if}
+
+			{#if artwork.isAvailable}
+				<div class="rounded-xl border border-primary/30 bg-primary/5 p-5 md:p-6">
+					<h3 class="mb-1 font-serif text-lg text-foreground">{$t('interestedHeading')}</h3>
+					<p class="mb-4 text-sm leading-relaxed text-muted-foreground">{$t('availableInfo')}</p>
+					<a
+						href="/contact"
+						data-sveltekit-preload-data="hover"
+						data-sveltekit-noscroll
+						class="inline-flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-6 py-2.5 font-semibold text-primary-foreground transition-colors duration-200 hover:bg-primary/90 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none"
+					>
+						{$t('contactArtist')}
+					</a>
+				</div>
+			{:else}
+				<div class="rounded-xl border border-border bg-muted/50 p-5 md:p-6">
+					<h3 class="mb-1 font-serif text-lg text-muted-foreground">{$t('soldHeading')}</h3>
+					<p class="mb-4 text-sm leading-relaxed text-muted-foreground">{$t('soldInfo')}</p>
+					<a
+						href="/contact"
+						data-sveltekit-preload-data="hover"
+						data-sveltekit-noscroll
+						class="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-border px-6 py-2.5 font-medium text-foreground transition-colors duration-200 hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+					>
+						{$t('contactArtist')}
+					</a>
+				</div>
+			{/if}
+
+			<!-- Prev / back / next -->
+			<div class="flex items-center justify-between gap-2 pt-2">
+				<button
+					onclick={() => navigateToArtwork(navigation.prevId)}
+					disabled={!navigation.prevId || isNavigating}
+					class="inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+					aria-label={$t('previousArtwork')}
+				>
+					<ChevronLeft class="size-5" />
+					<span class="hidden lg:inline">{$t('previousArtwork')}</span>
+				</button>
+
+				<button
+					onclick={goBack}
+					class="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-border px-5 py-2 text-sm font-medium text-foreground transition-colors duration-200 hover:border-primary hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none"
+					aria-label={$t('goBack')}
+				>
+					{$t('goBack')}
+				</button>
+
+				<button
+					onclick={() => navigateToArtwork(navigation.nextId)}
+					disabled={!navigation.nextId || isNavigating}
+					class="inline-flex min-h-[44px] items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+					aria-label={$t('nextArtwork')}
+				>
+					<span class="hidden lg:inline">{$t('nextArtwork')}</span>
+					<ChevronRight class="size-5" />
+				</button>
 			</div>
 		</div>
 	</div>
