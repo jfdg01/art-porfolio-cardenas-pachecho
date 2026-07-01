@@ -16,11 +16,15 @@
 	import Img from '@zerodevx/svelte-img';
 	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import BiggerPicture from 'bigger-picture';
-	import { imageMapDetail } from '$lib/data/imageImportsDetail';
+	import { imageMapDetail, imageMapFull } from '$lib/data/imageImportsDetail';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
 
 	let { data }: { data: PageData } = $props();
+
+	// images[].src is a virtual /images/<name>.webp key; resolve to the hashed asset
+	const fullUrl = (src: string) =>
+		imageMapFull[src.split('/').pop()?.replace('.webp', '') ?? ''] || src;
 
 	// Avoid hydration mismatch: optimized <Img> renders client-side only
 	let mounted = $state(false);
@@ -93,7 +97,7 @@
 		if (!bp) return;
 		// Dimensions are precomputed at build time (generate-artwork-images.mjs)
 		const items = artwork.images.map((image) => ({
-			img: image.src,
+			img: fullUrl(image.src),
 			alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
 			width: image.width ?? 1920,
 			height: image.height ?? 1080
@@ -174,7 +178,7 @@
 							/>
 						{:else}
 							<img
-								src={imageSrc}
+								src={fullUrl(imageSrc)}
 								alt={$t('artworkAlt', { values: { title: artwork.title } })}
 								class="h-auto w-full rounded-lg shadow-md"
 								loading="lazy"

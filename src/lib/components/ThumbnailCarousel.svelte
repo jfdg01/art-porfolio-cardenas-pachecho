@@ -4,7 +4,7 @@
 -->
 
 <script lang="ts">
-	import { imageMapDetail } from '$lib/data/imageImportsDetail';
+	import { imageMapDetail, imageMapFull } from '$lib/data/imageImportsDetail';
 	import Img from '@zerodevx/svelte-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
@@ -154,7 +154,7 @@
 						/>
 					{:else}
 						<img
-							src={imageSrc}
+							src={imageName ? imageMapFull[imageName] : imageSrc}
 							alt={image.alt || $t('artworkAlt', { values: { title: index + 1 } })}
 							class="h-20 w-auto rounded"
 							loading="lazy"

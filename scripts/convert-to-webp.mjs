@@ -8,7 +8,7 @@ import sharp from 'sharp';
  * This script processes all images in the source directory and converts them to WebP
  */
 
-const OUTPUT_IMAGES_DIR = path.join(process.cwd(), 'static', 'images');
+const OUTPUT_IMAGES_DIR = path.join(process.cwd(), 'src', 'lib', 'assets', 'images');
 const MAX_DIMENSION = 1536;
 const WEBP_QUALITY = 70;
 
@@ -83,7 +83,7 @@ async function processImage(fileName, sourceDir) {
 		console.log(`📁 Created output directory: ${OUTPUT_IMAGES_DIR}`);
 	}
 
-	// Always overwrite existing files in static/images directory
+	// Always overwrite existing files in src/lib/assets/images directory
 	if (fs.existsSync(outputPath)) {
 		console.log(`\n🔄 Overwriting existing WebP file: ${webpFileName}`);
 	}
@@ -252,7 +252,7 @@ This script will:
 - Normalize filenames by removing accents, diacritics, converting to lowercase, and replacing spaces with hyphens
 - Use 70% quality for WebP compression
 - Resize images to maximum 1536x1536 resolution while maintaining aspect ratio
-- Save converted files to static/images directory
+- Save converted files to src/lib/assets/images directory
 - Always overwrite existing files in the output directory
 - Preserve original files in the source directory
 - Show detailed conversion statistics

@@ -2,7 +2,7 @@
 
 /**
  * Script to generate artwork images data from static images
- * This script scans the /static/images folder and creates artworkImages.ts
+ * This script scans the src/lib/assets/images folder and creates artworkImages.ts
  * with image URLs linked to artwork IDs
  */
 
@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.join(__dirname, '..');
 
 // Paths
-const staticImagesPath = path.join(projectRoot, 'static', 'images');
+const staticImagesPath = path.join(projectRoot, 'src', 'lib', 'assets', 'images');
 const outputPath = path.join(projectRoot, 'src', 'lib', 'data');
 
 // Ensure output directory exists

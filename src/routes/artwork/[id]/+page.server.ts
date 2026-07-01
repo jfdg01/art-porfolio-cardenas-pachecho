@@ -1,5 +1,13 @@
 import type { PageServerLoad } from './$types';
 import { artworkData } from '$lib/data/artworkData';
+import { imageMapFull } from '$lib/data/imageImportsDetail';
+
+// artwork.images[].src is a virtual /images/<name>.webp key; resolve it to the
+// real hashed asset URL
+function assetUrl(src: string | undefined): string {
+	const name = src?.split('/').pop()?.replace('.webp', '');
+	return (name && imageMapFull[name]) || '/web-app-manifest-512x512.png';
+}
 
 export const load: PageServerLoad = async ({ params, url }) => {
 	const artwork = artworkData.find((artwork) => artwork.id === params.id);
@@ -12,10 +20,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 	const seo = {
 		title: `${artwork.title} - Carmen Cárdenas Pacheco`,
 		description: `View ${artwork.title} by Carmen Cárdenas Pacheco. ${artwork.description || 'Explore this beautiful artwork in the portfolio.'}`,
-		image:
-			typeof artwork.images[0] === 'string'
-				? artwork.images[0]
-				: artwork.images[0]?.src || '/images/default.webp',
+		image: assetUrl(typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src),
 		type: 'article',
 		url: url.href,
 		structuredData: {
@@ -23,7 +28,7 @@ export const load: PageServerLoad = async ({ params, url }) => {
 			'@type': 'VisualArtwork',
 			name: artwork.title,
 			description: artwork.description || `View ${artwork.title} by Carmen Cárdenas Pacheco`,
-			image: `https://cardenaspacheco.es${typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src || '/images/default.webp'}`,
+			image: `https://cardenaspacheco.es${assetUrl(typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src)}`,
 			url: url.href,
 			creator: {
 				'@type': 'Person',

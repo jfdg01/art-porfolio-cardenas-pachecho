@@ -33,3 +33,19 @@ Object.entries(imageImportsCarousel).forEach(([path, image]) => {
 	const filename = path.split('/').pop()?.replace('.webp', '') || '';
 	imageMapCarousel[filename] = image as string;
 });
+
+// Raw asset URLs (no imagetools re-encode) — the exact webp file, hashed and
+// CDN-served. Used for the lightbox full view and og:image, replacing the
+// duplicate copies that used to live in static/images.
+const imageImportsFull = import.meta.glob('$lib/assets/images/*.webp', {
+	import: 'default',
+	eager: true,
+	query: '?url'
+});
+
+export const imageMapFull: Record<string, string> = {};
+
+Object.entries(imageImportsFull).forEach(([path, image]) => {
+	const filename = path.split('/').pop()?.replace('.webp', '') || '';
+	imageMapFull[filename] = image as string;
+});
