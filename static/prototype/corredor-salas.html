@@ -25,17 +25,42 @@
 				font-size: 1rem;
 			}
 			.rooms ul {
-				display: contents;
+				flex: 1;
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
+				gap: 0.25rem 0.5rem;
+				padding: 0;
 				list-style: none;
+				font-size: 0.9375rem;
 			}
+			/* Each Room shows one of its works above its name, so the list reads at a glance */
 			.rooms a {
-				display: inline-block;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				gap: 0.35rem;
 				padding: 0.35rem 0;
 				text-decoration: none;
 				color: var(--muted);
 			}
+			.rooms img {
+				width: min(4.5rem, 100%);
+				height: 3.25rem;
+				object-fit: cover;
+				opacity: 0.75;
+			}
+			.rooms a:hover img,
+			.rooms a[aria-current] img {
+				opacity: 1;
+			}
+			.rooms a[aria-current] img {
+				outline: 2px solid var(--ink);
+				outline-offset: 2px;
+			}
 			.rooms a[aria-current] {
 				color: var(--ink);
+			}
+			.rooms a[aria-current] span {
 				text-decoration: underline;
 				text-underline-offset: 0.35em;
 			}
@@ -91,6 +116,14 @@
 			siteHeader('1 · Corredor por las Salas · Source Serif 4 + Space Grotesk');
 
 			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
+			// A random work stands for each Room, a different one per Room where the Room allows it.
+			const used = new Set();
+			for (const r of rooms) {
+				const free = r.works.filter((a) => !used.has(a));
+				const pool = free.length ? free : r.works;
+				r.face = pool[Math.floor(Math.random() * pool.length)];
+				used.add(r.face);
+			}
 			const walk = document.querySelector('main');
 			walk.innerHTML = rooms
 				.map((r, i) => {
@@ -104,7 +137,10 @@
 				.join('');
 
 			document.querySelector('.rooms ul').innerHTML = rooms
-				.map((r) => `<li><a href="#sala-${r.tag}" data-room="${r.tag}">${r.name}</a></li>`)
+				.map(
+					(r) => `<li><a href="#sala-${r.tag}" data-room="${r.tag}">
+						<img src="/images/${r.face.id}.webp" alt="" width="72" height="52"><span>${r.name}</span></a></li>`
+				)
 				.join('');
 			const select = document.querySelector('#room');
 			select.innerHTML = rooms.map((r) => `<option value="${r.tag}">${r.name} (${r.works.length})</option>`).join('');
