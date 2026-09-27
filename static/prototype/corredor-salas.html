@@ -195,6 +195,32 @@
 			.end .proto a {
 				display: inline;
 			}
+			/* Portrait phone: the name stays on top while the site links scroll away. The header is
+			   sticky with a negative top (--hide, the links row, measured in JS), and the strip
+			   sticks right under what is left of it (--site-h). */
+			@media (max-width: 700px) {
+				#site {
+					position: sticky;
+					top: calc(-1 * var(--hide, 0px));
+					z-index: 3;
+					background: var(--wall);
+				}
+				#site nav {
+					grid-row: 1;
+				}
+				#site .name {
+					grid-row: 2;
+				}
+				#site .lang {
+					grid-area: 2 / 2;
+				}
+				.rooms {
+					top: var(--site-h, 0px) !important;
+				}
+				.corridor > * {
+					scroll-margin-top: calc(var(--site-h, 0px) + 4rem);
+				}
+			}
 			/* Phone: the Room strip is the one control that stays, one tap target high */
 			@media (max-width: 700px), (max-height: 500px) {
 				.rooms {
@@ -436,6 +462,17 @@
 				const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 				document.body.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
 			};
+
+			// Measure the header rows for the sticky name (see the CSS above).
+			const site = document.querySelector('#site');
+			const fit = () => {
+				const hide = site.querySelector('nav').getBoundingClientRect().bottom - site.getBoundingClientRect().top;
+				site.style.setProperty('--hide', `${hide}px`);
+				document.documentElement.style.setProperty('--site-h', `${site.offsetHeight - hide}px`);
+			};
+			fit();
+			addEventListener('resize', fit);
+			document.fonts.ready.then(fit);
 
 			// The phone has one view, the walk.
 			const wantsAll = new URLSearchParams(location.search).get('vista') === 'todas';
