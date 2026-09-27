@@ -115,16 +115,16 @@
 				font: 1rem var(--sans);
 				color: var(--muted);
 			}
+			/* Masonry: uncropped images in columns, each with its short Label */
 			.mass ul {
-				display: flex;
-				flex-wrap: wrap;
-				align-items: flex-start;
-				gap: 2rem 1.75rem;
+				columns: 6 11rem;
+				column-gap: 1.75rem;
 				padding: 0;
 				list-style: none;
 			}
 			.mass li {
-				width: min-content;
+				break-inside: avoid;
+				margin-bottom: 2rem;
 			}
 			.mass a {
 				display: block;
@@ -132,8 +132,8 @@
 			}
 			.mass img {
 				display: block;
-				height: 11rem;
-				width: auto;
+				width: 100%;
+				height: auto;
 			}
 			.mass a:hover img,
 			.mass a:focus-visible img {
@@ -145,7 +145,6 @@
 			}
 			.mass .label {
 				margin-top: 0.5rem;
-				min-width: 7rem;
 			}
 			.mass .label .title {
 				font-size: 1rem;
@@ -208,9 +207,15 @@
 				#site nav {
 					grid-row: 1;
 				}
+				#site {
+					align-items: center;
+					row-gap: 0.625rem; /* the part of the header that stays: this gap, the name, the padding */
+					padding-bottom: 0.625rem;
+				}
 				#site .name {
 					grid-row: 2;
-					font-size: clamp(1rem, 4.6vw, 1.3125rem); /* one line beside the switch, down to 360 px */
+					font-weight: 600;
+					font-size: clamp(1.125rem, 5.4vw, 1.5rem); /* one line beside the switch, down to 360 px */
 				}
 				#site .views {
 					grid-area: 2 / 2;
@@ -219,9 +224,11 @@
 				.rooms {
 					top: var(--site-h, 0px) !important;
 				}
-				.corridor > *,
-				.mass section {
+				.corridor > * {
 					scroll-margin-top: calc(var(--site-h, 0px) + 4rem);
+				}
+				.mass section {
+					scroll-margin-top: calc(var(--site-h, 0px) + 5rem);
 				}
 			}
 			/* Phone: the Room strip is the one control that stays, one tap target high */
@@ -248,9 +255,19 @@
 					min-width: 0;
 				}
 				/* The language link sits first in the strip */
+				.rooms {
+					gap: 0;
+				}
 				.rooms .lang {
 					flex: none;
+					height: 2.75rem;
 					margin-left: 1rem;
+					padding: 0 1rem 0 0;
+					border: 0;
+					border-right: 1px solid var(--line);
+					color: var(--ink);
+					text-decoration: underline;
+					text-underline-offset: 0.25em;
 				}
 				.rooms li {
 					flex: none;
@@ -258,7 +275,7 @@
 				/* The view switch sits beside the name; it shows only the other view */
 				#site .views button {
 					height: 2.75rem;
-					padding: 0 0.6rem;
+					padding: 0 0.75rem;
 					font-size: 0.9375rem;
 					background: var(--ink);
 					color: var(--wall);
@@ -266,7 +283,7 @@
 				#site .views [aria-pressed='true'] {
 					display: none;
 				}
-				/* "Ver todas" on a phone: the page scrolls, three square thumbnails a row, no Labels */
+				/* "Ver todas" on a phone: the page scrolls, a masonry of three columns, no Labels */
 				.mass {
 					overflow: visible;
 					padding: 0 1rem 3rem;
@@ -279,18 +296,11 @@
 					margin: 1.5rem 0 0.75rem;
 				}
 				.mass ul {
-					display: grid;
-					grid-template-columns: repeat(3, 1fr);
-					gap: 0.25rem;
+					columns: 3;
+					column-gap: 0.25rem;
 				}
 				.mass li {
-					width: auto;
-				}
-				.mass img {
-					width: 100%;
-					height: auto;
-					aspect-ratio: 1;
-					object-fit: cover;
+					margin-bottom: 0.25rem;
 				}
 				.mass .label {
 					display: none;
@@ -546,11 +556,14 @@
 				document.querySelector('#site').append(document.querySelector('.views'));
 				document.querySelector('.rooms').prepend(document.querySelector('#site .lang'));
 			}
+			// A link to a Room opens it, once the fonts have set the header height.
 			const start = location.hash.slice('#sala-'.length);
-			if (document.getElementById(`sala-${start}`)) {
-				if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));
-				else open(start);
-			}
+			if (document.getElementById(`sala-${start}`))
+				document.fonts.ready.then(() => {
+					fit();
+					if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));
+					else open(start);
+				});
 		</script>
 	</body>
 </html>
