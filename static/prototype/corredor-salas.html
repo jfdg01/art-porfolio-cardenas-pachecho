@@ -210,9 +210,11 @@
 				}
 				#site .name {
 					grid-row: 2;
+					font-size: clamp(1rem, 4.6vw, 1.3125rem); /* one line beside the switch, down to 360 px */
 				}
-				#site .lang {
+				#site .views {
 					grid-area: 2 / 2;
+					align-self: center;
 				}
 				.rooms {
 					top: var(--site-h, 0px) !important;
@@ -245,20 +247,23 @@
 				.rooms ul {
 					min-width: 0;
 				}
-				.rooms li {
-					flex: none;
-				}
-				/* The view switch sits first in the strip; it shows only the other view */
-				.rooms .views {
+				/* The language link sits first in the strip */
+				.rooms .lang {
 					flex: none;
 					margin-left: 1rem;
 				}
-				.rooms .views button {
+				.rooms li {
+					flex: none;
+				}
+				/* The view switch sits beside the name; it shows only the other view */
+				#site .views button {
 					height: 2.75rem;
+					padding: 0 0.6rem;
+					font-size: 0.9375rem;
 					background: var(--ink);
 					color: var(--wall);
 				}
-				.rooms .views [aria-pressed='true'] {
+				#site .views [aria-pressed='true'] {
 					display: none;
 				}
 				/* "Ver todas" on a phone: the page scrolls, three square thumbnails a row, no Labels */
@@ -534,10 +539,12 @@
 			const end = document.querySelector('.end');
 			end.innerHTML = document.querySelector('#site nav ul').outerHTML;
 			// The prototype controls go to the end of the phone walk, out of the header.
-			// The view switch goes to the sticky Room strip, as the bottom bar is gone.
+			// The bottom bar is gone: the view switch takes the place of the language link beside
+			// the name, and the language link goes first in the Room strip.
 			if (PHONE.matches) {
 				end.append(document.querySelector('.proto'));
-				document.querySelector('.rooms').prepend(document.querySelector('.views'));
+				document.querySelector('#site').append(document.querySelector('.views'));
+				document.querySelector('.rooms').prepend(document.querySelector('#site .lang'));
 			}
 			const start = location.hash.slice('#sala-'.length);
 			if (document.getElementById(`sala-${start}`)) {
