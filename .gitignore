@@ -54,3 +54,6 @@ node_modules/.cache
 
 # TypeScript incremental build info
 *.tsbuildinfo
+# Playwright
+/test-results
+/playwright-report

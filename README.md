@@ -87,4 +87,6 @@ npm run generate-sitemap      # regenera sitemap.xml
 npm run check     # type-check con svelte-check
 npm run lint      # ESLint
 npm run format    # Prettier
+npm test          # Playwright contra el build de producción
+BASE_URL=https://<preview>.vercel.app npm test  # contra un despliegue de Vercel
 ```
