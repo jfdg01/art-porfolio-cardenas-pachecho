@@ -1,7 +1,6 @@
 <script lang="ts">
 	import type { LayoutData } from './$types';
 	import '../app.css';
-	import { setGalleryState } from '$lib/GalleryState.svelte';
 	import '$lib/i18n';
 	import { locale } from 'svelte-i18n';
 	// import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
@@ -15,9 +14,6 @@
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	let { children, data }: { children: any; data: LayoutData } = $props();
-
-	// Set up global gallery state with server-loaded artwork data
-	setGalleryState(data.artworkData);
 
 	// Set locale from load function data
 	locale.set(data.locale);

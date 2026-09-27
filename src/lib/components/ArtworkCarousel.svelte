@@ -5,9 +5,7 @@
 
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { getGalleryState } from '$lib/GalleryState.svelte';
-	import { imageMapCarousel } from '$lib/data/imageImports';
-	import Img from '@zerodevx/svelte-img';
+	import { artworks } from '$lib/artworks';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
@@ -18,12 +16,6 @@
 	}
 
 	let { currentArtworkId }: Props = $props();
-
-	// Get gallery state to access all artworks
-	const galleryState = getGalleryState();
-
-	// Get all artworks from the gallery state (not filtered)
-	let artworks = $derived(galleryState.artworks);
 
 	// Reference to the scroll container
 	let scrollContainer: HTMLDivElement;
@@ -262,54 +254,40 @@
 			<div class="flex gap-3 py-2 px-4">
 				{#each indices as index (index)}
 					{@const artwork = getArtwork(index)}
-					{@const imageSrc = artwork.images?.[0]?.src}
-					{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-					{@const optimizedImage = imageName ? imageMapCarousel[imageName] : undefined}
 					{@const isCurrentArtwork = artwork.id === currentArtworkId}
 
-					{#if imageSrc}
-						<Tooltip.Root>
-							<Tooltip.Trigger>
-								{#snippet child({ props })}
-									<Button.Root
-										{...props}
-										onclick={() => navigateToArtwork(artwork.id)}
-										onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
-										class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted border-2 {isCurrentArtwork
-											? 'border-primary shadow-lg scale-105'
-											: 'border-transparent hover:border-muted-foreground/30'}"
-										aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
-										aria-pressed={isCurrentArtwork}
-										tabindex={0}
-									>
-										{#if optimizedImage}
-											<Img
-												src={optimizedImage}
-												alt={$t('artworkAlt', { values: { title: artwork.title } })}
-												class="h-[120px] w-auto rounded-lg"
-												sizes="(min-width: 1540px) 100px, (min-width: 1280px) 100px, 100px"
-											/>
-										{:else}
-											<img
-												src={imageSrc}
-												alt={$t('artworkAlt', { values: { title: artwork.title } })}
-												class="h-[100px] w-auto rounded-lg"
-												loading="lazy"
-											/>
-										{/if}
-									</Button.Root>
-								{/snippet}
-							</Tooltip.Trigger>
-							<Tooltip.Portal>
-								<Tooltip.Content
-									sideOffset={8}
-									class="rounded-md bg-popover text-popover-foreground px-3 py-1.5 text-sm shadow-md"
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							{#snippet child({ props })}
+								<Button.Root
+									{...props}
+									onclick={() => navigateToArtwork(artwork.id)}
+									onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
+									class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted border-2 {isCurrentArtwork
+										? 'border-primary shadow-lg scale-105'
+										: 'border-transparent hover:border-muted-foreground/30'}"
+									aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
+									aria-pressed={isCurrentArtwork}
+									tabindex={0}
 								>
-									{artwork.title}
-								</Tooltip.Content>
-							</Tooltip.Portal>
-						</Tooltip.Root>
-					{/if}
+									<enhanced:img
+										src={artwork.images[0]}
+										alt={$t('artworkAlt', { values: { title: artwork.title } })}
+										class="h-[120px] w-auto rounded-lg"
+										sizes="100px"
+									/>
+								</Button.Root>
+							{/snippet}
+						</Tooltip.Trigger>
+						<Tooltip.Portal>
+							<Tooltip.Content
+								sideOffset={8}
+								class="rounded-md bg-popover text-popover-foreground px-3 py-1.5 text-sm shadow-md"
+							>
+								{artwork.title}
+							</Tooltip.Content>
+						</Tooltip.Portal>
+					</Tooltip.Root>
 				{/each}
 			</div>
 		</div>

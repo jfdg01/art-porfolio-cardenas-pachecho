@@ -4,15 +4,14 @@
 -->
 
 <script lang="ts">
-	import { imageMapDetail } from '$lib/data/imageImports';
-	import Img from '@zerodevx/svelte-img';
+	import type { Picture } from '@sveltejs/enhanced-img';
 	import { t } from 'svelte-i18n';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from 'bits-ui';
 
 	interface Props {
-		images: Array<{ src: string; alt?: string }>;
+		images: Picture[];
 		selectedIndex?: number;
 		onImageSelect?: (index: number) => void;
 	}
@@ -133,10 +132,6 @@
 		<!-- Thumbnail Content -->
 		<div class="flex gap-2 py-2 px-4 justify-center">
 			{#each images as image, index (index)}
-				{@const imageSrc = image.src}
-				{@const imageName = imageSrc?.split('/').pop()?.replace('.webp', '')}
-				{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
-
 				<Button.Root
 					onclick={() => handleImageClick(index)}
 					class="thumbnail-item flex-shrink-0 transition-all duration-200 overflow-hidden rounded-lg bg-muted border-2 {selectedIndex ===
@@ -146,21 +141,12 @@
 					aria-label={$t('viewImage', { values: { num: index + 1 } })}
 					aria-pressed={selectedIndex === index}
 				>
-					{#if optimizedImage}
-						<Img
-							src={optimizedImage}
-							alt={image.alt || $t('artworkAlt', { values: { title: index + 1 } })}
-							class="h-20 w-auto rounded"
-							sizes="80px"
-						/>
-					{:else}
-						<img
-							src={imageSrc}
-							alt={image.alt || $t('artworkAlt', { values: { title: index + 1 } })}
-							class="h-20 w-auto rounded"
-							loading="lazy"
-						/>
-					{/if}
+					<enhanced:img
+						src={image}
+						alt={$t('artworkAlt', { values: { title: index + 1 } })}
+						class="h-20 w-auto rounded"
+						sizes="80px"
+					/>
 				</Button.Root>
 			{/each}
 		</div>

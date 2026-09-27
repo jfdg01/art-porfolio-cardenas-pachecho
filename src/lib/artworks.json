@@ -1,0 +1,267 @@
+[
+	{
+		"id": "estudio-anatomia",
+		"title": "Estudio Anatomia",
+		"tags": ["dibujo", "apunte", "figura"],
+		"sold": false
+	},
+	{
+		"id": "summary",
+		"title": "Summary",
+		"tags": ["dibujo", "pintura", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "hombre-con-barba",
+		"title": "Hombre Con Barba",
+		"tags": ["acuarela", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "inherente",
+		"title": "Inherente",
+		"tags": ["dibujo", "figura"],
+		"sold": false
+	},
+	{
+		"id": "perpetuidad",
+		"title": "Perpetuidad",
+		"tags": ["acuarela", "animal"],
+		"sold": true
+	},
+	{
+		"id": "belong",
+		"title": "Belong",
+		"tags": ["acuarela", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "estudio-retrato-1",
+		"title": "Estudio Retrato 1",
+		"tags": ["acuarela", "apunte", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "estudio-retrato-2",
+		"title": "Estudio Retrato 2",
+		"tags": ["acuarela", "apunte", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "dama-acuarela",
+		"title": "Dama Acuarela",
+		"tags": ["acuarela", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "provecto",
+		"title": "Provecto",
+		"tags": ["acuarela", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "the-rockero",
+		"title": "The Rockero",
+		"tags": ["pintura", "animal"],
+		"sold": true
+	},
+	{
+		"id": "zalema",
+		"title": "Zalema",
+		"tags": ["pintura", "animal"],
+		"sold": true
+	},
+	{
+		"id": "apunte-grafito",
+		"title": "Apunte Grafito",
+		"tags": ["apunte", "dibujo", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "nuevos-acercamientos",
+		"title": "Nuevos Acercamientos",
+		"tags": ["acuarela", "animal"],
+		"sold": true
+	},
+	{
+		"id": "apunte-baeza-acuerela",
+		"title": "Apunte Baeza Acuerela",
+		"tags": ["apunte", "acuarela", "arquitectura"],
+		"sold": true
+	},
+	{
+		"id": "dama",
+		"title": "Dama",
+		"tags": ["dibujo", "figura"],
+		"sold": false
+	},
+	{
+		"id": "grafito-catedral",
+		"title": "Grafito Catedral",
+		"tags": ["dibujo", "arquitectura"],
+		"sold": true
+	},
+	{
+		"id": "lechera",
+		"title": "Lechera",
+		"tags": ["pintura", "animal"],
+		"sold": true
+	},
+	{
+		"id": "theophany",
+		"title": "Theophany",
+		"tags": ["acuarela", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "albor",
+		"title": "Albor",
+		"year": 2020,
+		"tags": ["pintura", "animal"],
+		"sold": true
+	},
+	{
+		"id": "xauen",
+		"title": "Xauen",
+		"tags": ["acuarela", "arquitectura"],
+		"sold": true
+	},
+	{
+		"id": "vetusto",
+		"title": "Vetusto",
+		"tags": ["dibujo", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "apunte-abstracto-1",
+		"title": "Apunte Abstracto 1",
+		"tags": ["apunte", "pintura", "abstracto"],
+		"sold": true
+	},
+	{
+		"id": "apunte-abstracto-2",
+		"title": "Apunte Abstracto 2",
+		"tags": ["apunte", "pintura", "abstracto"],
+		"sold": false
+	},
+	{
+		"id": "apunte-abstracto-3",
+		"title": "Apunte Abstracto 3",
+		"tags": ["apunte", "pintura", "abstracto"],
+		"sold": false
+	},
+	{
+		"id": "retrato-del-fayum",
+		"title": "Retrato Del Fayum",
+		"tags": ["grabado", "retrato"],
+		"sold": false
+	},
+	{
+		"id": "apunte-acuarela-paloma",
+		"title": "Apunte Acuarela Paloma",
+		"tags": ["apunte", "acuarela", "animal"],
+		"sold": true
+	},
+	{
+		"id": "the-joke",
+		"title": "The Joke",
+		"tags": ["pintura", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "apunte-acrilico-1",
+		"title": "Apunte Acrilico 1",
+		"tags": ["apunte", "pintura", "paisaje"],
+		"sold": false
+	},
+	{
+		"id": "apunte-acrilico-2",
+		"title": "Apunte Acrilico 2",
+		"tags": ["apunte", "pintura", "paisaje"],
+		"sold": false
+	},
+	{
+		"id": "apunte-acrilico-3",
+		"title": "Apunte Acrilico 3",
+		"tags": ["apunte", "pintura", "paisaje"],
+		"sold": true
+	},
+	{
+		"id": "apunte-acrilico-4",
+		"title": "Apunte Acrilico 4",
+		"tags": ["apunte", "pintura", "paisaje"],
+		"sold": false
+	},
+	{
+		"id": "apunte-paisaje-collage-1",
+		"title": "Apunte Paisaje Collage 1",
+		"tags": ["apunte", "pintura", "collage", "paisaje"],
+		"sold": false
+	},
+	{
+		"id": "apunte-paisaje-collage-2",
+		"title": "Apunte Paisaje Collage 2",
+		"tags": ["apunte", "pintura", "collage", "paisaje"],
+		"sold": false
+	},
+	{
+		"id": "retrato-sanguina",
+		"title": "Retrato Sanguina",
+		"tags": ["dibujo", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "tragaluz",
+		"title": "Tragaluz",
+		"tags": ["pintura", "figura"],
+		"sold": false
+	},
+	{
+		"id": "alcon-collage",
+		"title": "Alcon Collage",
+		"tags": ["pintura", "collage", "animal"],
+		"sold": false
+	},
+	{
+		"id": "notional",
+		"title": "Notional",
+		"tags": ["pintura", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "celebes-sea",
+		"title": "Celebes Sea",
+		"tags": ["acuarela", "retrato"],
+		"sold": true
+	},
+	{
+		"id": "time-after-time",
+		"title": "Time After Time",
+		"tags": ["dibujo", "animal"],
+		"sold": true
+	},
+	{
+		"id": "apunte-paisaje-acuarela-1",
+		"title": "Apunte Paisaje Acuarela 1",
+		"tags": ["apunte", "acuarela", "paisaje"],
+		"sold": true
+	},
+	{
+		"id": "apunte-paisaje-acuarela-3",
+		"title": "Apunte Paisaje Acuarela 3",
+		"tags": ["apunte", "acuarela", "paisaje"],
+		"sold": true
+	},
+	{
+		"id": "apunte-paisaje-acuarela-4",
+		"title": "Apunte Paisaje Acuarela 4",
+		"tags": ["apunte", "acuarela", "paisaje"],
+		"sold": true
+	},
+	{
+		"id": "apunte-paisaje-acuarela-5",
+		"title": "Apunte Paisaje Acuarela 5",
+		"tags": ["apunte", "acuarela", "arquitectura"],
+		"sold": true
+	}
+]

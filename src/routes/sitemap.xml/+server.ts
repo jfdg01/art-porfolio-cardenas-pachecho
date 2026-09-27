@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import { artworkData } from '$lib/data/artworkData';
+import { artworks } from '$lib/artworks';
 
 // Base URL - update this to your actual domain
 const baseUrl = 'https://cardenaspacheco.com';
@@ -43,15 +43,15 @@ export const GET: RequestHandler = async () => {
 	];
 
 	// Generate artwork routes with image information
-	const artworkRoutes: SitemapRoute[] = artworkData.map((artwork) => ({
+	const artworkRoutes: SitemapRoute[] = artworks.map((artwork) => ({
 		url: `/artwork/${artwork.id}`,
 		changefreq: 'monthly',
 		priority: '0.6',
 		lastmod: new Date().toISOString().split('T')[0],
-		images: artwork.images?.map((img) => ({
+		images: artwork.images.map(({ img }) => ({
 			loc: `${baseUrl}${img.src}`,
 			title: artwork.title,
-			caption: artwork.description || `${artwork.title} by Carmen Cárdenas Pacheco`
+			caption: `${artwork.title} by Carmen Cárdenas Pacheco`
 		}))
 	}));
 

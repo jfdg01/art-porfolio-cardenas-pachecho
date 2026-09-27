@@ -4,19 +4,15 @@
 -->
 
 <script lang="ts">
-	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
-	import type { Artwork } from '$lib/types/artwork';
+	import { getNeighbours } from '$lib/artworks';
 	import { Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft, Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import Img from '@zerodevx/svelte-img';
-	import { getGalleryState } from '$lib/GalleryState.svelte';
 	import BiggerPicture from 'bigger-picture';
-	import { imageMapDetail } from '$lib/data/imageImports';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
 	import { Label, Button } from 'bits-ui';
@@ -24,35 +20,14 @@
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
 
-	// Track if component is mounted to avoid hydration mismatch
-	let mounted = $state(false);
-
 	// Make artwork reactive to data changes
 	let artwork = $derived(data.artwork);
-
-	// Get gallery state for calculating next/prev
-	const galleryState = getGalleryState();
 
 	// BiggerPicture lightbox instance
 	let bp: ReturnType<typeof BiggerPicture> | null = null;
 
-	// Calculate next/prev based on current filter state
-	let navigation = $derived.by(() => {
-		const filteredArtworks = galleryState.filteredArtworks;
-		const currentIndex = filteredArtworks.findIndex((art: Artwork) => art.id === artwork.id);
-
-		if (currentIndex === -1) {
-			return { nextId: null, prevId: null };
-		}
-
-		const nextIndex = currentIndex === filteredArtworks.length - 1 ? 0 : currentIndex + 1;
-		const prevIndex = currentIndex === 0 ? filteredArtworks.length - 1 : currentIndex - 1;
-
-		return {
-			nextId: filteredArtworks[nextIndex]?.id || null,
-			prevId: filteredArtworks[prevIndex]?.id || null
-		};
-	});
+	// The neighbours on the Wall, for previous/next
+	let neighbours = $derived(getNeighbours(artwork.id));
 
 	// Current image index for cycling through variants
 	let currentImageIndex = $state(0);
@@ -61,15 +36,15 @@
 	let isNavigating = $state(false);
 
 	// Computed values
-	let currentImage = $derived(artwork?.images?.[currentImageIndex] || null);
-	let hasMultipleImages = $derived(artwork && artwork.images ? artwork.images.length > 1 : false);
+	let currentImage = $derived(artwork.images[currentImageIndex]);
+	let hasMultipleImages = $derived(artwork.images.length > 1);
 
 	function goBack() {
 		goto('/', { noScroll: true });
 	}
 
-	function navigateToArtwork(artworkId: string | null) {
-		if (!artworkId || isNavigating) return;
+	function navigateToArtwork(artworkId: string) {
+		if (isNavigating) return;
 		isNavigating = true;
 		goto(`/artwork/${artworkId}`, { replaceState: false, noScroll: true });
 	}
@@ -78,10 +53,10 @@
 		// Ctrl+Arrow for artwork navigation
 		if (event.ctrlKey && event.key === 'ArrowLeft') {
 			event.preventDefault();
-			navigateToArtwork(navigation.prevId);
+			navigateToArtwork(neighbours.previous.id);
 		} else if (event.ctrlKey && event.key === 'ArrowRight') {
 			event.preventDefault();
-			navigateToArtwork(navigation.nextId);
+			navigateToArtwork(neighbours.next.id);
 		}
 		// Plain arrow keys for image cycling (only if multiple images)
 		else if (event.key === 'ArrowLeft' && hasMultipleImages) {
@@ -94,52 +69,26 @@
 	}
 
 	function nextImage() {
-		if (artwork && artwork.images && hasMultipleImages) {
+		if (hasMultipleImages) {
 			currentImageIndex = (currentImageIndex + 1) % artwork.images.length;
 		}
 	}
 
 	function previousImage() {
-		if (artwork && artwork.images && hasMultipleImages) {
+		if (hasMultipleImages) {
 			currentImageIndex =
 				currentImageIndex === 0 ? artwork.images.length - 1 : currentImageIndex - 1;
 		}
 	}
 
-	async function openLightbox() {
-		if (!bp) return;
-
-		// Load images to get their actual dimensions
-		const items = await Promise.all(
-			artwork.images.map(
-				(image): Promise<{ img: string; alt: string; width: number; height: number }> => {
-					return new Promise((resolve) => {
-						const img = new Image();
-						img.onload = () => {
-							resolve({
-								img: image.src,
-								alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
-								width: img.naturalWidth,
-								height: img.naturalHeight
-							});
-						};
-						img.onerror = () => {
-							// Fallback if image fails to load
-							resolve({
-								img: image.src,
-								alt: image.alt || $t('artworkAlt', { values: { title: artwork.title } }),
-								width: 1920,
-								height: 1080
-							});
-						};
-						img.src = image.src;
-					});
-				}
-			)
-		);
-
-		bp.open({
-			items,
+	function openLightbox() {
+		bp?.open({
+			items: artwork.images.map(({ img }) => ({
+				img: img.src,
+				alt: $t('artworkAlt', { values: { title: artwork.title } }),
+				width: img.w,
+				height: img.h
+			})),
 			position: currentImageIndex
 		});
 	}
@@ -165,7 +114,6 @@
 
 	// Initialize BiggerPicture lightbox
 	onMount(() => {
-		mounted = true;
 		bp = BiggerPicture({
 			target: document.body
 		});
@@ -230,42 +178,21 @@
 			<div class="p-4 md:p-6 lg:p-8">
 				<div class="space-y-4">
 					<div class="relative">
-						{#if currentImage && currentImage.src}
-							{@const imageSrc = currentImage.src}
-							{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-							{@const optimizedImage = imageName ? imageMapDetail[imageName] : undefined}
-							<div
-								onclick={openLightbox}
-								onkeydown={(e) => e.key === 'Enter' && openLightbox()}
-								class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
-								role="button"
-								tabindex="0"
-								aria-label={$t('expandImage', { default: 'Expand image' })}
-							>
-								{#if mounted && optimizedImage && browser}
-									<!-- Only render optimized image on client to prevent hydration mismatch -->
-									<Img
-										src={optimizedImage}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
-									/>
-								{:else}
-									<!-- Fallback for images not found in the mapping or during SSR -->
-									<img
-										src={imageSrc}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
-										class="w-full h-auto rounded-lg shadow-md"
-										loading="lazy"
-										sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
-									/>
-								{/if}
-							</div>
-						{:else}
-							<div class="w-full h-64 bg-muted rounded-lg flex items-center justify-center">
-								<p class="text-muted-foreground">No image available</p>
-							</div>
-						{/if}
+						<div
+							onclick={openLightbox}
+							onkeydown={(e) => e.key === 'Enter' && openLightbox()}
+							class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+							role="button"
+							tabindex="0"
+							aria-label={$t('expandImage', { default: 'Expand image' })}
+						>
+							<enhanced:img
+								src={currentImage}
+								alt={$t('artworkAlt', { values: { title: artwork.title } })}
+								class="w-full h-auto rounded-lg shadow-md"
+								sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
+							/>
+						</div>
 
 						<!-- Navigation Controls -->
 						{#if hasMultipleImages}
@@ -286,7 +213,7 @@
 							</Button.Root>
 						{/if}
 
-						{#if !artwork.isAvailable}
+						{#if artwork.sold}
 							<div
 								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
 							>
@@ -296,7 +223,7 @@
 					</div>
 
 					<!-- Thumbnail Carousel for Image Navigation -->
-					{#if hasMultipleImages && artwork.images}
+					{#if hasMultipleImages}
 						<ThumbnailCarousel
 							images={artwork.images}
 							selectedIndex={currentImageIndex}
@@ -388,24 +315,8 @@
 						</div>
 					</div>
 
-					<!-- Description -->
-					{#if artwork.description}
-						<div>
-							<p
-								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
-							>
-								{$t('descriptionLabel')}
-							</p>
-							<p
-								class="text-sm md:text-base montserrat-medium text-muted-foreground leading-relaxed max-w-prose"
-							>
-								{artwork.description}
-							</p>
-						</div>
-					{/if}
-
 					<!-- Contact Information -->
-					{#if artwork.isAvailable}
+					{#if !artwork.sold}
 						<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-6">
 							<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-primary mb-2">
 								{$t('interestedHeading')}
@@ -456,8 +367,8 @@
 						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
 							<Button.Root
-								onclick={() => navigateToArtwork(navigation.prevId)}
-								disabled={!navigation.prevId || isNavigating}
+								onclick={() => navigateToArtwork(neighbours.previous.id)}
+								disabled={isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={$t('previousArtwork')}
 								title={$t('previousArtwork')}
@@ -477,8 +388,8 @@
 
 							<!-- Next Artwork Button -->
 							<Button.Root
-								onclick={() => navigateToArtwork(navigation.nextId)}
-								disabled={!navigation.nextId || isNavigating}
+								onclick={() => navigateToArtwork(neighbours.next.id)}
+								disabled={isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={$t('nextArtwork')}
 								title={$t('nextArtwork')}

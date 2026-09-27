@@ -19,26 +19,24 @@ Un artista necesita enseñar su obra tal cual es: color fiel y detalle al máxim
 
 ## Cómo funciona
 
-El original pesado nunca llega al navegador. Un pipeline en tiempo de build (`scripts/`) transforma las fotos de obra en assets ligeros y genera automáticamente los datos y el sitemap.
+El original pesado nunca llega al navegador. Un único módulo (`src/lib/artworks.ts`) une los datos de cada obra, escritos a mano, con sus imágenes, y el build genera los tamaños responsive.
 
 ```mermaid
 flowchart LR
-    A["Fotos originales<br/>JPG/PNG 5 MB+"] -->|"convert-to-webp<br/>(sharp)"| B["WebP optimizado<br/>máx. 1536px · calidad 70"]
-    B --> C["generate-artwork-images<br/>+ generate-artwork-data"]
-    C --> D["artworkData.ts<br/>artworkImages.ts"]
-    D --> E["generate-sitemap<br/>sitemap.xml"]
-    D --> F["App SvelteKit"]
-    F -->|"@zerodevx/svelte-img<br/>+ carga diferida"| G["Galería · páginas de obra<br/>ES / EN"]
+    A["artworks.json<br/>(escrito a mano)"] --> C["src/lib/artworks.ts<br/>valida en el build"]
+    B["src/lib/assets/images/<br/>&lt;id&gt;.webp · &lt;id&gt;-zoom-N.webp"] --> C
+    C -->|"@sveltejs/enhanced-img<br/>AVIF + WebP"| G["Galería · páginas de obra<br/>sitemap · ES / EN"]
     G -->|"adapter-vercel<br/>(Node.js 22)"| H["🌐 cardenaspacheco.com"]
 ```
 
 **Decisiones técnicas y su porqué:**
 
-- **Conversión a WebP con `sharp`** (`scripts/convert-to-webp.mjs`): reescala a un máximo de 1536px y comprime a calidad 70. Convierte megabytes de foto original en archivos ligeros sin pérdida visible, y normaliza los nombres (sin acentos ni espacios) para URLs limpias.
-- **Datos generados, no escritos a mano** (`generate-artwork-images` + `generate-artwork-data`): el script escanea la carpeta de imágenes, agrupa las variantes de zoom por obra y produce los `.ts` con las rutas. Añadir una obra es soltar su foto y regenerar.
-- **Imágenes responsive con `@zerodevx/svelte-img` + carga diferida**: cada tarjeta sirve el tamaño justo para el dispositivo y solo carga lo que entra en pantalla, clave para el 95+ de Lighthouse.
+- **Un solo archivo de datos, escrito a mano** (`src/lib/artworks.json`): título, año, etiquetas, medidas y si está vendida. Ningún script lo escribe. El orden del archivo es el orden de la galería.
+- **Imágenes por convención de nombre** (`src/lib/assets/images/`): `<id>.webp` es la imagen principal y `<id>-zoom-N.webp` los detalles. Hay una sola copia de cada imagen en el repositorio.
+- **Validación en el build**: una obra sin imagen principal, una imagen sin obra, una etiqueta desconocida o un campo mal formado paran el build con un mensaje que nombra la obra.
+- **Imágenes responsive con `@sveltejs/enhanced-img` + carga diferida**: el build genera AVIF y WebP en varios anchos, y cada tarjeta sirve el tamaño justo para el dispositivo.
 - **Multiidioma con `svelte-i18n`** (ES por defecto, EN): diccionarios en `src/lib/locales/`, pensado también para SEO internacional.
-- **`sitemap.xml` autogenerado** (`generate-sitemap.mjs`) a partir de los datos de obra: cada página `/artwork/[id]` queda indexable sin mantenimiento manual.
+- **`sitemap.xml` generado** por la ruta `src/routes/sitemap.xml` a partir del módulo de obras: cada página `/artwork/[id]` queda indexable sin mantenimiento manual.
 - **Cabeceras de seguridad y caché** (`vercel.json`): HSTS, anti-clickjacking y `Cache-Control` inmutable de un año para assets e imágenes.
 - **`bigger-picture`** como visor/lightbox para ver cada obra ampliada sin librerías pesadas.
 
@@ -49,7 +47,7 @@ flowchart LR
 | Framework | Svelte 5 + SvelteKit |
 | Lenguaje | TypeScript |
 | Estilos | Tailwind CSS 4 · sin fuentes web (tipografía del sistema) |
-| Imágenes | sharp (build) · @zerodevx/svelte-img · bigger-picture |
+| Imágenes | @sveltejs/enhanced-img · bigger-picture |
 | i18n | svelte-i18n (ES / EN) |
 | Iconos | lucide-svelte |
 | Analítica | Vercel Analytics + Speed Insights |
@@ -59,9 +57,9 @@ flowchart LR
 
 > - **95+** en rendimiento (Lighthouse)
 > - **44** obras en la galería
-> - **5 MB+** por foto original → **WebP** ligero (máx. 1536px, calidad 70)
+> - **5 MB+** por foto original → **AVIF / WebP** en varios anchos
 > - **2** idiomas (español · inglés)
-> - **0** entradas de datos escritas a mano: obras y sitemap se autogeneran
+> - **1** archivo de datos escrito a mano, validado en cada build
 
 ## Ejecutar en local
 
@@ -73,13 +71,7 @@ npm run build      # build de producción
 npm run preview    # previsualizar el build
 ```
 
-**Pipeline de imágenes y datos** (tras añadir nuevas fotos de obra):
-
-```bash
-npm run images:convert        # convierte originales a WebP con sharp
-npm run generate-artwork-all  # regenera imágenes + datos de obra
-npm run generate-sitemap      # regenera sitemap.xml
-```
+**Añadir una obra:** copia su foto a `src/lib/assets/images/<id>.webp` (y los detalles como `<id>-zoom-1.webp`), y añade su entrada a `src/lib/artworks.json`. El build comprueba que las dos cosas encajan.
 
 **Calidad de código:**
 

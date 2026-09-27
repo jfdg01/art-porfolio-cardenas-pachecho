@@ -1,29 +1,27 @@
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
-import { artworkData } from '$lib/data/artworkData';
+import { getArtwork } from '$lib/artworks';
 
 export const load: PageServerLoad = async ({ params, url }) => {
-	const artwork = artworkData.find((artwork) => artwork.id === params.id);
+	const artwork = getArtwork(params.id);
 
-	if (!artwork) {
-		throw new Error('Artwork not found');
-	}
+	if (!artwork) error(404, 'Artwork not found');
+
+	const image = artwork.images[0].img.src;
 
 	// Generate SEO metadata on the server
 	const seo = {
 		title: `${artwork.title} - Carmen Cárdenas Pacheco`,
-		description: `View ${artwork.title} by Carmen Cárdenas Pacheco. ${artwork.description || 'Explore this beautiful artwork in the portfolio.'}`,
-		image:
-			typeof artwork.images[0] === 'string'
-				? artwork.images[0]
-				: artwork.images[0]?.src || '/images/default.webp',
+		description: `View ${artwork.title} by Carmen Cárdenas Pacheco.`,
+		image,
 		type: 'article',
 		url: url.href,
 		structuredData: {
 			'@context': 'https://schema.org',
 			'@type': 'VisualArtwork',
 			name: artwork.title,
-			description: artwork.description || `View ${artwork.title} by Carmen Cárdenas Pacheco`,
-			image: `https://cardenaspacheco.com${typeof artwork.images[0] === 'string' ? artwork.images[0] : artwork.images[0]?.src || '/images/default.webp'}`,
+			description: `View ${artwork.title} by Carmen Cárdenas Pacheco`,
+			image: `https://cardenaspacheco.com${image}`,
 			url: url.href,
 			creator: {
 				'@type': 'Person',

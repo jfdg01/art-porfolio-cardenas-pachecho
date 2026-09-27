@@ -6,12 +6,10 @@
 -->
 
 <script lang="ts">
-	import type { Artwork } from '$lib/types/artwork';
+	import type { Artwork } from '$lib/artworks';
 	import { Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
-	import Img from '@zerodevx/svelte-img';
-	import { imageMapGallery } from '$lib/data/imageImports';
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
@@ -29,7 +27,6 @@
 	} = $props();
 
 	function handleClick() {
-		// Navigate without query parameters - state is preserved in GalleryState context
 		goto(`/artwork/${artwork.id}`, { noScroll: true });
 	}
 
@@ -53,24 +50,14 @@
 	>
 		<!-- Image -->
 		<div class="relative overflow-hidden">
-			{#if artwork.images && artwork.images.length > 0}
-				{@const imageSrc = artwork.images[0].src}
-				{@const imageName = imageSrc.split('/').pop()?.replace('.webp', '')}
-				{@const optimizedImage = imageName ? imageMapGallery[imageName] : undefined}
-
-				<Img
-					src={optimizedImage ?? imageSrc}
-					alt={$t('artworkAlt', { values: { title: artwork.title } })}
-					class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
-					sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
-					fetchpriority={isPriority ? 'high' : undefined}
-					loading={eager ? 'eager' : 'lazy'}
-				/>
-			{:else}
-				<div class="w-full h-48 bg-muted flex items-center justify-center">
-					<p class="text-muted-foreground">No image available</p>
-				</div>
-			{/if}
+			<enhanced:img
+				src={artwork.images[0]}
+				alt={$t('artworkAlt', { values: { title: artwork.title } })}
+				class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
+				sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
+				fetchpriority={isPriority ? 'high' : undefined}
+				loading={eager ? 'eager' : 'lazy'}
+			/>
 
 			<!-- Overlay on hover -->
 			<div
@@ -90,7 +77,7 @@
 				>
 					{artwork.title}
 				</h3>
-				{#if artwork.isAvailable}
+				{#if !artwork.sold}
 					<span
 						class="relative w-3 h-3 rounded-full flex-shrink-0 animate-pulse"
 						style="background-color: var(--color-success)"
