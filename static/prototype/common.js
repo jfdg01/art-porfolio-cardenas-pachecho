@@ -43,9 +43,9 @@ export function work(a) {
 }
 
 // The site header: name, the one navigation list, and the prototype controls.
+// The 2.5D depth is always on, except under reduced motion (decided on #4: no toggle).
 export function siteHeader(note) {
-	const on = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-	document.documentElement.classList.toggle('depth', on);
+	document.documentElement.classList.toggle('depth', !matchMedia('(prefers-reduced-motion: reduce)').matches);
 	document.querySelector('#site').innerHTML = `
 		<a class="name" href="/prototype/index.html">Carmen Cárdenas Pacheco</a>
 		<nav aria-label="Principal"><ul>
@@ -57,11 +57,8 @@ export function siteHeader(note) {
 		<a class="lang" href="#" lang="en">English</a>
 		<div class="proto">
 			<span>${note}</span>
-			<button type="button" aria-pressed="${on}">Profundidad</button>
 			<a href="/prototype/index.html">Prototipos</a>
 		</div>`;
-	const b = document.querySelector('#site button');
-	b.onclick = () => b.setAttribute('aria-pressed', document.documentElement.classList.toggle('depth'));
 }
 
 // A corridor: a row of stops (Artworks and Room doors). On a large screen it scrolls

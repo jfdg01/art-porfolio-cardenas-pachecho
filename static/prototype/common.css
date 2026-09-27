@@ -87,10 +87,6 @@ button:disabled {
 	font-size: 0.875rem;
 	color: var(--muted);
 }
-.proto button {
-	min-height: 36px;
-	padding: 0.25rem 0.75rem;
-}
 
 /* The Label */
 .label {
