@@ -580,6 +580,48 @@
 							fill: 'backwards'
 						});
 			};
+			// Todas to Paseo, the same machine in reverse: each work in view in Paseo grows out of its
+			// thumbnail (same Room, same Artwork) when that thumbnail was in view. The other works and
+			// the door fade in.
+			const gather = (show) => {
+				if (reduce.matches) return show();
+				const seen = new Map(); // "room/id" → where the thumbnail was in Todas
+				for (const a of mass.querySelectorAll('a')) {
+					const r = a.querySelector('img').getBoundingClientRect();
+					if (inView(r)) seen.set(`${a.dataset.room}/${a.dataset.id}`, r);
+				}
+				show();
+				for (const stop of walk.children) {
+					if (!inView(stop.getBoundingClientRect())) continue; // the whole stop: a Label can show without its canvas
+					const el = stop.querySelector('.canvas') ?? stop; // a work moves its canvas; a door moves whole
+					const to = el.getBoundingClientRect();
+					const img = el.querySelector('img');
+					if (img) img.loading = 'eager';
+					const from = seen.get(`${stop.dataset.room}/${stop.dataset.id}`);
+					if (from) {
+						const [x, y] = centre(to);
+						el.style.zIndex = 1; // above its neighbours, under the sticky header and strip
+						el.animate(
+							[
+								{ transform: `translate(${centre(from)[0] - x}px, ${centre(from)[1] - y}px) scale(${from.width / to.width})` },
+								{ transform: 'none' }
+							],
+							{ duration: 650, easing: machine, fill: 'backwards' }
+						).finished.then(() => el.style.removeProperty('z-index'));
+					} else
+						el.animate([{ opacity: 0, transform: 'scale(0.96)' }, { opacity: 1, transform: 'none' }], {
+							duration: 500,
+							delay: 250,
+							easing: machine,
+							fill: 'backwards'
+						});
+					stop.querySelector('.label')?.animate([{ opacity: 0 }, { opacity: 1 }], {
+						duration: 300,
+						delay: 550,
+						fill: 'backwards'
+					});
+				}
+			};
 			// A switch keeps the current Room in view.
 			for (const b of views)
 				b.onclick = () => {
@@ -588,6 +630,7 @@
 						open(location.hash.slice('#sala-'.length) || rooms[0].tag);
 					};
 					if (b.dataset.view === 'todas' && mass.hidden) deal(show);
+					else if (b.dataset.view === 'paseo' && !mass.hidden) gather(show);
 					else show();
 				};
 			// The Room under the strip is the current Room. The mass scrolls itself, or the body on a phone.
@@ -604,8 +647,10 @@
 				const a = e.target.closest('a');
 				if (!a) return;
 				e.preventDefault();
-				setView('paseo');
-				jump(stops.findIndex((s) => s.dataset.room === a.dataset.room && s.dataset.id === a.dataset.id));
+				gather(() => {
+					setView('paseo');
+					jump(stops.findIndex((s) => s.dataset.room === a.dataset.room && s.dataset.id === a.dataset.id));
+				});
 			};
 
 			const open = (tag) => {
