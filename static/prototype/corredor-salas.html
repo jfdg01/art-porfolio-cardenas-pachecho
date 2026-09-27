@@ -164,6 +164,50 @@
 			.bp-count {
 				font: 0.9375rem/1 var(--sans);
 			}
+			/* A Room tap (View Transitions): the header, the strip and the bars stay, and the rest
+			   slides by --vt-x / --vt-y, set in JS from the direction. The old Room is gone before
+			   the new one shows, so the two never read over each other. */
+			#site {
+				view-transition-name: site;
+			}
+			.rooms {
+				view-transition-name: rooms;
+			}
+			.controls {
+				view-transition-name: controls;
+			}
+			.top {
+				view-transition-name: up;
+			}
+			::view-transition-old(root) {
+				animation-name: vt-out;
+			}
+			::view-transition-new(root) {
+				animation-name: vt-in;
+			}
+			::view-transition-old(root),
+			::view-transition-new(root) {
+				animation-duration: 0.45s;
+				animation-timing-function: cubic-bezier(0.2, 0.7, 0.2, 1);
+			}
+			@keyframes vt-out {
+				50%,
+				to {
+					opacity: 0;
+				}
+				to {
+					transform: translate(calc(-1 * var(--vt-x, 0px)), calc(-1 * var(--vt-y, 0px)));
+				}
+			}
+			@keyframes vt-in {
+				from,
+				40% {
+					opacity: 0;
+				}
+				from {
+					transform: translate(var(--vt-x, 0px), var(--vt-y, 0px));
+				}
+			}
 			/* Back to the top: only on the phone walk, once the header is gone */
 			.top {
 				display: none;
@@ -459,6 +503,20 @@
 				go(i);
 				walk.style.scrollBehavior = '';
 			};
+			// A Room tap animates: the page moves at once, and the View Transition slides the old Room
+			// out and the new one in, the way the walk goes. Sideways in the computer corridor,
+			// up or down elsewhere. No animation under reduced motion, or where the browser lacks it.
+			const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+			const travel = (tag, move) => {
+				if (reduce.matches || !document.startViewTransition) return move();
+				const at = (t) => rooms.findIndex((r) => r.tag === t);
+				const way = Math.sign(at(tag) - at(location.hash.slice('#sala-'.length)));
+				const sideways = mass.hidden && !PHONE.matches;
+				const html = document.documentElement.style;
+				html.setProperty('--vt-x', sideways ? `${way * 12}vw` : '0px');
+				html.setProperty('--vt-y', sideways ? '0px' : `${way * 12}vh`);
+				document.startViewTransition(move);
+			};
 
 			// Two views: "Paseo" (the corridor) and "Ver todas" (every Room at once). The URL keeps the view.
 			const views = document.querySelectorAll('[data-view]');
@@ -496,13 +554,13 @@
 				if (!mass.hidden) {
 					document.getElementById(`todas-${tag}`).scrollIntoView();
 					mark(tag);
-				} else go(stops.indexOf(document.getElementById(`sala-${tag}`)));
+				} else jump(stops.indexOf(document.getElementById(`sala-${tag}`)));
 			};
 			document.querySelector('.rooms ul').onclick = (e) => {
 				const a = e.target.closest('a');
 				if (!a) return;
 				e.preventDefault();
-				open(a.dataset.room);
+				travel(a.dataset.room, () => open(a.dataset.room));
 			};
 			// A link to a Room opens that Room.
 			// Full View: a tap on an Artwork opens it large, with pinch zoom, and its detail images after it.
