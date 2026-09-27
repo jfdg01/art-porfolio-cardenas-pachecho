@@ -4,34 +4,9 @@ import { artworkData } from '$lib/data/artworkData';
 import type { Artwork } from '$lib/types/artwork';
 
 // Define all supported language codes
-type SupportedLocale =
-	| 'en'
-	| 'es'
-	| 'fr'
-	| 'de'
-	| 'it'
-	| 'ru'
-	| 'pt'
-	| 'cn'
-	| 'jp'
-	| 'kr'
-	| 'hi'
-	| 'he';
+type SupportedLocale = 'en' | 'es';
 
-const supportedLocales: SupportedLocale[] = [
-	'en',
-	'es',
-	'fr',
-	'de',
-	'it',
-	'ru',
-	'pt',
-	'cn',
-	'jp',
-	'kr',
-	'hi',
-	'he'
-];
+const supportedLocales: SupportedLocale[] = ['en', 'es'];
 
 function isValidLocale(locale: string): locale is SupportedLocale {
 	return supportedLocales.includes(locale as SupportedLocale);

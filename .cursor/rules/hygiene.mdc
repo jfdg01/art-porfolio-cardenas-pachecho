@@ -1,4 +1,0 @@
----
-alwaysApply: true
----
-Every time any significant changes are made to Svelte or typeScript files, run the "npm run hygiene" command on the root directory of the project and fix any errors and warnings that are currently in the system.

@@ -48,7 +48,7 @@ flowchart LR
 |------|------------|
 | Framework | Svelte 5 + SvelteKit |
 | Lenguaje | TypeScript |
-| Estilos | Tailwind CSS 4 · fuentes Fraunces + Inter |
+| Estilos | Tailwind CSS 4 · sin fuentes web (tipografía del sistema) |
 | Imágenes | sharp (build) · @zerodevx/svelte-img · bigger-picture |
 | i18n | svelte-i18n (ES / EN) |
 | Iconos | lucide-svelte |

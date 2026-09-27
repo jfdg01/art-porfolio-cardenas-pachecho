@@ -13,17 +13,7 @@
 	// Define all supported languages with their display names and flags
 	const languages = [
 		{ code: 'es', name: 'Español', flag: '🇪🇸' },
-		{ code: 'en', name: 'English', flag: '🇬🇧' },
-		{ code: 'fr', name: 'Français', flag: '🇫🇷' },
-		{ code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-		{ code: 'it', name: 'Italiano', flag: '🇮🇹' },
-		{ code: 'ru', name: 'Русский', flag: '🇷🇺' },
-		{ code: 'pt', name: 'Português', flag: '🇵🇹' },
-		{ code: 'cn', name: '中文', flag: '🇨🇳' },
-		{ code: 'jp', name: '日本語', flag: '🇯🇵' },
-		{ code: 'kr', name: '한국어', flag: '🇰🇷' },
-		{ code: 'hi', name: 'हिन्दी', flag: '🇮🇳' },
-		{ code: 'he', name: 'עברית', flag: '🇮🇱' }
+		{ code: 'en', name: 'English', flag: '🇬🇧' }
 	] as const;
 
 	type LanguageCode = (typeof languages)[number]['code'];
