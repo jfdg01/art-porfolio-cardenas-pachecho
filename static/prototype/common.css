@@ -23,6 +23,9 @@ body {
 a {
 	color: inherit;
 }
+[hidden] {
+	display: none !important;
+}
 :focus-visible {
 	outline: 3px solid var(--ink);
 	outline-offset: 4px;
@@ -244,8 +247,8 @@ button:disabled {
 	/* Prototype controls float, so the phone layout is judged without them */
 	.proto {
 		position: fixed;
+		top: 0.5rem;
 		right: 0.5rem;
-		bottom: 5rem;
 		z-index: 1;
 	}
 	.proto span,

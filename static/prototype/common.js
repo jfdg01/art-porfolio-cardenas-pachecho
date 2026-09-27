@@ -102,7 +102,7 @@ export function corridor(walk, onStop) {
 	prev.onclick = () => go(current - 1);
 	next.onclick = () => go(current + 1);
 	addEventListener('keydown', (e) => {
-		if (e.target.closest?.('select, input, textarea')) return;
+		if (walk.hidden || e.target.closest?.('select, input, textarea')) return;
 		const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
 		if (!step) return;
 		e.preventDefault();

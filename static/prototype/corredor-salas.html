@@ -81,7 +81,98 @@
 				font: italic 400 clamp(2.5rem, 6vw, 4.5rem) / 1 var(--serif);
 				margin: 0.5rem 0 1rem;
 			}
+			/* The bottom bar: the walk buttons in the middle, the view switch at the side */
+			.controls {
+				display: grid;
+				grid-template-columns: 1fr auto 1fr;
+			}
+			.walking {
+				display: flex;
+				align-items: center;
+				gap: 1.5rem;
+			}
+			.views {
+				grid-column: 3; /* the same place in both views */
+				justify-self: end;
+				display: flex;
+			}
+			.views button + button {
+				border-left: 0;
+			}
+			/* "Ver todas": every Room at once, small uncropped images with a short Label */
+			.mass {
+				flex: 1;
+				overflow: hidden auto;
+				padding: 1.5rem clamp(1rem, 4vw, 3rem) 4rem;
+			}
+			.mass section + section {
+				margin-top: 3.5rem;
+			}
+			.mass h2 {
+				font: italic 400 2.25rem/1.1 var(--serif);
+				margin-bottom: 1.25rem;
+			}
+			.mass h2 small {
+				margin-left: 0.75rem;
+				font: 1rem var(--sans);
+				color: var(--muted);
+			}
+			.mass ul {
+				display: flex;
+				flex-wrap: wrap;
+				align-items: flex-start;
+				gap: 2rem 1.75rem;
+				padding: 0;
+				list-style: none;
+			}
+			.mass li {
+				width: min-content;
+			}
+			.mass a {
+				display: block;
+				text-decoration: none;
+			}
+			.mass img {
+				display: block;
+				height: 11rem;
+				width: auto;
+			}
+			.mass a:hover img,
+			.mass a:focus-visible img {
+				outline: 2px solid var(--ink);
+				outline-offset: 3px;
+			}
+			.mass a:hover .title {
+				text-decoration: underline;
+			}
+			.mass .label {
+				margin-top: 0.5rem;
+				min-width: 7rem;
+			}
+			.mass .label .title {
+				font-size: 1rem;
+			}
 			@media (max-width: 700px) {
+				.controls {
+					grid-template-columns: 1fr;
+					justify-items: stretch;
+				}
+				.walking {
+					gap: 0.5rem;
+				}
+				.views {
+					grid-column: auto;
+					justify-self: stretch;
+				}
+				.views button {
+					flex: 1;
+				}
+				.mass ul {
+					gap: 1.5rem 1rem;
+				}
+				.mass img {
+					height: 8rem;
+				}
 				.rooms ul {
 					display: none;
 				}
@@ -106,13 +197,21 @@
 			<select id="room"></select>
 		</nav>
 		<main class="walk corridor" tabindex="-1"></main>
+		<main class="mass" hidden></main>
 		<div class="controls">
-			<button id="prev" type="button">← Anterior</button>
-			<output aria-live="polite"></output>
-			<button id="next" type="button">Siguiente →</button>
+			<span></span>
+			<div class="walking">
+				<button id="prev" type="button">← Anterior</button>
+				<output aria-live="polite"></output>
+				<button id="next" type="button">Siguiente →</button>
+			</div>
+			<div class="views" role="group" aria-label="Vista">
+				<button type="button" data-view="paseo">Paseo</button>
+				<button type="button" data-view="todas">Ver todas</button>
+			</div>
 		</div>
 		<script type="module">
-			import { ROOMS, inRoom, work, siteHeader, corridor } from './common.js';
+			import { ROOMS, inRoom, work, esc, siteHeader, corridor } from './common.js';
 			siteHeader('1 · Corredor por las Salas · Source Serif 4 + Space Grotesk');
 
 			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
@@ -132,7 +231,7 @@
 						<p>Sala ${i + 1} de ${rooms.length}</p>
 						<h2>${r.name}</h2>
 						<p>${r.works.length} obras${next ? ` · después: ${next.name}` : ''}</p>
-					</section>` + r.works.map((a) => work(a).replace('<figure', `<figure data-room="${r.tag}"`)).join('');
+					</section>` + r.works.map((a) => work(a).replace('<figure', `<figure data-room="${r.tag}" data-id="${a.id}"`)).join('');
 				})
 				.join('');
 
@@ -145,18 +244,73 @@
 			const select = document.querySelector('#room');
 			select.innerHTML = rooms.map((r) => `<option value="${r.tag}">${r.name} (${r.works.length})</option>`).join('');
 
+			const mass = document.querySelector('.mass');
+			mass.innerHTML = rooms
+				.map(
+					(r) => `<section id="todas-${r.tag}" data-room="${r.tag}">
+						<h2>${r.name}<small>${r.works.length} obras</small></h2>
+						<ul>${r.works
+							.map(
+								(a) => `<li><a href="#sala-${r.tag}" data-room="${r.tag}" data-id="${a.id}">
+									<img src="/images/${a.id}.webp" alt="" width="${a.w}" height="${a.h}" loading="lazy">
+									<span class="label"><span class="title">${esc(a.title)}</span>${a.sold ? '<span class="sold">Vendida</span>' : ''}</span>
+								</a></li>`
+							)
+							.join('')}</ul>
+					</section>`
+				)
+				.join('');
+
+			// The current Room: marked in the Room list and kept in the URL.
+			const mark = (tag) => {
+				for (const a of document.querySelectorAll('.rooms a'))
+					a.toggleAttribute('aria-current', a.dataset.room === tag);
+				select.value = tag;
+				history.replaceState(null, '', `${location.search}#sala-${tag}`);
+			};
 			const { go, stops } = corridor(walk, (stop, i) => {
 				const tag = stop.dataset.room;
 				const room = rooms.find((r) => r.tag === tag);
 				const door = stops.indexOf(document.getElementById(`sala-${tag}`));
-				for (const a of document.querySelectorAll('.rooms a'))
-					a.toggleAttribute('aria-current', a.dataset.room === tag);
-				select.value = tag;
+				mark(tag);
 				document.querySelector('output').textContent =
 					i === door ? `Sala ${room.name}` : `${room.name} · obra ${i - door} de ${room.works.length}`;
-				history.replaceState(null, '', `#sala-${tag}`);
 			});
-			const open = (tag) => go(stops.indexOf(document.getElementById(`sala-${tag}`)));
+			const jump = (i) => {
+				walk.style.scrollBehavior = 'auto';
+				go(i);
+				walk.style.scrollBehavior = '';
+			};
+
+			// Two views: "Paseo" (the corridor) and "Ver todas" (every Room at once). The URL keeps the view.
+			const views = document.querySelectorAll('[data-view]');
+			const setView = (v) => {
+				mass.hidden = v !== 'todas';
+				walk.hidden = document.querySelector('.walking').hidden = v === 'todas';
+				for (const b of views) b.setAttribute('aria-pressed', b.dataset.view === v);
+				history.replaceState(null, '', `${v === 'todas' ? '?vista=todas' : location.pathname}${location.hash}`);
+			};
+			for (const b of views) b.onclick = () => setView(b.dataset.view);
+			mass.addEventListener('scroll', () => {
+				const line = mass.getBoundingClientRect().top + 80;
+				const passed = [...mass.children].filter((s) => s.getBoundingClientRect().top <= line);
+				mark((passed.at(-1) ?? mass.firstElementChild).dataset.room);
+			});
+			// A click on a small image opens that Artwork in the corridor, in the same Room.
+			mass.onclick = (e) => {
+				const a = e.target.closest('a');
+				if (!a) return;
+				e.preventDefault();
+				setView('paseo');
+				jump(stops.findIndex((s) => s.dataset.room === a.dataset.room && s.dataset.id === a.dataset.id));
+			};
+
+			const open = (tag) => {
+				if (!mass.hidden) {
+					document.getElementById(`todas-${tag}`).scrollIntoView();
+					mark(tag);
+				} else go(stops.indexOf(document.getElementById(`sala-${tag}`)));
+			};
 			select.onchange = () => open(select.value);
 			document.querySelector('.rooms ul').onclick = (e) => {
 				const a = e.target.closest('a');
@@ -165,11 +319,11 @@
 				open(a.dataset.room);
 			};
 			// A link to a Room opens that Room.
+			setView(new URLSearchParams(location.search).get('vista') === 'todas' ? 'todas' : 'paseo');
 			const start = location.hash.slice('#sala-'.length);
 			if (document.getElementById(`sala-${start}`)) {
-				walk.style.scrollBehavior = 'auto';
-				open(start);
-				walk.style.scrollBehavior = '';
+				if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));
+				else open(start);
 			}
 		</script>
 	</body>
