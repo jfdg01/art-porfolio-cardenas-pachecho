@@ -526,11 +526,10 @@
 				for (const b of views) b.setAttribute('aria-pressed', b.dataset.view === v);
 				history.replaceState(null, '', `${v === 'todas' ? '?vista=todas' : location.pathname}${location.hash}`);
 			};
-			// Paseo to Todas, with a physical feel (FLIP: measure, switch, animate back from the old
-			// place). The works in view shrink into their places in the grid; the rest of the Room
-			// deal themselves out of a pile behind them. A spring curve gives the overshoot.
-			const spring =
-				'linear(0, 0.009, 0.035 2.1%, 0.141, 0.281 6.7%, 0.723 12.9%, 0.938 16.7%, 1.017, 1.077, 1.121, 1.149 24.3%, 1.159, 1.163, 1.161, 1.154 29.9%, 1.129 32.8%, 1.051 39.6%, 1.017 43.1%, 0.991, 0.977 51%, 0.974 53.8%, 0.975 57.1%, 0.997 69.8%, 1.003 76.9%, 1.004 83.8%, 1)';
+			// Paseo to Todas (FLIP: measure, switch, animate back from the old place). The works in
+			// view shrink into their places in the grid; the rest of the Room move out from behind
+			// them, one after the other. Mechanical: straight lines, a firm start and stop, no overshoot.
+			const machine = 'cubic-bezier(0.7, 0, 0.2, 1)';
 			const inView = (r) => r.width && r.bottom > 0 && r.top < innerHeight && r.right > 0 && r.left < innerWidth;
 			const centre = (r) => [r.left + r.width / 2, r.top + r.height / 2];
 			const deal = (show) => {
@@ -554,16 +553,16 @@
 					const from = seen.get(id);
 					seen.delete(id); // a work in two Rooms flies to one place only
 					const [x, y] = centre(to);
-					const delay = from ? 0 : Math.min(120 + n++ * 35, 900);
+					const delay = from ? 0 : Math.min(150 + n++ * 30, 750);
 					const start = from
 						? `translate(${centre(from)[0] - x}px, ${centre(from)[1] - y}px) scale(${from.width / to.width})`
-						: `translate(${pile[0] - x}px, ${pile[1] - y}px) rotate(${Math.random() * 40 - 20}deg) scale(0.4)`;
+						: `translate(${pile[0] - x}px, ${pile[1] - y}px) scale(0.8)`;
 					// The works from Paseo fly above the pile, but under the sticky header and strip (z-index 2+).
 					if (from) img.style.cssText = 'position: relative; z-index: 1';
 					img.animate([{ transform: start, opacity: from ? 1 : 0 }, { transform: 'none', opacity: 1 }], {
-						duration: from ? 800 : 950,
+						duration: from ? 650 : 700,
 						delay,
-						easing: spring,
+						easing: machine,
 						fill: 'backwards'
 					}).finished.then(() => img.removeAttribute('style'));
 					img.closest('a').querySelector('.label')?.animate([{ opacity: 0 }, { opacity: 1 }], {
