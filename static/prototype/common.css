@@ -230,19 +230,35 @@ button:disabled {
 	text-align: center;
 	color: var(--muted);
 }
+#site .lang {
+	padding: 0.5rem 0;
+}
+/* Phone header: name and language on one line, the site links on the next */
 @media (max-width: 700px) {
 	#site {
-		gap: 0 1rem;
-		padding: 0.5rem 1rem;
+		display: grid;
+		grid-template-columns: 1fr auto;
+		align-items: baseline;
+		gap: 0.25rem 1rem;
+		padding: 0.75rem 1rem 0.5rem;
 	}
 	#site .name {
-		font-size: 1.25rem;
+		font-size: clamp(1.125rem, 5.2vw, 1.3125rem); /* one line down to 360 px */
+	}
+	#site nav {
+		grid-column: 1 / -1;
+	}
+	#site .lang {
+		grid-area: 1 / 2;
 	}
 	#site ul {
-		gap: 0 1.1rem;
+		justify-content: space-between;
+		gap: 0 1rem;
+		font-size: 1.0625rem;
 	}
-	#site nav a {
-		padding: 0.25rem 0;
+	#site nav a,
+	#site .lang {
+		padding: 0.35rem 0;
 	}
 	/* Prototype controls float, so the phone layout is judged without them */
 	.proto {
@@ -254,41 +270,6 @@ button:disabled {
 	.proto span,
 	.proto a {
 		display: none;
-	}
-	.corridor {
-		flex-direction: column;
-		gap: 0;
-		padding: 0;
-		overflow: hidden auto;
-		scroll-snap-type: y mandatory;
-	}
-	.corridor > * {
-		min-height: 100%;
-		width: 100%;
-		scroll-snap-align: start;
-		scroll-snap-stop: always;
-	}
-	.corridor .work {
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		gap: 1rem;
-		padding: 1.5rem 1rem;
-	}
-	.corridor .canvas,
-	.corridor .label {
-		width: min(calc(62cqh * var(--r)), 100%);
-	}
-	.corridor .label {
-		min-width: 14rem;
-	}
-	.controls {
-		gap: 0.5rem;
-	}
-	.controls output {
-		min-width: 0;
-		flex: 1;
-		font-size: 0.9375rem;
 	}
 }
 /* The phone walk: one view. The page scrolls down, the header scrolls away, and the

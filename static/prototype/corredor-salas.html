@@ -186,6 +186,15 @@
 				display: inline-block;
 				padding: 0.5rem 0;
 			}
+			.end .proto {
+				position: static;
+				flex-wrap: wrap;
+				margin-top: 2rem;
+			}
+			.end .proto span,
+			.end .proto a {
+				display: inline;
+			}
 			/* Phone: the Room strip is the one control that stays, one tap target high */
 			@media (max-width: 700px), (max-height: 500px) {
 				.rooms {
@@ -240,6 +249,9 @@
 				}
 				.end {
 					display: block;
+				}
+				.controls {
+					display: none; /* the page's grid rule above would win over common.css */
 				}
 				/* Sticky, not fixed: the body holds the perspective, and fixed would scroll with it */
 				.top {
@@ -333,10 +345,13 @@
 			const mark = (tag) => {
 				for (const a of document.querySelectorAll('.rooms a'))
 					a.toggleAttribute('aria-current', a.dataset.room === tag);
-				// On a phone the strip scrolls: bring the current Room into the middle of it.
+				// On a phone the strip scrolls: bring the current Room into view, but only when it is out of view.
 				const strip = document.querySelector('.rooms ul');
 				const li = strip.querySelector('[aria-current]').parentElement;
-				strip.scrollLeft = li.offsetLeft - (strip.clientWidth - li.offsetWidth) / 2;
+				const outside =
+					li.offsetLeft < strip.scrollLeft ||
+					li.offsetLeft + li.offsetWidth > strip.scrollLeft + strip.clientWidth;
+				if (outside) strip.scrollLeft = li.offsetLeft - 16;
 				history.replaceState(null, '', `${location.search}#sala-${tag}`);
 			};
 			const { go, stops } = corridor(walk, (stop, i) => {
@@ -426,7 +441,10 @@
 			const wantsAll = new URLSearchParams(location.search).get('vista') === 'todas';
 			setView(wantsAll && !PHONE.matches ? 'todas' : 'paseo');
 			// At the end of the phone walk the site links come back.
-			document.querySelector('.end').innerHTML = document.querySelector('#site nav ul').outerHTML;
+			const end = document.querySelector('.end');
+			end.innerHTML = document.querySelector('#site nav ul').outerHTML;
+			// The prototype controls go to the end of the phone walk, out of the header.
+			if (PHONE.matches) end.append(document.querySelector('.proto'));
 			const start = location.hash.slice('#sala-'.length);
 			if (document.getElementById(`sala-${start}`)) {
 				if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));

@@ -40,8 +40,8 @@ export function siteHeader(note) {
 			<li><a href="#">Clases</a></li>
 			<li><a href="#">Contacto</a></li>
 			<li><a href="#">Sobre mí</a></li>
-			<li><a href="#" lang="en">English</a></li>
 		</ul></nav>
+		<a class="lang" href="#" lang="en">English</a>
 		<div class="proto">
 			<span>${note}</span>
 			<button type="button" aria-pressed="${on}">Profundidad</button>
