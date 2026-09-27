@@ -6,19 +6,30 @@
 -->
 
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { m } from '$lib/paraglide/messages';
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import { ArrowRight } from 'lucide-svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-
-	// Get page data from server-side load function
-	let { data }: { data: PageData } = $props();
+	import { ARTIST } from '$lib';
 </script>
 
-<SEO seo={data.seo} />
+<SEO
+	title="Clases Online - Carmen Cárdenas Pacheco"
+	description="Descubre las clases de arte online de Carmen Cárdenas Pacheco. Aprende técnicas artísticas desde casa."
+	structuredData={{
+		'@type': 'Course',
+		name: 'Clases Online de Arte',
+		description: 'Clases de arte online impartidas por Carmen Cárdenas Pacheco',
+		provider: ARTIST,
+		instructor: { ...ARTIST, jobTitle: 'Artista y Profesora de Arte' },
+		courseMode: 'online',
+		educationalLevel: 'beginner',
+		teaches: ['Pintura', 'Técnicas Artísticas', 'Arte Contemporáneo'],
+		audience: { '@type': 'Audience', audienceType: 'Estudiantes de arte' }
+	}}
+/>
 
 <GalleryHeader />
 

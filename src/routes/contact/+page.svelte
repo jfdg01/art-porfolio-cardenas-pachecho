@@ -6,16 +6,16 @@
 -->
 
 <script lang="ts">
-	import type { PageData } from './$types';
 	import { m } from '$lib/paraglide/messages';
 	import { Send } from 'lucide-svelte';
 	import { Label, Button, Progress, AlertDialog, Separator } from 'bits-ui';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { ARTIST } from '$lib';
 
-	// Get page data from server-side load function
-	let { data }: { data: PageData } = $props();
+	const description =
+		'Contacta con Carmen Cárdenas Pacheco para consultas sobre su portfolio artístico, compras y colaboraciones.';
 
 	let formData = $state({
 		name: '',
@@ -128,7 +128,21 @@
 	}
 </script>
 
-<SEO seo={data.seo} />
+<SEO
+	title="Contacto - Carmen Cárdenas Pacheco"
+	{description}
+	structuredData={{
+		'@type': 'ContactPage',
+		name: 'Contacto - Carmen Cárdenas Pacheco',
+		description,
+		mainEntity: {
+			...ARTIST,
+			email: 'cardenaspachecocarmenalejandra@gmail.com',
+			jobTitle: 'Artista',
+			description: 'Artista contemporánea especializada en pintura y técnicas mixtas'
+		}
+	}}
+/>
 
 <GalleryHeader />
 

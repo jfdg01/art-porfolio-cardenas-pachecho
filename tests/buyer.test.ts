@@ -102,7 +102,29 @@ for (const [esPath, enPath] of pages) {
 			}
 		}
 	});
+	for (const path of [esPath, enPath]) {
+		test(`${path} names its own URL in its metadata and structured data`, async ({ page }) => {
+			await page.goto(path);
+			const url = `https://cardenaspacheco.com${path}`;
+			await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', url);
+			await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', url);
+			const jsonLd = await page.locator('script[type="application/ld+json"]').textContent();
+			expect(JSON.parse(jsonLd!)).toMatchObject({ '@context': 'https://schema.org', url });
+		});
+	}
 }
+
+test('the sitemap lists every page in both Locales', async ({ request }) => {
+	const sitemap = await (await request.get('/sitemap.xml')).text();
+	const paths = [...sitemap.matchAll(/<loc>https:\/\/cardenaspacheco\.com(.*?)<\/loc>/g)];
+	const expected = siteByLocale.flatMap((site) => [
+		site.wall,
+		site.classes,
+		site.contact,
+		...artworks.map(({ id }) => site.artwork(id))
+	]);
+	expect(paths.map(([, path]) => path).sort()).toEqual(expected.sort());
+});
 
 test('the old paths redirect for good to the Spanish paths', async ({ request }) => {
 	const home = await request.get('/');

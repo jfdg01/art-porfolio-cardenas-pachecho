@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
+	import { ARTIST, SITE_URL } from '$lib';
 	import BiggerPicture from 'bigger-picture';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
@@ -137,7 +138,27 @@
 	});
 </script>
 
-<SEO seo={data.seo} />
+<SEO
+	title="{artwork.title} - Carmen Cárdenas Pacheco"
+	description="View {artwork.title} by Carmen Cárdenas Pacheco."
+	image={artwork.images[0].img.src}
+	type="article"
+	structuredData={{
+		'@type': 'VisualArtwork',
+		name: artwork.title,
+		description: `View ${artwork.title} by Carmen Cárdenas Pacheco`,
+		image: SITE_URL + artwork.images[0].img.src,
+		creator: ARTIST,
+		dateCreated: artwork.year?.toString(),
+		artform: 'Painting',
+		artMedium: 'Mixed Media',
+		artworkSurface: artwork.dimensions
+			? `${artwork.dimensions.width}x${artwork.dimensions.height} ${artwork.dimensions.unit}`
+			: undefined,
+		genre: artwork.tags.join(', '),
+		keywords: artwork.tags.join(', ')
+	}}
+/>
 
 <!-- Header -->
 <GalleryHeader />

@@ -2,7 +2,7 @@
 @component ArtworkCard
 @description Displays an individual artwork with image and title
 @example
-  <ArtworkCard {artwork} on:click={handleArtworkClick} />
+  <ArtworkCard {artwork} />
 -->
 
 <script lang="ts">
@@ -10,7 +10,6 @@
 	import { Eye } from 'lucide-svelte';
 	import { m } from '$lib/paraglide/messages';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { goto } from '$app/navigation';
 
 	/**
 	 * @prop {Artwork} artwork - The artwork object to display
@@ -26,27 +25,14 @@
 		isPriority?: boolean;
 		eager?: boolean;
 	} = $props();
-
-	function handleClick() {
-		goto(localizeHref(`/artwork/${artwork.id}`), { noScroll: true });
-	}
-
-	function handleKeydown(event: KeyboardEvent) {
-		if (event.key === 'Enter' || event.key === ' ') {
-			event.preventDefault();
-			handleClick();
-		}
-	}
 </script>
 
-<!-- Single seamless card with image and title -->
+<!-- The image and the Title, as one real link, so the prerender crawler finds the Artwork page -->
 <div class="artwork-container">
-	<div
-		class="artwork-card group cursor-pointer rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-card"
-		onclick={handleClick}
-		onkeydown={handleKeydown}
-		tabindex="0"
-		role="button"
+	<a
+		href={localizeHref(`/artwork/${artwork.id}`)}
+		data-sveltekit-noscroll
+		class="artwork-card block group rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-card"
 		aria-label={m.viewDetailsFor({ title: artwork.title })}
 	>
 		<!-- Image -->
@@ -93,5 +79,5 @@
 				{/if}
 			</div>
 		</div>
-	</div>
+	</a>
 </div>

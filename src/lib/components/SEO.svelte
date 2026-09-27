@@ -1,146 +1,65 @@
+<!--
+@component SEO
+@description The one SEO helper: the page metadata and its schema.org structured data.
+It names the page by its public URL, so the metadata is the same on Vercel, in a preview
+and in a prerendered file.
+-->
+
 <script lang="ts">
 	import { page } from '$app/state';
-	import { getLocale } from '$lib/paraglide/runtime';
-	import { SITE_URL } from '$lib';
+	import { locales, localizeHref } from '$lib/paraglide/runtime';
+	import { ARTIST, SITE_URL } from '$lib';
 
-	interface SEOData {
+	interface Props {
 		title: string;
 		description: string;
-		image: string;
-		type: string;
-		url: string;
-		structuredData?: Record<string, unknown>;
+		/** A path on this site or an absolute URL. */
+		image?: string;
+		type?: 'website' | 'article';
+		/** The page's schema.org object; this adds its `@context` and `url`. */
+		structuredData: Record<string, unknown>;
 	}
 
-	interface SEOProps {
-		seo?: SEOData;
-		noIndex?: boolean;
-	}
+	let {
+		title,
+		description,
+		image = '/web-app-manifest-512x512.png',
+		type = 'website',
+		structuredData
+	}: Props = $props();
 
-	let { seo, noIndex = false }: SEOProps = $props();
-
-	// Default SEO data
-	const defaultSEO: SEOData = {
-		title: 'Carmen Cárdenas Pacheco',
-		description: 'Galería de arte de Carmen Cárdenas Pacheco',
-		image: '/web-app-manifest-512x512.png',
-		type: 'website',
-		url: `${SITE_URL}${page.url.pathname}`
-	};
-
-	// Use provided SEO data or fallback to defaults
-	const currentSEO = seo || defaultSEO;
-
-	// Ensure image URL is absolute
-	const absoluteImageUrl = currentSEO.image.startsWith('http')
-		? currentSEO.image
-		: `${SITE_URL}${currentSEO.image}`;
-
-	// Generate structured data
-	const generateStructuredData = () => {
-		// If custom structured data is provided, use it
-		if (currentSEO.structuredData) {
-			return currentSEO.structuredData;
-		}
-
-		// Default structured data based on page type
-		if (currentSEO.type === 'article') {
-			// VisualArtwork schema for artwork pages
-			return {
-				'@context': 'https://schema.org',
-				'@type': 'VisualArtwork',
-				name: currentSEO.title,
-				description: currentSEO.description,
-				image: absoluteImageUrl,
-				url: currentSEO.url,
-				creator: {
-					'@type': 'Person',
-					name: 'Carmen Cárdenas Pacheco'
-				},
-				dateCreated: new Date().toISOString(),
-				artform: 'Painting',
-				artMedium: 'Mixed Media'
-			};
-		} else {
-			// WebSite schema for main pages
-			return {
-				'@context': 'https://schema.org',
-				'@type': 'WebSite',
-				name: 'Carmen Cárdenas Pacheco',
-				description: 'Galería de arte de Carmen Cárdenas Pacheco',
-				url: SITE_URL,
-				author: {
-					'@type': 'Person',
-					name: 'Carmen Cárdenas Pacheco'
-				},
-				publisher: {
-					'@type': 'Person',
-					name: 'Carmen Cárdenas Pacheco'
-				},
-				potentialAction: {
-					'@type': 'SearchAction',
-					target: `${SITE_URL}/?q={search_term_string}`,
-					'query-input': 'required name=search_term_string'
-				}
-			};
-		}
-	};
-
-	const structuredData = generateStructuredData();
-
-	// Create JSON-LD script content
-	const jsonLdContent = JSON.stringify(structuredData, null, 2);
+	let url = $derived(SITE_URL + page.url.pathname);
+	let imageUrl = $derived(image.startsWith('http') ? image : SITE_URL + image);
+	let jsonLd = $derived(
+		JSON.stringify({ '@context': 'https://schema.org', ...structuredData, url })
+	);
 </script>
 
 <svelte:head>
-	{#key page.url.pathname}
-		<!-- Canonical URL -->
-		<link rel="canonical" href={currentSEO.url} />
+	<title>{title}</title>
+	<meta name="description" content={description} />
+	<meta name="author" content={ARTIST.name} />
+	<link rel="canonical" href={url} />
+	{#each locales as locale (locale)}
+		<link
+			rel="alternate"
+			hreflang={locale}
+			href={SITE_URL + localizeHref(page.url.pathname, { locale })}
+		/>
+	{/each}
 
-		<!-- Basic Meta Tags -->
-		<title>{currentSEO.title}</title>
-		<meta name="description" content={currentSEO.description} />
+	<meta property="og:url" content={url} />
+	<meta property="og:type" content={type} />
+	<meta property="og:title" content={title} />
+	<meta property="og:description" content={description} />
+	<meta property="og:image" content={imageUrl} />
+	<meta property="og:site_name" content={ARTIST.name} />
 
-		<!-- Open Graph -->
-		<meta property="og:url" content={currentSEO.url} />
-		<meta property="og:type" content={currentSEO.type} />
-		<meta property="og:title" content={currentSEO.title} />
-		<meta property="og:description" content={currentSEO.description} />
-		<meta property="og:image" content={absoluteImageUrl} />
-		<meta property="og:site_name" content="Carmen Cárdenas Pacheco" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={title} />
+	<meta name="twitter:description" content={description} />
+	<meta name="twitter:image" content={imageUrl} />
 
-		<!-- Twitter Card -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content={currentSEO.title} />
-		<meta name="twitter:description" content={currentSEO.description} />
-		<meta name="twitter:image" content={absoluteImageUrl} />
-
-		<!-- Favicon -->
-		<link rel="icon" type="image/x-icon" href="/favicon.ico" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" type="image/png" sizes="96x96" href="/favicon-96x96.png" />
-		<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-		<link rel="manifest" href="/site.webmanifest" />
-
-		<!-- Additional SEO Meta Tags -->
-		<meta name="author" content="Carmen Cárdenas Pacheco" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<meta charset="utf-8" />
-
-		<!-- Robots -->
-		{#if noIndex}
-			<meta name="robots" content="noindex, nofollow" />
-		{:else}
-			<meta name="robots" content="index, follow" />
-		{/if}
-
-		<!-- Language -->
-		<meta name="language" content={getLocale()} />
-		<meta name="geo.region" content="ES" />
-		<meta name="geo.country" content="Spain" />
-
-		<!-- JSON-LD Structured Data -->
-		<!-- eslint-disable-next-line svelte/no-at-html-tags -->
-		{@html '<script type="application/ld+json">' + jsonLdContent + '<' + '/script>'}
-	{/key}
+	<!-- eslint-disable-next-line svelte/no-at-html-tags -->
+	{@html '<script type="application/ld+json">' + jsonLd + '<' + '/script>'}
 </svelte:head>

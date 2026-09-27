@@ -3,6 +3,9 @@ import { artworks } from '$lib/artworks';
 import { locales, localizeHref } from '$lib/paraglide/runtime';
 import { SITE_URL } from '$lib';
 
+// A server route does not take the prerender option of the root layout.
+export const prerender = true;
+
 // Type definitions for sitemap
 type ImageEntry = {
 	loc: string;
@@ -111,10 +114,5 @@ ${imageEntries}
 
 	const sitemapXml = generateSitemap(allRoutes);
 
-	return new Response(sitemapXml, {
-		headers: {
-			'Content-Type': 'application/xml',
-			'Cache-Control': 'public, max-age=3600' // Cache for 1 hour
-		}
-	});
+	return new Response(sitemapXml, { headers: { 'Content-Type': 'application/xml' } });
 };
