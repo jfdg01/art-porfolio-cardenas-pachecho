@@ -8,7 +8,6 @@
 	import { m } from '$lib/paraglide/messages';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import { Button } from 'bits-ui';
 
 	interface Props {
 		images: Picture[];
@@ -110,21 +109,23 @@
 <div class="relative w-full">
 	<!-- Scroll Buttons - Desktop Only (shown only if content is scrollable) -->
 	{#if isScrollable}
-		<Button.Root
+		<button
+			type="button"
 			onclick={scrollLeft}
-			class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-background/90 hover:bg-background shadow-md hover:shadow-lg transition-all duration-200"
+			class="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 bg-background/90 hover:bg-background transition-all duration-200"
 			aria-label="Scroll left"
 		>
 			<ChevronLeft class="w-5 h-5 text-foreground" />
-		</Button.Root>
+		</button>
 
-		<Button.Root
+		<button
+			type="button"
 			onclick={scrollRight}
-			class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 rounded-full bg-background/90 hover:bg-background shadow-md hover:shadow-lg transition-all duration-200"
+			class="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-10 h-10 bg-background/90 hover:bg-background transition-all duration-200"
 			aria-label="Scroll right"
 		>
 			<ChevronRight class="w-5 h-5 text-foreground" />
-		</Button.Root>
+		</button>
 	{/if}
 
 	<!-- Scrollable Container -->
@@ -132,22 +133,18 @@
 		<!-- Thumbnail Content -->
 		<div class="flex gap-2 py-2 px-4 justify-center">
 			{#each images as image, index (index)}
-				<Button.Root
+				<button
+					type="button"
 					onclick={() => handleImageClick(index)}
-					class="thumbnail-item flex-shrink-0 transition-all duration-200 overflow-hidden rounded-lg bg-muted border-2 {selectedIndex ===
+					class="thumbnail-item flex-shrink-0 transition-all duration-200 overflow-hidden bg-muted border-2 {selectedIndex ===
 					index
-						? 'border-primary shadow-lg scale-105'
+						? 'border-primary scale-105'
 						: 'border-transparent hover:border-muted-foreground/30'}"
 					aria-label={m.viewImage({ num: index + 1 })}
 					aria-pressed={selectedIndex === index}
 				>
-					<enhanced:img
-						src={image}
-						alt={String(index + 1)}
-						class="h-20 w-auto rounded"
-						sizes="80px"
-					/>
-				</Button.Root>
+					<enhanced:img src={image} alt={String(index + 1)} class="h-20 w-auto" sizes="80px" />
+				</button>
 			{/each}
 		</div>
 	</div>

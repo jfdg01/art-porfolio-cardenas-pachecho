@@ -32,7 +32,7 @@
 	<a
 		href={localizeHref(`/artwork/${artwork.id}`)}
 		data-sveltekit-noscroll
-		class="artwork-card block group rounded-xl overflow-hidden shadow-lg shadow-stone-800/20 hover:shadow-xl hover:shadow-stone-900/40 transition-all duration-300 hover:-translate-y-1 bg-card"
+		class="artwork-card block group overflow-hidden transition-all duration-300 hover:-translate-y-1 bg-card"
 		aria-label={m.viewDetailsFor({ title: artwork.title })}
 	>
 		<!-- Image -->
@@ -59,20 +59,18 @@
 		<!-- Title with availability indicator -->
 		<div class="px-3 py-2 border-t border-border">
 			<div class="flex items-center justify-center gap-2">
-				<h3
-					class="font-semibold montserrat-semibold text-card-foreground text-sm leading-tight text-center"
-				>
+				<h3 class="font-semibold text-card-foreground text-sm leading-tight text-center">
 					{artwork.title}
 				</h3>
 				{#if !artwork.sold}
 					<span
-						class="relative w-3 h-3 rounded-full flex-shrink-0 animate-pulse"
+						class="relative w-3 h-3 flex-shrink-0 animate-pulse"
 						style="background-color: var(--color-success)"
 						aria-label={m.available()}
 					>
 						<!-- Animated glow ring -->
 						<span
-							class="absolute inset-0 rounded-full animate-ping opacity-90"
+							class="absolute inset-0 animate-ping opacity-90"
 							style="background-color: var(--color-success)"
 						></span>
 					</span>

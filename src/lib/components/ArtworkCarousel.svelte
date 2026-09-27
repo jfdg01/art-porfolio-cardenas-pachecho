@@ -10,7 +10,6 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
-	import { Button, Tooltip } from 'bits-ui';
 
 	interface Props {
 		currentArtworkId?: string;
@@ -226,73 +225,60 @@
 <div class="relative w-full group">
 	<!-- Scroll Buttons - Desktop Only with gradient overlay (shown only if content is scrollable) -->
 	{#if isScrollable}
-		<Button.Root
+		<button
+			type="button"
 			onclick={scrollLeft}
-			class="hidden min-[850px]:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			class="hidden min-[850px]:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 bg-gradient-to-r from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200"
 			aria-label="Scroll left"
 		>
-			<ChevronLeft class="size-7 text-foreground drop-shadow-lg" />
-		</Button.Root>
+			<ChevronLeft class="size-7 text-foreground" />
+		</button>
 
-		<Button.Root
+		<button
+			type="button"
 			onclick={scrollRight}
-			class="hidden min-[850px]:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 rounded-full bg-gradient-to-l from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200 shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+			class="hidden min-[850px]:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-14 h-14 bg-gradient-to-l from-background/95 via-background/80 to-transparent hover:from-background hover:via-background/90 transition-all duration-200"
 			aria-label="Scroll right"
 		>
-			<ChevronRight class="size-7 text-foreground drop-shadow-lg" />
-		</Button.Root>
+			<ChevronRight class="size-7 text-foreground" />
+		</button>
 	{/if}
 
 	<!-- Carousel Container -->
-	<Tooltip.Provider>
-		<div
-			class="w-full overflow-x-auto scrollbar-hide"
-			bind:this={scrollContainer}
-			onscroll={handleScroll}
-			onwheel={handleWheel}
-		>
-			<!-- Scrollable content - circular scroll illusion -->
-			<div class="flex gap-3 py-2 px-4">
-				{#each indices as index (index)}
-					{@const artwork = getArtwork(index)}
-					{@const isCurrentArtwork = artwork.id === currentArtworkId}
+	<div
+		class="w-full overflow-x-auto scrollbar-hide"
+		bind:this={scrollContainer}
+		onscroll={handleScroll}
+		onwheel={handleWheel}
+	>
+		<!-- Scrollable content - circular scroll illusion -->
+		<div class="flex gap-3 py-2 px-4">
+			{#each indices as index (index)}
+				{@const artwork = getArtwork(index)}
+				{@const isCurrentArtwork = artwork.id === currentArtworkId}
 
-					<Tooltip.Root>
-						<Tooltip.Trigger>
-							{#snippet child({ props })}
-								<Button.Root
-									{...props}
-									onclick={() => navigateToArtwork(artwork.id)}
-									onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
-									class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted border-2 {isCurrentArtwork
-										? 'border-primary shadow-lg scale-105'
-										: 'border-transparent hover:border-muted-foreground/30'}"
-									aria-label={m.viewDetailsFor({ title: artwork.title })}
-									aria-pressed={isCurrentArtwork}
-									tabindex={0}
-								>
-									<enhanced:img
-										src={artwork.images[0]}
-										alt={artwork.title}
-										class="h-[120px] w-auto rounded-lg"
-										sizes="100px"
-									/>
-								</Button.Root>
-							{/snippet}
-						</Tooltip.Trigger>
-						<Tooltip.Portal>
-							<Tooltip.Content
-								sideOffset={8}
-								class="rounded-md bg-popover text-popover-foreground px-3 py-1.5 text-sm shadow-md"
-							>
-								{artwork.title}
-							</Tooltip.Content>
-						</Tooltip.Portal>
-					</Tooltip.Root>
-				{/each}
-			</div>
+				<button
+					type="button"
+					title={artwork.title}
+					onclick={() => navigateToArtwork(artwork.id)}
+					onkeydown={(e: KeyboardEvent) => handleKeydown(e, artwork.id)}
+					class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 overflow-hidden bg-muted border-2 {isCurrentArtwork
+						? 'border-primary scale-105'
+						: 'border-transparent hover:border-muted-foreground/30'}"
+					aria-label={m.viewDetailsFor({ title: artwork.title })}
+					aria-pressed={isCurrentArtwork}
+					tabindex={0}
+				>
+					<enhanced:img
+						src={artwork.images[0]}
+						alt={artwork.title}
+						class="h-[120px] w-auto"
+						sizes="100px"
+					/>
+				</button>
+			{/each}
 		</div>
-	</Tooltip.Provider>
+	</div>
 </div>
 
 <style>

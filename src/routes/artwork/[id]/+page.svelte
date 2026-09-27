@@ -11,13 +11,11 @@
 	import { localizeHref } from '$lib/paraglide/runtime';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import SEO from '$lib/components/SEO.svelte';
 	import { ARTIST, SITE_URL } from '$lib';
 	import BiggerPicture from 'bigger-picture';
 	import ArtworkCarousel from '$lib/components/ArtworkCarousel.svelte';
 	import ThumbnailCarousel from '$lib/components/ThumbnailCarousel.svelte';
-	import { Label, Button } from 'bits-ui';
 
 	// Get artwork data from load function
 	let { data }: { data: PageData } = $props();
@@ -109,7 +107,7 @@
 			// Focus the main element when it loads
 			const mainElement = document.querySelector('main') as HTMLElement;
 			if (mainElement) {
-				mainElement.focus();
+				mainElement.focus({ preventScroll: true });
 			}
 		}
 	});
@@ -160,40 +158,32 @@
 	}}
 />
 
-<!-- Header -->
-<GalleryHeader />
-
 <!-- Go Back Button -->
-<div class="bg-background/80 backdrop-blur-md">
+<div class="bg-background/80">
 	<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 		<div class="py-3 md:py-4">
-			<Button.Root
+			<button
+				type="button"
 				onclick={goBack}
-				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-primary hover:text-primary hover:bg-accent rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
+				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-primary hover:text-primary hover:bg-accent transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
 				aria-label={m.goBack()}
 			>
 				<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
 				<span>{m.goBack()}</span>
-			</Button.Root>
+			</button>
 		</div>
 	</div>
 </div>
 
 <!-- Main Content -->
 <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-<main
-	class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 focus:outline-none"
-	onkeydown={handleKeydown}
-	tabindex="-1"
->
+<main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8" onkeydown={handleKeydown} tabindex="-1">
 	<!-- Artwork Carousel - Full width, flush with screen edges -->
 	<div class="-mx-4 sm:-mx-6 lg:-mx-8 mb-4">
 		<ArtworkCarousel currentArtworkId={artwork?.id} />
 	</div>
 
-	<div
-		class="bg-card/80 backdrop-blur-xl rounded-xl md:rounded-2xl shadow-lg border border-border overflow-hidden w-full"
-	>
+	<div class="bg-card/80 border border-border overflow-hidden w-full">
 		<!-- Content Grid -->
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-0 w-full">
 			<!-- Image Section -->
@@ -203,7 +193,7 @@
 						<div
 							onclick={openLightbox}
 							onkeydown={(e) => e.key === 'Enter' && openLightbox()}
-							class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
+							class="cursor-pointer"
 							role="button"
 							tabindex="0"
 							aria-label={m.expandImage()}
@@ -211,33 +201,35 @@
 							<enhanced:img
 								src={currentImage}
 								alt={artwork.title}
-								class="w-full h-auto rounded-lg shadow-md"
+								class="w-full h-auto"
 								sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
 							/>
 						</div>
 
 						<!-- Navigation Controls -->
 						{#if hasMultipleImages}
-							<Button.Root
+							<button
+								type="button"
 								onclick={previousImage}
-								class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
+								class="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 transition-all duration-200"
 								aria-label="Previous image"
 							>
 								<ChevronLeft class="w-6 h-6" />
-							</Button.Root>
+							</button>
 
-							<Button.Root
+							<button
+								type="button"
 								onclick={nextImage}
-								class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full transition-all duration-200"
+								class="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 transition-all duration-200"
 								aria-label="Next image"
 							>
 								<ChevronRight class="w-6 h-6" />
-							</Button.Root>
+							</button>
 						{/if}
 
 						{#if artwork.sold}
 							<div
-								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
+								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 text-sm font-semibold"
 							>
 								{m.sold()}
 							</div>
@@ -255,17 +247,15 @@
 
 					<!-- Click to enlarge label -->
 					<div class="text-center">
-						<Label.Root
+						<button
+							type="button"
 							onclick={openLightbox}
-							onkeydown={(e) => e.key === 'Enter' && openLightbox()}
-							class="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground montserrat-medium cursor-pointer hover:text-primary transition-colors duration-200"
-							role="button"
-							tabindex={0}
+							class="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground cursor-pointer hover:text-primary transition-colors duration-200"
 							aria-label={m.clickToEnlarge()}
 						>
 							<Eye class="w-4 h-4 md:w-5 md:h-5" />
 							<span>{m.clickToEnlarge()}</span>
-						</Label.Root>
+						</button>
 					</div>
 				</div>
 			</div>
@@ -276,7 +266,7 @@
 					<!-- Title -->
 					<div>
 						<h1
-							class="text-xl md:text-2xl lg:text-3xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent"
+							class="text-xl md:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent"
 						>
 							{artwork.title}
 						</h1>
@@ -286,12 +276,10 @@
 						<div class="flex items-start gap-3">
 							<Ruler class="w-5 h-5 text-muted-foreground mt-1" />
 							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
+								<p class="text-xs md:text-sm font-medium text-muted-foreground mb-1">
 									{m.dimensionsLabel()}
 								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
+								<p class="text-base md:text-lg font-semibold text-foreground">
 									{artwork.dimensions.width} × {artwork.dimensions.height}
 									{artwork.dimensions.unit}
 								</p>
@@ -304,12 +292,10 @@
 						<div class="flex items-start gap-3">
 							<Calendar class="w-5 h-5 text-muted-foreground mt-1" />
 							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
+								<p class="text-xs md:text-sm font-medium text-muted-foreground mb-1">
 									{m.yearLabel()}
 								</p>
-								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
+								<p class="text-base md:text-lg font-semibold text-foreground">
 									{artwork.year}
 								</p>
 							</div>
@@ -320,15 +306,13 @@
 					<div class="flex items-start gap-3">
 						<Tag class="w-5 h-5 text-muted-foreground mt-1" />
 						<div class="flex-1">
-							<p
-								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
-							>
+							<p class="text-xs md:text-sm font-medium text-muted-foreground mb-2">
 								{m.tagsLabel()}
 							</p>
 							<div class="flex flex-wrap gap-2">
 								{#each artwork.tags as tag (tag)}
 									<span
-										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
+										class="inline-flex items-center px-2 md:px-3 py-1 text-xs md:text-sm font-medium bg-accent text-accent-foreground"
 									>
 										{m[`tag_${tag}`]()}
 									</span>
@@ -339,46 +323,40 @@
 
 					<!-- Contact Information -->
 					{#if !artwork.sold}
-						<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-6">
-							<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-primary mb-2">
+						<div class="bg-primary/5 border border-primary/20 p-4 md:p-6">
+							<h3 class="text-base md:text-lg font-semibold text-primary mb-2">
 								{m.interestedHeading()}
 							</h3>
-							<p
-								class="text-muted-foreground text-xs md:text-sm montserrat-medium mb-4 leading-relaxed"
-							>
+							<p class="text-muted-foreground text-xs md:text-sm mb-4 leading-relaxed">
 								{m.availableInfo()}
 							</p>
-							<Button.Root
+							<a
 								href={localizeHref('/contact')}
 								data-sveltekit-preload-data="hover"
 								data-sveltekit-noscroll
-								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold min-h-[44px] min-w-[44px] bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 transform hover:-translate-y-0.5"
 							>
 								{m.contactArtist()}
-							</Button.Root>
+							</a>
 						</div>
 					{:else}
-						<div class="bg-muted/50 border border-border rounded-xl p-4 md:p-6">
+						<div class="bg-muted/50 border border-border p-4 md:p-6">
 							<div class="space-y-3">
-								<h3
-									class="text-base md:text-lg font-semibold montserrat-semibold text-muted-foreground"
-								>
+								<h3 class="text-base md:text-lg font-semibold text-muted-foreground">
 									{m.soldHeading()}
 								</h3>
-								<p
-									class="text-muted-foreground text-xs md:text-sm montserrat-medium leading-relaxed"
-								>
+								<p class="text-muted-foreground text-xs md:text-sm leading-relaxed">
 									{m.soldInfo()}
 								</p>
 								<div class="pt-2 flex justify-center">
-									<Button.Root
+									<a
 										href={localizeHref('/contact')}
 										data-sveltekit-preload-data="hover"
 										data-sveltekit-noscroll
-										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
+										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold min-h-[44px] min-w-[44px] bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 transform hover:-translate-y-0.5"
 									>
 										{m.contactArtist()}
-									</Button.Root>
+									</a>
 								</div>
 							</div>
 						</div>
@@ -388,37 +366,40 @@
 					<div class="pt-2">
 						<div class="flex items-center justify-between gap-2 md:gap-3 lg:gap-4">
 							<!-- Previous Artwork Button -->
-							<Button.Root
+							<button
+								type="button"
 								onclick={() => navigateToArtwork(neighbours.previous.id)}
 								disabled={isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={m.previousArtwork()}
 								title={m.previousArtwork()}
 							>
 								<ChevronLeft class="w-5 h-5" />
 								<span class="hidden lg:inline">{m.previousArtwork()}</span>
-							</Button.Root>
+							</button>
 
 							<!-- Go Back to Gallery Button -->
-							<Button.Root
+							<button
+								type="button"
 								onclick={goBack}
-								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
+								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold min-h-[44px] bg-primary hover:bg-primary/90 text-primary-foreground transition-all duration-200 transform hover:-translate-y-0.5 md:px-6 md:text-base"
 								aria-label={m.goBack()}
 							>
 								<span class="whitespace-nowrap">{m.goBack()}</span>
-							</Button.Root>
+							</button>
 
 							<!-- Next Artwork Button -->
-							<Button.Root
+							<button
+								type="button"
 								onclick={() => navigateToArtwork(neighbours.next.id)}
 								disabled={isNavigating}
-								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
+								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
 								aria-label={m.nextArtwork()}
 								title={m.nextArtwork()}
 							>
 								<span class="hidden lg:inline">{m.nextArtwork()}</span>
 								<ChevronRight class="w-5 h-5" />
-							</Button.Root>
+							</button>
 						</div>
 					</div>
 				</div>

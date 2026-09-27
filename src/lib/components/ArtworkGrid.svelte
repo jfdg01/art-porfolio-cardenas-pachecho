@@ -30,7 +30,7 @@
 
 <!-- Results Count -->
 <div class="mt-8 text-center">
-	<p class="text-sm text-muted-foreground montserrat-medium">
+	<p class="text-sm text-muted-foreground">
 		{m.showingCount({ count: artworks.length })}
 	</p>
 </div>

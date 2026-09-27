@@ -1,6 +1,5 @@
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
-@plugin '@tailwindcss/typography';
 @import 'bigger-picture/css';
 
 @theme {
@@ -11,74 +10,36 @@
 	--breakpoint-xl: 1440px;
 	--breakpoint-2xl: 2560px;
 
-	/* Light mode colors */
-	--color-background: #ffffff;
-	--color-foreground: #0f172a;
-	--color-muted: #f1f5f9;
-	--color-muted-foreground: #64748b;
-	--color-border: #e2e8f0;
-	--color-primary: #3b82f6;
-	--color-primary-foreground: #ffffff;
-	--color-card: #ffffff;
-	--color-card-foreground: #0f172a;
-	--color-popover: #ffffff;
-	--color-popover-foreground: #0f172a;
-	--color-accent: #f1f5f9;
-	--color-accent-foreground: #0f172a;
-	--color-destructive: rgb(190, 49, 49);
-	--color-destructive-foreground: #ffffff;
-	--color-ring: #3b82f6;
-	--color-success: #22c55e;
-	--color-success-foreground: #ffffff;
+	--font-sans: 'Space Grotesk Variable', sans-serif;
+	--font-serif: 'Source Serif 4 Variable', serif;
 
-	/* Collapsible animations */
-	--animate-collapsible-down: collapsible-down 200ms ease-out;
-	--animate-collapsible-up: collapsible-up 200ms ease-out;
+	/* One dark wall (issue #8). Warm neutrals, so the paintings keep their colours.
+	   Contrast on the wall: foreground 14.1:1, muted-foreground 7.0:1. */
+	--color-background: #1b1a18;
+	--color-foreground: #ece7de;
+	--color-muted: #24221f;
+	--color-muted-foreground: #aaa397;
+	--color-border: #3b3834;
+	--color-primary: #ece7de;
+	--color-primary-foreground: #1b1a18;
+	--color-card: #1b1a18;
+	--color-card-foreground: #ece7de;
+	--color-popover: #1b1a18;
+	--color-popover-foreground: #ece7de;
+	--color-accent: #24221f;
+	--color-accent-foreground: #ece7de;
+	/* Error text and the Sold badge: 5.2:1 on the wall and under the wall colour */
+	--color-destructive: #e0685c;
+	--color-destructive-foreground: #1b1a18;
+	--color-ring: #ece7de;
 }
 
-@layer theme {
-	.dark {
-		/* Dark mode colors using Tailwind's neutral palette */
-		--color-background: #171717; /* neutral-900 */
-		--color-foreground: #fafafa; /* neutral-50 */
-		--color-muted: #262626; /* neutral-800 */
-		--color-muted-foreground: #a3a3a3; /* neutral-400 */
-		--color-border: #404040; /* neutral-700 */
-		--color-primary: #60a5fa;
-		--color-primary-foreground: #0f172a;
-		--color-card: #262626; /* neutral-800 */
-		--color-card-foreground: #fafafa; /* neutral-50 */
-		--color-popover: #262626; /* neutral-800 */
-		--color-popover-foreground: #fafafa; /* neutral-50 */
-		--color-accent: #262626; /* neutral-800 */
-		--color-accent-foreground: #fafafa; /* neutral-50 */
-		--color-destructive: rgb(190, 49, 49);
-		--color-destructive-foreground: #ffffff;
-		--color-ring: #60a5fa;
-		--color-success: #4ade80;
-		--color-success-foreground: #ffffff;
+@layer base {
+	:root {
+		color-scheme: dark;
 	}
-}
-
-/* Collapsible keyframes */
-@keyframes collapsible-down {
-	from {
-		height: 0;
-		opacity: 0;
-	}
-	to {
-		height: var(--bits-collapsible-content-height);
-		opacity: 1;
-	}
-}
-
-@keyframes collapsible-up {
-	from {
-		height: var(--bits-collapsible-content-height);
-		opacity: 1;
-	}
-	to {
-		height: 0;
-		opacity: 0;
+	:focus-visible {
+		outline: 3px solid var(--color-foreground);
+		outline-offset: 4px;
 	}
 }
