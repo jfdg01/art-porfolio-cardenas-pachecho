@@ -74,7 +74,7 @@ export function corridor(walk, onStop) {
 	let busyUntil = 0; // a button scroll is under way; its scroll events must not reset `current`
 	const center = (r) => (phone.matches ? r.top + r.height / 2 : r.left + r.width / 2);
 	const find = () => {
-		if (performance.now() < busyUntil) return;
+		if (walk.hidden || performance.now() < busyUntil) return;
 		const mid = center(scroller().getBoundingClientRect());
 		let best = 0;
 		stops.forEach((s, i) => {

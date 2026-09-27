@@ -217,7 +217,8 @@
 				.rooms {
 					top: var(--site-h, 0px) !important;
 				}
-				.corridor > * {
+				.corridor > *,
+				.mass section {
 					scroll-margin-top: calc(var(--site-h, 0px) + 4rem);
 				}
 			}
@@ -241,8 +242,53 @@
 					padding: 0 1rem;
 					scrollbar-width: none;
 				}
+				.rooms ul {
+					min-width: 0;
+				}
 				.rooms li {
 					flex: none;
+				}
+				/* The view switch sits first in the strip; it shows only the other view */
+				.rooms .views {
+					flex: none;
+					margin-left: 1rem;
+				}
+				.rooms .views button {
+					height: 2.75rem;
+					background: var(--ink);
+					color: var(--wall);
+				}
+				.rooms .views [aria-pressed='true'] {
+					display: none;
+				}
+				/* "Ver todas" on a phone: the page scrolls, three square thumbnails a row, no Labels */
+				.mass {
+					overflow: visible;
+					padding: 0 1rem 3rem;
+				}
+				.mass section + section {
+					margin-top: 2.5rem;
+				}
+				.mass h2 {
+					font-size: 1.75rem;
+					margin: 1.5rem 0 0.75rem;
+				}
+				.mass ul {
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					gap: 0.25rem;
+				}
+				.mass li {
+					width: auto;
+				}
+				.mass img {
+					width: 100%;
+					height: auto;
+					aspect-ratio: 1;
+					object-fit: cover;
+				}
+				.mass .label {
+					display: none;
 				}
 				.rooms a {
 					flex-direction: row;
@@ -402,12 +448,21 @@
 				for (const b of views) b.setAttribute('aria-pressed', b.dataset.view === v);
 				history.replaceState(null, '', `${v === 'todas' ? '?vista=todas' : location.pathname}${location.hash}`);
 			};
-			for (const b of views) b.onclick = () => setView(b.dataset.view);
-			mass.addEventListener('scroll', () => {
-				const line = mass.getBoundingClientRect().top + 80;
+			// A switch keeps the current Room in view.
+			for (const b of views)
+				b.onclick = () => {
+					setView(b.dataset.view);
+					open(location.hash.slice('#sala-'.length) || rooms[0].tag);
+				};
+			// The Room under the strip is the current Room. The mass scrolls itself, or the body on a phone.
+			const follow = () => {
+				if (mass.hidden) return;
+				const line = document.querySelector('.rooms').getBoundingClientRect().bottom + 80;
 				const passed = [...mass.children].filter((s) => s.getBoundingClientRect().top <= line);
 				mark((passed.at(-1) ?? mass.firstElementChild).dataset.room);
-			});
+			};
+			mass.addEventListener('scroll', follow);
+			document.body.addEventListener('scroll', follow);
 			// A click on a small image opens that Artwork in the corridor, in the same Room.
 			mass.onclick = (e) => {
 				const a = e.target.closest('a');
@@ -474,14 +529,16 @@
 			addEventListener('resize', fit);
 			document.fonts.ready.then(fit);
 
-			// The phone has one view, the walk.
-			const wantsAll = new URLSearchParams(location.search).get('vista') === 'todas';
-			setView(wantsAll && !PHONE.matches ? 'todas' : 'paseo');
+			setView(new URLSearchParams(location.search).get('vista') === 'todas' ? 'todas' : 'paseo');
 			// At the end of the phone walk the site links come back.
 			const end = document.querySelector('.end');
 			end.innerHTML = document.querySelector('#site nav ul').outerHTML;
 			// The prototype controls go to the end of the phone walk, out of the header.
-			if (PHONE.matches) end.append(document.querySelector('.proto'));
+			// The view switch goes to the sticky Room strip, as the bottom bar is gone.
+			if (PHONE.matches) {
+				end.append(document.querySelector('.proto'));
+				document.querySelector('.rooms').prepend(document.querySelector('.views'));
+			}
 			const start = location.hash.slice('#sala-'.length);
 			if (document.getElementById(`sala-${start}`)) {
 				if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));
