@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>1 · Corredor por las Salas — prototipo</title>
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Space+Grotesk:wght@400;600&display=swap"
+		/>
+		<link rel="stylesheet" href="common.css" />
+		<style>
+			:root {
+				--serif: 'Source Serif 4', serif;
+				--sans: 'Space Grotesk', sans-serif;
+			}
+			.rooms {
+				display: flex;
+				align-items: center;
+				gap: 0.25rem 1.5rem;
+				flex-wrap: wrap;
+				padding: 0.5rem clamp(1rem, 4vw, 3rem);
+				border-bottom: 1px solid var(--line);
+				font-size: 1rem;
+			}
+			.rooms ul {
+				display: contents;
+				list-style: none;
+			}
+			.rooms a {
+				display: inline-block;
+				padding: 0.35rem 0;
+				text-decoration: none;
+				color: var(--muted);
+			}
+			.rooms a[aria-current] {
+				color: var(--ink);
+				text-decoration: underline;
+				text-underline-offset: 0.35em;
+			}
+			.rooms select {
+				display: none;
+				flex: 1;
+			}
+			/* A Room door: the name of the Room, big, on the wall of the corridor */
+			.door {
+				width: 22rem;
+				border-left: 1px solid var(--muted);
+				padding: 2rem 0 2rem 2rem;
+			}
+			.door p {
+				color: var(--muted);
+			}
+			.door h2 {
+				font: italic 400 clamp(2.5rem, 6vw, 4.5rem) / 1 var(--serif);
+				margin: 0.5rem 0 1rem;
+			}
+			@media (max-width: 700px) {
+				.rooms ul {
+					display: none;
+				}
+				.rooms select {
+					display: block;
+				}
+				.door {
+					display: flex;
+					flex-direction: column;
+					justify-content: center;
+					border: 0;
+					padding: 2rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header id="site"></header>
+		<nav class="rooms" aria-label="Salas">
+			<label for="room">Salas:</label>
+			<ul></ul>
+			<select id="room"></select>
+		</nav>
+		<main class="walk corridor" tabindex="-1"></main>
+		<div class="controls">
+			<button id="prev" type="button">← Anterior</button>
+			<output aria-live="polite"></output>
+			<button id="next" type="button">Siguiente →</button>
+		</div>
+		<script type="module">
+			import { ROOMS, inRoom, work, siteHeader, corridor } from './common.js';
+			siteHeader('1 · Corredor por las Salas · Source Serif 4 + Space Grotesk');
+
+			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
+			const walk = document.querySelector('main');
+			walk.innerHTML = rooms
+				.map((r, i) => {
+					const next = rooms[i + 1];
+					return `<section class="door" id="sala-${r.tag}" data-room="${r.tag}">
+						<p>Sala ${i + 1} de ${rooms.length}</p>
+						<h2>${r.name}</h2>
+						<p>${r.works.length} obras${next ? ` · después: ${next.name}` : ''}</p>
+					</section>` + r.works.map((a) => work(a).replace('<figure', `<figure data-room="${r.tag}"`)).join('');
+				})
+				.join('');
+
+			document.querySelector('.rooms ul').innerHTML = rooms
+				.map((r) => `<li><a href="#sala-${r.tag}" data-room="${r.tag}">${r.name}</a></li>`)
+				.join('');
+			const select = document.querySelector('#room');
+			select.innerHTML = rooms.map((r) => `<option value="${r.tag}">${r.name} (${r.works.length})</option>`).join('');
+
+			const { go, stops } = corridor(walk, (stop, i) => {
+				const tag = stop.dataset.room;
+				const room = rooms.find((r) => r.tag === tag);
+				const door = stops.indexOf(document.getElementById(`sala-${tag}`));
+				for (const a of document.querySelectorAll('.rooms a'))
+					a.toggleAttribute('aria-current', a.dataset.room === tag);
+				select.value = tag;
+				document.querySelector('output').textContent =
+					i === door ? `Sala ${room.name}` : `${room.name} · obra ${i - door} de ${room.works.length}`;
+				history.replaceState(null, '', `#sala-${tag}`);
+			});
+			const open = (tag) => go(stops.indexOf(document.getElementById(`sala-${tag}`)));
+			select.onchange = () => open(select.value);
+			document.querySelector('.rooms ul').onclick = (e) => {
+				const a = e.target.closest('a');
+				if (!a) return;
+				e.preventDefault();
+				open(a.dataset.room);
+			};
+			// A link to a Room opens that Room.
+			const start = location.hash.slice('#sala-'.length);
+			if (document.getElementById(`sala-${start}`)) {
+				walk.style.scrollBehavior = 'auto';
+				open(start);
+				walk.style.scrollBehavior = '';
+			}
+		</script>
+	</body>
+</html>

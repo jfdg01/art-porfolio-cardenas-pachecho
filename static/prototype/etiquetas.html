@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>Propuesta de Etiquetas (#4)</title>
+		<link rel="stylesheet" href="common.css" />
+		<style>
+			:root {
+				--serif: Georgia, serif;
+				--sans: system-ui, sans-serif;
+			}
+			body {
+				height: auto;
+				padding: clamp(1rem, 4vw, 3rem);
+			}
+			h1 {
+				font: 400 2.25rem/1.2 var(--serif);
+			}
+			p {
+				color: var(--muted);
+				margin: 0.5rem 0 1.5rem;
+				max-width: 50rem;
+			}
+			table {
+				border-collapse: collapse;
+			}
+			th,
+			td {
+				text-align: left;
+				padding: 0.5rem 1rem 0.5rem 0;
+				border-bottom: 1px solid var(--line);
+				vertical-align: middle;
+			}
+			img {
+				display: block;
+				height: 6rem;
+				width: auto;
+			}
+			ins {
+				text-decoration: none;
+				font-weight: 600;
+				color: #9fd49a;
+			}
+			del {
+				color: #e59287;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Propuesta de Etiquetas</h1>
+		<p>
+			Cada Etiqueta es una Sala. En <ins>verde</ins> las Etiquetas nuevas y en <del>rojo</del> las
+			que se quitan. Las Etiquetas de tema (retrato, figura, paisaje, arquitectura, animal,
+			abstracto) vienen de mirar cada imagen. «collage» es una técnica nueva, tomada de los
+			títulos. Corrija aquí lo que no encaje.
+		</p>
+		<p id="rooms"></p>
+		<table>
+			<thead>
+				<tr><th>Obra</th><th>Título</th><th>Hoy</th><th>Propuesta</th></tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<script type="module">
+			import { ARTWORKS, ROOMS, inRoom, esc } from './common.js';
+			document.querySelector('#rooms').textContent =
+				'Salas: ' + ROOMS.map((r) => `${r.name} (${inRoom(r.tag).length})`).join(' · ');
+			document.querySelector('tbody').innerHTML = ARTWORKS.map(
+				(a) => `<tr>
+					<td><img src="/images/${a.id}.webp" alt="" loading="lazy"></td>
+					<td>${esc(a.title)}<br><small>${a.id}</small></td>
+					<td>${a.oldTags.map((t) => (a.tags.includes(t) ? t : `<del>${t}</del>`)).join(', ')}</td>
+					<td>${a.tags.map((t) => (a.oldTags.includes(t) ? t : `<ins>${t}</ins>`)).join(', ')}</td>
+				</tr>`
+			).join('');
+		</script>
+	</body>
+</html>

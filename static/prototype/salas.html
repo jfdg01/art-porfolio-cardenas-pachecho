@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>4 · Salas — prototipo</title>
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Sans:wght@400;600&display=swap"
+		/>
+		<link rel="stylesheet" href="common.css" />
+		<style>
+			:root {
+				--serif: 'Spectral', serif;
+				--sans: 'IBM Plex Sans', sans-serif;
+			}
+			main {
+				flex: 1;
+				overflow: hidden auto;
+				padding: clamp(1.5rem, 5vw, 4rem);
+			}
+			h1:focus {
+				outline: none; /* focused only to move the screen reader to the new Room */
+			}
+			h1 {
+				font: 400 clamp(2.25rem, 6vw, 4rem) / 1.1 var(--serif);
+			}
+			.intro {
+				color: var(--muted);
+				margin: 0.5rem 0 3rem;
+			}
+			/* The list of Rooms: a door is a cover image, the name and the count */
+			.doors {
+				display: grid;
+				grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+				gap: 3rem clamp(1.5rem, 3vw, 3rem);
+				list-style: none;
+				padding: 0;
+			}
+			.doors a {
+				display: block;
+				text-decoration: none;
+			}
+			.doors img {
+				display: block;
+				width: 100%;
+				aspect-ratio: 4 / 3;
+				object-fit: cover;
+				margin-bottom: 0.75rem;
+			}
+			.doors strong {
+				display: block;
+				font: 400 1.75rem/1.2 var(--serif);
+				text-decoration: underline;
+				text-decoration-thickness: 1px;
+				text-underline-offset: 0.25em;
+			}
+			.doors span {
+				color: var(--muted);
+			}
+			/* One Room: a calm hang on one line, each Label to the right of its work */
+			.back {
+				display: inline-block;
+				padding: 0.5rem 0;
+				margin-bottom: 1rem;
+			}
+			.hang {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: center;
+				align-items: flex-end;
+				gap: 5rem 6rem;
+				margin: 3rem 0 5rem;
+			}
+			.hang .work {
+				display: flex;
+				align-items: flex-end;
+				gap: 1.25rem;
+			}
+			.hang .canvas {
+				width: min(calc(46dvh * var(--r)), 52vw);
+			}
+			.hang .label {
+				width: 10rem;
+			}
+			.onward {
+				display: flex;
+				justify-content: space-between;
+				gap: 1rem;
+				flex-wrap: wrap;
+				border-top: 1px solid var(--line);
+				padding-top: 1.5rem;
+			}
+			.onward a {
+				display: inline-block;
+				padding: 0.5rem 0;
+				font: 400 1.375rem/1.3 var(--serif);
+			}
+			@media (max-width: 700px) {
+				.hang {
+					flex-direction: column;
+					align-items: stretch;
+					gap: 3.5rem;
+				}
+				.hang .work {
+					flex-direction: column;
+					align-items: stretch;
+				}
+				.hang .canvas,
+				.hang .label {
+					width: 100%;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<header id="site"></header>
+		<main class="walk"></main>
+		<script type="module">
+			import { ROOMS, inRoom, work, siteHeader } from './common.js';
+			siteHeader('4 · Salas · Spectral + IBM Plex Sans');
+			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
+			// Each door shows a different cover: the first work of the Room that no earlier door shows.
+			const used = new Set();
+			for (const r of rooms) {
+				const cover = r.works.find((a) => !used.has(a)) ?? r.works[0];
+				used.add(cover);
+				r.cover = cover.id;
+			}
+			const main = document.querySelector('main');
+
+			// The Room lives in the URL: #sala-retrato opens the Room of portraits.
+			const show = () => {
+				const i = rooms.findIndex((r) => location.hash === `#sala-${r.tag}`);
+				const r = rooms[i];
+				main.innerHTML = !r
+					? `<h1 tabindex="-1">Obra</h1>
+						<p class="intro">${rooms.length} salas. Una obra cuelga en cada sala que la describe.</p>
+						<ul class="doors">${rooms
+							.map(
+								(r) => `<li><a href="#sala-${r.tag}">
+									<img src="/images/${r.cover}.webp" alt="" loading="lazy">
+									<strong>${r.name}</strong><span>${r.works.length} obras</span></a></li>`
+							)
+							.join('')}</ul>`
+					: `<a class="back" href="#">← Todas las salas</a>
+						<h1 tabindex="-1">${r.name}</h1>
+						<p class="intro">Sala ${i + 1} de ${rooms.length} · ${r.works.length} obras</p>
+						<div class="hang">${r.works.map(work).join('')}</div>
+						<nav class="onward" aria-label="Otras salas">
+							${i > 0 ? `<a href="#sala-${rooms[i - 1].tag}">← ${rooms[i - 1].name}</a>` : '<span></span>'}
+							${i < rooms.length - 1 ? `<a href="#sala-${rooms[i + 1].tag}">${rooms[i + 1].name} →</a>` : '<a href="#">Todas las salas →</a>'}
+						</nav>`;
+				main.scrollTop = 0;
+			};
+			addEventListener('hashchange', () => (show(), main.querySelector('h1').focus({ preventScroll: true })));
+			show();
+		</script>
+	</body>
+</html>

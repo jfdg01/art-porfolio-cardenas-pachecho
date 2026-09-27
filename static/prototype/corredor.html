@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<title>3 · Corredor — prototipo</title>
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Instrument+Sans:wght@400;600&display=swap"
+		/>
+		<link rel="stylesheet" href="common.css" />
+		<style>
+			:root {
+				--serif: 'Newsreader', serif;
+				--sans: 'Instrument Sans', sans-serif;
+			}
+			.label .title {
+				font-style: italic;
+				font-size: 1.375rem;
+			}
+		</style>
+	</head>
+	<body>
+		<header id="site"></header>
+		<main class="walk corridor" tabindex="-1"></main>
+		<div class="controls">
+			<button id="prev" type="button">← Anterior</button>
+			<output aria-live="polite"></output>
+			<button id="next" type="button">Siguiente →</button>
+		</div>
+		<script type="module">
+			import { ARTWORKS, work, siteHeader, corridor } from './common.js';
+			siteHeader('3 · Corredor · Newsreader + Instrument Sans');
+			const walk = document.querySelector('main');
+			walk.innerHTML = ARTWORKS.map(work).join('');
+			corridor(walk, (stop, i, stops) => {
+				document.querySelector('output').textContent = `Obra ${i + 1} de ${stops.length}`;
+			});
+		</script>
+	</body>
+</html>
