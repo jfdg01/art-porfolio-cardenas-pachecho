@@ -2,17 +2,30 @@
 import { ARTWORKS, ROOMS } from './data.js';
 export { ARTWORKS, ROOMS };
 
+// Made-up facts: the data has no sizes and one year. Each gap gets a value seeded by the id,
+// so it stays the same on every load. ponytail: delete this loop once the real facts exist.
+const seed = (s) => [...s].reduce((h, c) => (h * 31 + c.charCodeAt(0)) >>> 0, 7);
+for (const a of ARTWORKS) {
+	const h = seed(a.id);
+	a.year ??= 1998 + (h % 27);
+	if (a.dimensions) continue;
+	const long = 30 + ((h >>> 5) % 91); // 30 to 120 cm on the long side, in the image's ratio
+	const r = a.w / a.h;
+	const [width, height] = r >= 1 ? [long, long / r] : [long * r, long];
+	a.dimensions = { width: Math.round(width), height: Math.round(height), unit: 'cm' };
+}
+
 export const inRoom = (tag) => ARTWORKS.filter((a) => a.tags.includes(tag));
 // A phone, held either way. The same query sits in common.css; keep the two equal.
 export const PHONE = matchMedia('(max-width: 700px), (max-height: 500px)');
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
-// The museum Label. Missing facts show as a dash, so the gaps in the data stay visible.
+// The museum Label.
 export function label(a) {
 	const d = a.dimensions;
 	return `<figcaption class="label">
 		<span class="title">${esc(a.title)}</span>
-		<span class="facts"><span>${a.year ?? '—'}</span><span>${a.tags.join(', ')}</span><span>${d ? `${d.width} × ${d.height} ${d.unit}` : '— × — cm'}</span></span>
+		<span class="facts"><span>${a.year}</span><span>${a.tags.join(', ')}</span><span>${d.width} × ${d.height} ${d.unit}</span></span>
 		${a.sold ? '<span class="sold">Vendida</span>' : ''}
 	</figcaption>`;
 }

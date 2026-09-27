@@ -111,6 +111,18 @@ button:disabled {
 	text-transform: uppercase;
 	font-size: 0.8125rem;
 }
+/* Beside a work, the Label is a museum plaque: a small light card on the dark wall.
+   Ink #1b1a18 on #efeae0 is 15:1, the facts #4a463f are 8.3:1. */
+.work .label {
+	padding: 0.75rem 1rem;
+	background: #efeae0;
+	color: #4a463f;
+	box-shadow: 0 1px 3px rgb(0 0 0 / 0.6);
+}
+.work .label .title,
+.work .label .sold {
+	color: #1b1a18;
+}
 .label .sold::before {
 	content: '';
 	display: inline-block;
