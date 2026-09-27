@@ -265,8 +265,12 @@
 					grid-area: 2 / 2;
 					align-self: center;
 				}
+				/* The strip tucks 1px under the header, and draws the header's bottom line itself, so no
+				   sliver of the page shows between the two at a fractional pixel position. */
 				.rooms {
-					top: var(--site-h, 0px) !important;
+					top: calc(var(--site-h, 0px) - 1px) !important;
+					margin-top: -1px;
+					border-top: 1px solid var(--line);
 				}
 				.corridor > * {
 					scroll-margin-top: calc(var(--site-h, 0px) + 4rem);
@@ -704,7 +708,7 @@
 			const fit = () => {
 				const hide = site.querySelector('nav').getBoundingClientRect().bottom - site.getBoundingClientRect().top;
 				site.style.setProperty('--hide', `${hide}px`);
-				document.documentElement.style.setProperty('--site-h', `${site.offsetHeight - hide}px`);
+				document.documentElement.style.setProperty('--site-h', `${site.getBoundingClientRect().height - hide}px`);
 			};
 			fit();
 			addEventListener('resize', fit);
