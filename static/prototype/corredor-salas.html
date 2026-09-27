@@ -9,6 +9,7 @@
 			rel="stylesheet"
 			href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=Space+Grotesk:wght@400;600&display=swap"
 		/>
+		<link rel="stylesheet" href="vendor/bigger-picture.css" />
 		<link rel="stylesheet" href="common.css" />
 		<style>
 			:root {
@@ -149,6 +150,25 @@
 			.mass .label .title {
 				font-size: 1rem;
 			}
+			.canvas {
+				cursor: zoom-in;
+			}
+			/* Full View (bigger-picture): the dark wall behind, sharp shapes, the variant's fonts */
+			.bp-wrap > div:first-child {
+				background: rgb(20 19 17);
+			}
+			.bp-cap {
+				border-radius: 0;
+				background: var(--wall);
+				font: 1.0625rem/1.3 var(--serif);
+			}
+			.bp-count {
+				font: 0.9375rem/1 var(--sans);
+			}
+			/* Back to the top: only on the phone walk, once the header is gone */
+			.top {
+				display: none;
+			}
 			/* The site links again at the end of the phone walk */
 			.end {
 				display: none;
@@ -221,6 +241,19 @@
 				.end {
 					display: block;
 				}
+				/* Sticky, not fixed: the body holds the perspective, and fixed would scroll with it */
+				.top {
+					display: block;
+					position: sticky;
+					bottom: 1rem;
+					z-index: 3;
+					width: max-content;
+					margin: 0 1rem 0 auto;
+					background: var(--ink);
+					color: var(--wall);
+					border-color: var(--ink);
+					box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 0.6);
+				}
 			}
 		</style>
 	</head>
@@ -245,8 +278,10 @@
 				<button type="button" data-view="todas">Ver todas</button>
 			</div>
 		</div>
+		<button class="top" type="button" hidden>↑ Arriba</button>
 		<script type="module">
-			import { ROOMS, inRoom, work, esc, siteHeader, corridor, PHONE } from './common.js';
+			import { ROOMS, ARTWORKS, inRoom, work, esc, siteHeader, corridor, PHONE } from './common.js';
+			import BiggerPicture from './vendor/bigger-picture.min.mjs';
 			siteHeader('1 · Corredor por las Salas · Source Serif 4 + Space Grotesk');
 
 			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
@@ -354,6 +389,39 @@
 				open(a.dataset.room);
 			};
 			// A link to a Room opens that Room.
+			// Full View: a tap on an Artwork opens it large, with pinch zoom, and its detail images after it.
+			// ponytail: the display copies stand in for the originals until they arrive in R2.
+			const bp = BiggerPicture({ target: document.documentElement }); // not body: see .top
+			const size = (src) =>
+				new Promise((ok) => {
+					const img = new Image();
+					img.onload = () => ok({ img: src, width: img.naturalWidth, height: img.naturalHeight });
+					img.src = src;
+				});
+			walk.addEventListener('click', async (e) => {
+				const canvas = e.target.closest('.canvas');
+				if (!canvas) return;
+				e.preventDefault();
+				const a = ARTWORKS.find((x) => x.id === canvas.closest('.work').dataset.id);
+				const details = await Promise.all(a.details.map((d) => size(`/images/${a.id}-${d}.webp`)));
+				const caption = esc(a.title);
+				bp.open({
+					el: canvas,
+					items: [
+						{ img: `/images/${a.id}.webp`, width: a.w, height: a.h, alt: a.title, caption },
+						...details.map((d, i) => ({ ...d, alt: `${a.title}, detalle ${i + 1}`, caption: `${caption} · detalle ${i + 1}` }))
+					]
+				});
+			});
+
+			// Back to the top, once the visitor has walked past the header.
+			const upButton = document.querySelector('.top');
+			document.body.addEventListener('scroll', () => (upButton.hidden = document.body.scrollTop < 400));
+			upButton.onclick = () => {
+				const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+				document.body.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+			};
+
 			// The phone has one view, the walk.
 			const wantsAll = new URLSearchParams(location.search).get('vista') === 'todas';
 			setView(wantsAll && !PHONE.matches ? 'todas' : 'paseo');
