@@ -17,7 +17,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			provider: {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
-				url: 'https://cardenaspacheco.es'
+				url: 'https://cardenaspacheco.com'
 			},
 			instructor: {
 				'@type': 'Person',

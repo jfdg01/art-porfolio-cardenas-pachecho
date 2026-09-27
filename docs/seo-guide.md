@@ -1,4 +1,4 @@
-# **Technical Guide and Launch Strategy for SvelteKit SEO on cardenaspacheco.es**
+# **Technical Guide and Launch Strategy for SvelteKit SEO on cardenaspacheco.com**
 
 The successful launch of a new website, particularly one built using a modern framework like SvelteKit, requires meticulous attention to both foundational SEO principles and platform-specific technical configurations. This report details the necessary steps, from initial domain verification with Arsys to advanced SvelteKit architectural patterns for maximizing visibility and establishing topical authority.
 
@@ -8,7 +8,7 @@ This initial phase establishes the foundational link between the domain registra
 
 ### **1\. Domain Acquisition Context: Leveraging the.es ccTLD**
 
-The selection of the .es country-code Top-Level Domain (ccTLD) for cardenaspacheco.es provides an immediate and powerful geographical signal to Google and other search engines. Google relies heavily on ccTLDs to determine a site’s target locale, making .es a strong, explicit indication that the content is intended for the Spanish market.1 This is particularly important because Google has deprecated the manual International Targeting report in Google Search Console (GSC).2 Consequently, the site must now rely almost entirely on the ccTLD and the content's language (Spanish) to reinforce its geographic relevance.
+The selection of the .es country-code Top-Level Domain (ccTLD) for cardenaspacheco.com provides an immediate and powerful geographical signal to Google and other search engines. Google relies heavily on ccTLDs to determine a site’s target locale, making .es a strong, explicit indication that the content is intended for the Spanish market.1 This is particularly important because Google has deprecated the manual International Targeting report in Google Search Console (GSC).2 Consequently, the site must now rely almost entirely on the ccTLD and the content's language (Spanish) to reinforce its geographic relevance.
 
 The strong geographical signal of the .es ccTLD necessitates proactive planning for future scale. While the site primarily targets Spain, if future expansion includes other Spanish-speaking markets (e.g., Mexico, Argentina, or a global Spanish audience), relying solely on the .es TLD may inadvertently restrict reach outside of Spain. To prevent this, a necessary defensive measure involves planning for hreflang implementation. The site should define language-country combinations (e.g., es-mx, es-ar) and, crucially, include an x-default tag. The x-default tag captures users whose location or language preference does not match an explicit variant, ensuring a broad but strategically targeted presence, even when only one primary language is live.3
 
@@ -18,7 +18,7 @@ GSC serves as the essential communication channel and monitoring dashboard betwe
 
 #### **Creating a Domain Property**
 
-The owner should create a Domain Property in GSC. This verification type encompasses the entire domain (cardenaspacheco.es), regardless of whether it is accessed via HTTP or HTTPS, or with or without the www subdomain. Utilizing a Domain Property simplifies long-term management and ensures comprehensive data aggregation.4
+The owner should create a Domain Property in GSC. This verification type encompasses the entire domain (cardenaspacheco.com), regardless of whether it is accessed via HTTP or HTTPS, or with or without the www subdomain. Utilizing a Domain Property simplifies long-term management and ensures comprehensive data aggregation.4
 
 #### **Verification Method: DNS TXT Record**
 
@@ -33,7 +33,7 @@ The verification process requires interacting directly with the Arsys domain man
 - **Step 3: Add the TXT Record:**
   - Select the option to **Añadir entrada DNS** (Add DNS entry).6
   - Choose **TXT** as the record type.7
-  - In the **Name/Host** field, input @ to signify the root domain (cardenaspacheco.es) or leave it blank, depending on the specific formatting required by the Arsys interface.5
+  - In the **Name/Host** field, input @ to signify the root domain (cardenaspacheco.com) or leave it blank, depending on the specific formatting required by the Arsys interface.5
   - In the **Value/Text** field, paste the _exact_ unique string copied from the GSC setup screen.4
   - The **TTL (Time to Live)** should generally be left at the default setting (e.g., 3600 seconds) unless a rapid change is specifically needed.5
 - **Step 4: Propagation and Verification:** Save the changes and allow time for DNS propagation across the internet, which can range from a few minutes up to 72 hours.7 Once the changes are propagated, return to GSC and click the "Verificar" (Verify) button. A successful verification message confirms the link between the site and Google.9
@@ -45,7 +45,7 @@ Table 1: Arsys DNS TXT Record Configuration for GSC Verification
 | Google Search Console Field (TXT Record) | Arsys DNS Panel Equivalent   | Value Input                                                         | Notes |
 | :--------------------------------------- | :--------------------------- | :------------------------------------------------------------------ | :---- |
 | **Type**                                 | TXT (Text)                   | Must select this record type.                                       | 5     |
-| **Name/Host**                            | @ or leave blank             | Target the root domain (cardenaspacheco.es). Follow Arsys's format. | 5     |
+| **Name/Host**                            | @ or leave blank             | Target the root domain (cardenaspacheco.com). Follow Arsys's format. | 5     |
 | **Value/Text**                           | (Unique Verification String) | The exact string provided by GSC.                                   | 4     |
 | **TTL (Time to Live)**                   | Default (e.g., 3600 seconds) | Use default unless rapid change is needed.                          | 5     |
 
@@ -124,7 +124,7 @@ To implement dynamic and reliable canonical tags, the URL path must be captured 
    \<script\>  
     import { page } from '$app/stores';  
     export let data;  
-    const SITE_URL \= 'https://cardenaspacheco.es';  
+    const SITE_URL \= 'https://cardenaspacheco.com';  
    \</script\>
 
    \<svelte:head\>  
@@ -152,7 +152,7 @@ The component structure dynamically pulls page information, including the URL, e
 
 HTML
 
-\<meta property\="og:url" content\="https://cardenaspacheco.es{$page.url.pathname.toString()}"\>  
+\<meta property\="og:url" content\="https://cardenaspacheco.com{$page.url.pathname.toString()}"\>  
 \<meta property\="og:type" content\="website"\>  
 \<meta property\="og:title" content\="{title}"\>  
 \<meta property\="og:description" content\="{description}"\>  
@@ -170,7 +170,7 @@ Sitemaps are critical for establishing a structured roadmap of the site’s inde
 
 The sitemap must be served as \`sitemap.xml\` \[28\] and its location must be referenced in \`robots.txt\` (as demonstrated in Section II.1). Due to SvelteKit's file-based routing, the sitemap is generated by creating a special directory structure: \`src/routes/sitemap.xml/+server.ts\`.\[28\]
 
-This endpoint utilizes an asynchronous \`GET\` function to dynamically construct and return the XML content. If \`cardenaspacheco.es\` includes dynamic content (e.g., listings or blog posts), the \`+server.ts\` file must execute logic to fetch all necessary URLs (e.g., from an API or database) and include them in the generated XML structure.\[21\] The endpoint must set the correct HTTP header: \`Content-Type: application/xml\`.
+This endpoint utilizes an asynchronous \`GET\` function to dynamically construct and return the XML content. If \`cardenaspacheco.com\` includes dynamic content (e.g., listings or blog posts), the \`+server.ts\` file must execute logic to fetch all necessary URLs (e.g., from an API or database) and include them in the generated XML structure.\[21\] The endpoint must set the correct HTTP header: \`Content-Type: application/xml\`.
 
 \#\#\# 5\. Structured Data Implementation (Schema.org JSON-LD)
 
@@ -222,7 +222,7 @@ Table 2 illustrates the necessary shift in keyword prioritization for a new doma
 
 Table 2: New Domain Keyword Prioritization Matrix
 
-| \*\*Keyword Type\*\*                       | \*\*Difficulty\*\* | \*\*Search Volume (SV)\*\* | \*\*Goal for cardenaspacheco.es\*\*                                                | \*\*Timeframe\*\*        |
+| \*\*Keyword Type\*\*                       | \*\*Difficulty\*\* | \*\*Search Volume (SV)\*\* | \*\*Goal for cardenaspacheco.com\*\*                                                | \*\*Timeframe\*\*        |
 | ------------------------------------------ | ------------------ | -------------------------- | ---------------------------------------------------------------------------------- | ------------------------ |
 | \*\*High SV, High Difficulty\*\*           | High               | High                       | Avoid—Too competitive for a new domain.                                            | Long-term (6-12+ months) |
 | \*\*Low SV, Low Difficulty (Long-Tail)\*\* | Low                | Low-Medium                 | \*\*Primary Target:\*\* Quick wins, initial traffic, immediate authority building. | Short-term (0-6 months)  |
@@ -323,7 +323,7 @@ Google Search Console is the operational hub for post-launch monitoring, providi
 
 \#\# VI. Conclusions and Recommendations
 
-The successful establishment of \`cardenaspacheco.es\` requires a balanced execution of SvelteKit-specific technical architecture and a targeted content strategy.
+The successful establishment of \`cardenaspacheco.com\` requires a balanced execution of SvelteKit-specific technical architecture and a targeted content strategy.
 
 The foundational security and verification steps—specifically the use of the \`.es\` ccTLD for geographic targeting and the Arsys DNS TXT record for GSC verification—must be completed first, backed by mandatory HSTS header configuration.
 

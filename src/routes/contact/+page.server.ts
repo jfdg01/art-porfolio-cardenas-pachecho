@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ url }) => {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
 				email: 'cardenaspachecocarmenalejandra@gmail.com',
-				url: 'https://cardenaspacheco.es',
+				url: 'https://cardenaspacheco.com',
 				jobTitle: 'Artista',
 				description: 'Artista contemporánea especializada en pintura y técnicas mixtas'
 			}

@@ -2,7 +2,7 @@ import type { RequestHandler } from '@sveltejs/kit';
 import { artworkData } from '$lib/data/artworkData';
 
 // Base URL - update this to your actual domain
-const baseUrl = 'https://cardenaspacheco.es';
+const baseUrl = 'https://cardenaspacheco.com';
 
 // Type definitions for sitemap
 type ImageEntry = {

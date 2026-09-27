@@ -71,4 +71,4 @@ User-agent: httpx
 Disallow: /
 
 # Sitemap location
-Sitemap: https://cardenaspacheco.es/sitemap.xml
+Sitemap: https://cardenaspacheco.com/sitemap.xml

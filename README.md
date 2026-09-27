@@ -9,7 +9,7 @@
 ![Lighthouse](https://img.shields.io/badge/Lighthouse-95%2B-4CAF50?logo=lighthouse&logoColor=white)
 ![Estado](https://img.shields.io/badge/estado-en_producción-brightgreen)
 
-### 🔗 Ver en vivo → **[cardenaspacheco.es](https://cardenaspacheco.es)**
+### 🔗 Ver en vivo → **[cardenaspacheco.com](https://cardenaspacheco.com)**
 
 ---
 
@@ -29,7 +29,7 @@ flowchart LR
     D --> E["generate-sitemap<br/>sitemap.xml"]
     D --> F["App SvelteKit"]
     F -->|"@zerodevx/svelte-img<br/>+ carga diferida"| G["Galería · páginas de obra<br/>ES / EN"]
-    G -->|"adapter-vercel<br/>(Node.js 22)"| H["🌐 cardenaspacheco.es"]
+    G -->|"adapter-vercel<br/>(Node.js 22)"| H["🌐 cardenaspacheco.com"]
 ```
 
 **Decisiones técnicas y su porqué:**

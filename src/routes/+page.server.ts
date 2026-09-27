@@ -43,7 +43,7 @@ export const load: PageServerLoad = async ({ url }) => {
 			author: {
 				'@type': 'Person',
 				name: 'Carmen Cárdenas Pacheco',
-				url: 'https://cardenaspacheco.es'
+				url: 'https://cardenaspacheco.com'
 			},
 			publisher: {
 				'@type': 'Person',

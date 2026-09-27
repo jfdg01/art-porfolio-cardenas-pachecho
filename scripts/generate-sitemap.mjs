@@ -24,7 +24,7 @@ const artworkIds = artworkIdMatches
 	: [];
 
 // Base URL - update this to your actual domain
-const baseUrl = 'https://cardenaspacheco.es';
+const baseUrl = 'https://cardenaspacheco.com';
 
 // Static routes
 const staticRoutes = [
