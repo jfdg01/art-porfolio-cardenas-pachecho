@@ -25,6 +25,7 @@
 				font-size: 1rem;
 			}
 			.rooms ul {
+				position: relative; /* offsetLeft of a Room counts from the strip */
 				flex: 1;
 				display: grid;
 				grid-template-columns: repeat(auto-fit, minmax(5rem, 1fr));
@@ -63,10 +64,6 @@
 			.rooms a[aria-current] span {
 				text-decoration: underline;
 				text-underline-offset: 0.35em;
-			}
-			.rooms select {
-				display: none;
-				flex: 1;
 			}
 			/* A Room door: the name of the Room, big, on the wall of the corridor */
 			.door {
@@ -152,39 +149,77 @@
 			.mass .label .title {
 				font-size: 1rem;
 			}
-			@media (max-width: 700px) {
-				.controls {
-					grid-template-columns: 1fr;
-					justify-items: stretch;
+			/* The site links again at the end of the phone walk */
+			.end {
+				display: none;
+				padding: 2rem 1rem 3rem;
+				border-top: 1px solid var(--line);
+			}
+			.end ul {
+				display: flex;
+				flex-wrap: wrap;
+				gap: 0.25rem 1.5rem;
+				padding: 0;
+				list-style: none;
+			}
+			.end a {
+				display: inline-block;
+				padding: 0.5rem 0;
+			}
+			/* Phone: the Room strip is the one control that stays, one tap target high */
+			@media (max-width: 700px), (max-height: 500px) {
+				.rooms {
+					position: sticky;
+					top: 0;
+					z-index: 2;
+					flex-wrap: nowrap;
+					padding: 0.375rem 0;
+					background: var(--wall);
 				}
-				.walking {
-					gap: 0.5rem;
-				}
-				.views {
-					grid-column: auto;
-					justify-self: stretch;
-				}
-				.views button {
-					flex: 1;
-				}
-				.mass ul {
-					gap: 1.5rem 1rem;
-				}
-				.mass img {
-					height: 8rem;
-				}
-				.rooms ul {
+				.rooms > span {
 					display: none;
 				}
-				.rooms select {
-					display: block;
+				.rooms ul {
+					display: flex;
+					gap: 0.5rem;
+					overflow-x: auto;
+					padding: 0 1rem;
+					scrollbar-width: none;
+				}
+				.rooms li {
+					flex: none;
+				}
+				.rooms a {
+					flex-direction: row;
+					gap: 0.6rem;
+					height: 2.75rem;
+					padding: 0 0.8rem 0 0;
+					border: 1px solid var(--line);
+				}
+				.rooms img {
+					width: 2.75rem;
+					height: 100%;
+				}
+				.rooms a[aria-current] {
+					border-color: var(--ink);
+				}
+				.rooms a[aria-current] img {
+					outline: none;
+				}
+				.rooms a[aria-current] span {
+					text-decoration: none;
 				}
 				.door {
-					display: flex;
-					flex-direction: column;
-					justify-content: center;
+					width: auto;
 					border: 0;
-					padding: 2rem;
+					padding: 0;
+				}
+				.door h2 {
+					font-size: 2.5rem;
+					margin: 0.25rem 0 0.5rem;
+				}
+				.end {
+					display: block;
 				}
 			}
 		</style>
@@ -192,12 +227,12 @@
 	<body>
 		<header id="site"></header>
 		<nav class="rooms" aria-label="Salas">
-			<label for="room">Salas:</label>
+			<span>Salas:</span>
 			<ul></ul>
-			<select id="room"></select>
 		</nav>
 		<main class="walk corridor" tabindex="-1"></main>
 		<main class="mass" hidden></main>
+		<nav class="end" aria-label="Principal, al final"></nav>
 		<div class="controls">
 			<span></span>
 			<div class="walking">
@@ -211,7 +246,7 @@
 			</div>
 		</div>
 		<script type="module">
-			import { ROOMS, inRoom, work, esc, siteHeader, corridor } from './common.js';
+			import { ROOMS, inRoom, work, esc, siteHeader, corridor, PHONE } from './common.js';
 			siteHeader('1 · Corredor por las Salas · Source Serif 4 + Space Grotesk');
 
 			const rooms = ROOMS.map((r) => ({ ...r, works: inRoom(r.tag) }));
@@ -241,8 +276,6 @@
 						<img src="/images/${r.face.id}.webp" alt="" width="72" height="52"><span>${r.name}</span></a></li>`
 				)
 				.join('');
-			const select = document.querySelector('#room');
-			select.innerHTML = rooms.map((r) => `<option value="${r.tag}">${r.name} (${r.works.length})</option>`).join('');
 
 			const mass = document.querySelector('.mass');
 			mass.innerHTML = rooms
@@ -265,7 +298,10 @@
 			const mark = (tag) => {
 				for (const a of document.querySelectorAll('.rooms a'))
 					a.toggleAttribute('aria-current', a.dataset.room === tag);
-				select.value = tag;
+				// On a phone the strip scrolls: bring the current Room into the middle of it.
+				const strip = document.querySelector('.rooms ul');
+				const li = strip.querySelector('[aria-current]').parentElement;
+				strip.scrollLeft = li.offsetLeft - (strip.clientWidth - li.offsetWidth) / 2;
 				history.replaceState(null, '', `${location.search}#sala-${tag}`);
 			};
 			const { go, stops } = corridor(walk, (stop, i) => {
@@ -311,7 +347,6 @@
 					mark(tag);
 				} else go(stops.indexOf(document.getElementById(`sala-${tag}`)));
 			};
-			select.onchange = () => open(select.value);
 			document.querySelector('.rooms ul').onclick = (e) => {
 				const a = e.target.closest('a');
 				if (!a) return;
@@ -319,7 +354,11 @@
 				open(a.dataset.room);
 			};
 			// A link to a Room opens that Room.
-			setView(new URLSearchParams(location.search).get('vista') === 'todas' ? 'todas' : 'paseo');
+			// The phone has one view, the walk.
+			const wantsAll = new URLSearchParams(location.search).get('vista') === 'todas';
+			setView(wantsAll && !PHONE.matches ? 'todas' : 'paseo');
+			// At the end of the phone walk the site links come back.
+			document.querySelector('.end').innerHTML = document.querySelector('#site nav ul').outerHTML;
 			const start = location.hash.slice('#sala-'.length);
 			if (document.getElementById(`sala-${start}`)) {
 				if (mass.hidden) jump(stops.indexOf(document.getElementById(`sala-${start}`)));

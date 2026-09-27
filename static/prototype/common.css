@@ -291,6 +291,74 @@ button:disabled {
 		font-size: 0.9375rem;
 	}
 }
+/* The phone walk: one view. The page scrolls down, the header scrolls away, and the
+   Room strip is the only control that stays. Same query as PHONE in common.js. */
+@media (max-width: 700px), (max-height: 500px) {
+	html {
+		overflow: hidden; /* so the body, not the viewport, is the scroll container */
+	}
+	body {
+		display: block;
+		overflow: hidden auto;
+	}
+	/* The body holds the perspective now, so the works show their top and bottom edges */
+	.depth body {
+		perspective: 600px;
+	}
+	.depth .walk {
+		perspective: none;
+		transform-style: preserve-3d;
+	}
+	.controls {
+		display: none;
+	}
+	.corridor {
+		display: block;
+		overflow: visible;
+		container-type: normal;
+		padding: 0 1rem 3rem;
+	}
+	.corridor > * {
+		width: auto;
+		margin-top: 3rem;
+		scroll-margin-top: 4rem;
+	}
+	.corridor .work {
+		flex-direction: column;
+		align-items: center;
+		gap: 0.6rem;
+	}
+	.corridor .canvas,
+	.corridor .label {
+		width: min(100%, calc(68svh * var(--r)));
+	}
+	.corridor .label {
+		min-width: min(100%, 16rem);
+		display: grid;
+		grid-template-columns: 1fr auto;
+		column-gap: 1rem;
+		align-items: baseline;
+	}
+	.corridor .label .sold {
+		grid-area: 1 / 2;
+		margin: 0;
+	}
+	.corridor .label .facts {
+		grid-column: 1 / -1;
+		font-size: 0.875rem;
+	}
+	.corridor .facts span + span::before {
+		content: ' · ';
+	}
+}
+.label .facts {
+	display: contents;
+}
+@media (max-width: 700px), (max-height: 500px) {
+	.corridor .label .facts {
+		display: block;
+	}
+}
 @media (prefers-reduced-motion: no-preference) {
 	.walk {
 		scroll-behavior: smooth;

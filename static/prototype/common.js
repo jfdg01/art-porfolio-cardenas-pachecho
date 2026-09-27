@@ -3,6 +3,8 @@ import { ARTWORKS, ROOMS } from './data.js';
 export { ARTWORKS, ROOMS };
 
 export const inRoom = (tag) => ARTWORKS.filter((a) => a.tags.includes(tag));
+// A phone, held either way. The same query sits in common.css; keep the two equal.
+export const PHONE = matchMedia('(max-width: 700px), (max-height: 500px)');
 export const esc = (s) => String(s).replace(/[&<>"]/g, (c) => `&#${c.charCodeAt(0)};`);
 
 // The museum Label. Missing facts show as a dash, so the gaps in the data stay visible.
@@ -10,9 +12,7 @@ export function label(a) {
 	const d = a.dimensions;
 	return `<figcaption class="label">
 		<span class="title">${esc(a.title)}</span>
-		<span>${a.year ?? '—'}</span>
-		<span>${a.tags.join(', ')}</span>
-		<span>${d ? `${d.width} × ${d.height} ${d.unit}` : '— × — cm'}</span>
+		<span class="facts"><span>${a.year ?? '—'}</span><span>${a.tags.join(', ')}</span><span>${d ? `${d.width} × ${d.height} ${d.unit}` : '— × — cm'}</span></span>
 		${a.sold ? '<span class="sold">Vendida</span>' : ''}
 	</figcaption>`;
 }
@@ -51,17 +51,18 @@ export function siteHeader(note) {
 	b.onclick = () => b.setAttribute('aria-pressed', document.documentElement.classList.toggle('depth'));
 }
 
-// A corridor: a scroll container of stops (Artworks and Room doors) with visible
-// previous/next buttons. Sideways on a large screen, one stop per screen on a phone.
+// A corridor: a row of stops (Artworks and Room doors). On a large screen it scrolls
+// sideways, with visible previous/next buttons. On a phone the whole page scrolls down.
 export function corridor(walk, onStop) {
 	const stops = [...walk.children];
-	const phone = matchMedia('(max-width: 700px)');
+	const phone = PHONE;
+	const scroller = () => (phone.matches ? document.body : walk);
 	let current = -1;
 	let busyUntil = 0; // a button scroll is under way; its scroll events must not reset `current`
 	const center = (r) => (phone.matches ? r.top + r.height / 2 : r.left + r.width / 2);
 	const find = () => {
 		if (performance.now() < busyUntil) return;
-		const mid = center(walk.getBoundingClientRect());
+		const mid = center(scroller().getBoundingClientRect());
 		let best = 0;
 		stops.forEach((s, i) => {
 			if (Math.abs(center(s.getBoundingClientRect()) - mid) < Math.abs(center(stops[best].getBoundingClientRect()) - mid)) best = i;
@@ -76,10 +77,11 @@ export function corridor(walk, onStop) {
 		onStop(stops[current], current, stops);
 	};
 	let frame = 0;
-	walk.addEventListener('scroll', () => {
-		cancelAnimationFrame(frame);
-		frame = requestAnimationFrame(find);
-	});
+	for (const el of [walk, document.body])
+		el.addEventListener('scroll', () => {
+			cancelAnimationFrame(frame);
+			frame = requestAnimationFrame(find);
+		});
 	// A mouse wheel scrolls down; in a sideways corridor that means "walk on".
 	walk.addEventListener(
 		'wheel',
@@ -96,7 +98,7 @@ export function corridor(walk, onStop) {
 		current = Math.max(0, Math.min(stops.length - 1, i));
 		busyUntil = performance.now() + 700;
 		stopped();
-		stops[current].scrollIntoView({ inline: 'center', block: 'center' });
+		stops[current].scrollIntoView({ inline: 'center', block: phone.matches ? 'start' : 'center' });
 	};
 	const [prev, next] = [document.querySelector('#prev'), document.querySelector('#next')];
 	prev.onclick = () => go(current - 1);
