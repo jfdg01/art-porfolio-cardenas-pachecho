@@ -6,7 +6,7 @@
 -->
 
 <script lang="ts">
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 	import { Mail, Phone, Instagram, MessageCircle } from 'lucide-svelte';
 
 	export let showWhatsApp = true;
@@ -19,7 +19,7 @@
 	<h2
 		class="text-lg md:text-xl font-semibold montserrat-semibold text-card-foreground mb-6 text-center"
 	>
-		{$t('contactInfo')}
+		{m.contactInfo()}
 	</h2>
 
 	<div class="space-y-6">
@@ -33,13 +33,13 @@
 				</div>
 				<div class="min-w-0 flex-1">
 					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('emailLabel')}
+						{m.emailLabel()}
 					</h3>
 					<a
 						href="mailto:cardenaspachecocarmenalejandra@gmail.com"
 						class="text-card-foreground font-medium montserrat-medium break-all hover:text-primary transition-colors duration-200"
 					>
-						{$t('emailAddress')}
+						{m.emailAddress()}
 					</a>
 				</div>
 			</div>
@@ -55,7 +55,7 @@
 				</div>
 				<div class="min-w-0 flex-1">
 					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('phoneNumberLabel')}
+						{m.phoneNumberLabel()}
 					</h3>
 					<a
 						href="https://wa.me/34628672368"
@@ -63,7 +63,7 @@
 						rel="noopener noreferrer"
 						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
-						{$t('phoneNumber')}
+						{m.phoneNumber()}
 					</a>
 				</div>
 			</div>
@@ -79,7 +79,7 @@
 				</div>
 				<div class="min-w-0 flex-1">
 					<h3 class="text-sm font-medium text-muted-foreground montserrat-medium">
-						{$t('whatsapp')}
+						{m.whatsapp()}
 					</h3>
 					<a
 						href="https://wa.me/34628672368"
@@ -87,7 +87,7 @@
 						rel="noopener noreferrer"
 						class="text-card-foreground font-medium montserrat-medium break-all hover:text-green-600 transition-colors duration-200"
 					>
-						{$t('phoneNumber')}
+						{m.phoneNumber()}
 					</a>
 				</div>
 			</div>
@@ -109,7 +109,7 @@
 						rel="noopener noreferrer"
 						class="text-card-foreground font-medium montserrat-medium break-all hover:text-pink-600 transition-colors duration-200"
 					>
-						{$t('instagram')}
+						{m.instagram()}
 					</a>
 				</div>
 			</div>

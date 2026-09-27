@@ -8,7 +8,7 @@
 <script lang="ts">
 	import type { Artwork } from '$lib/artworks';
 	import ArtworkCard from './ArtworkCard.svelte';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 
 	/**
 	 * @prop {Artwork[]} artworks - Array of artworks to display
@@ -31,7 +31,7 @@
 <!-- Results Count -->
 <div class="mt-8 text-center">
 	<p class="text-sm text-muted-foreground montserrat-medium">
-		{$t('showingCount', { values: { count: artworks.length } })}
+		{m.showingCount({ count: artworks.length })}
 	</p>
 </div>
 

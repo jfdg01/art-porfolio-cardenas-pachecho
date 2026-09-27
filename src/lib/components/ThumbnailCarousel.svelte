@@ -5,7 +5,7 @@
 
 <script lang="ts">
 	import type { Picture } from '@sveltejs/enhanced-img';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button } from 'bits-ui';
@@ -138,12 +138,12 @@
 					index
 						? 'border-primary shadow-lg scale-105'
 						: 'border-transparent hover:border-muted-foreground/30'}"
-					aria-label={$t('viewImage', { values: { num: index + 1 } })}
+					aria-label={m.viewImage({ num: index + 1 })}
 					aria-pressed={selectedIndex === index}
 				>
 					<enhanced:img
 						src={image}
-						alt={$t('artworkAlt', { values: { title: index + 1 } })}
+						alt={String(index + 1)}
 						class="h-20 w-auto rounded"
 						sizes="80px"
 					/>

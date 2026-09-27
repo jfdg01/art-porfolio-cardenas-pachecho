@@ -7,7 +7,8 @@
 
 <script lang="ts">
 	import { Palette, GraduationCap, Mail } from 'lucide-svelte';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import { page } from '$app/stores';
 	import { isActivePath } from '$lib/utils/navigation';
 
@@ -25,50 +26,50 @@
 	<div class="flex items-center justify-around px-4 pb-[env(safe-area-inset-bottom,0.5rem)] py-1">
 		<!-- Portfolio / Artworks -->
 		<a
-			href="/"
+			href={localizeHref('/')}
 			data-sveltekit-preload-data="hover"
 			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {checkActivePath(
 				'/'
 			)
 				? 'text-primary'
 				: 'text-muted-foreground hover:text-primary'}"
-			aria-label={$t('artworks')}
+			aria-label={m.artworks()}
 			aria-current={checkActivePath('/') ? 'page' : undefined}
 		>
 			<Palette class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('artworks')}</span>
+			<span class="text-xs font-medium montserrat-medium">{m.artworks()}</span>
 		</a>
 
 		<!-- Online Classes -->
 		<a
-			href="/clases-online"
+			href={localizeHref('/classes')}
 			data-sveltekit-preload-data="hover"
 			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {checkActivePath(
-				'/clases-online'
+				'/classes'
 			)
 				? 'text-primary'
 				: 'text-muted-foreground hover:text-primary'}"
-			aria-label={$t('onlineClassesPage')}
-			aria-current={checkActivePath('/clases-online') ? 'page' : undefined}
+			aria-label={m.onlineClassesPage()}
+			aria-current={checkActivePath('/classes') ? 'page' : undefined}
 		>
 			<GraduationCap class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('onlineClassesPage')}</span>
+			<span class="text-xs font-medium montserrat-medium">{m.onlineClassesPage()}</span>
 		</a>
 
 		<!-- Contact -->
 		<a
-			href="/contact"
+			href={localizeHref('/contact')}
 			data-sveltekit-preload-data="hover"
 			class="flex flex-col items-center justify-center gap-1 px-3 py-2 transition-all duration-200 min-h-[44px] min-w-[44px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 {checkActivePath(
 				'/contact'
 			)
 				? 'text-primary'
 				: 'text-muted-foreground hover:text-primary'}"
-			aria-label={$t('contact')}
+			aria-label={m.contact()}
 			aria-current={checkActivePath('/contact') ? 'page' : undefined}
 		>
 			<Mail class="size-5" />
-			<span class="text-xs font-medium montserrat-medium">{$t('contact')}</span>
+			<span class="text-xs font-medium montserrat-medium">{m.contact()}</span>
 		</a>
 	</div>
 </nav>

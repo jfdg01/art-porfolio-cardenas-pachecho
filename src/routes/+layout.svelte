@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { LayoutData } from './$types';
 	import '../app.css';
-	import '$lib/i18n';
-	import { locale } from 'svelte-i18n';
+	import { page } from '$app/state';
+	import { locales, localizeHref } from '$lib/paraglide/runtime';
+	import { SITE_URL } from '$lib';
 	// import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 	// import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import BottomNavigation from '$lib/components/BottomNavigation.svelte';
@@ -13,23 +13,18 @@
 	// injectAnalytics();
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	let { children, data }: { children: any; data: LayoutData } = $props();
-
-	// Set locale from load function data
-	locale.set(data.locale);
-
-	// Handle language changes in browser
-	$effect.pre(() => {
-		if (typeof window !== 'undefined') {
-			try {
-				// Save current locale to localStorage
-				localStorage.setItem('lang', data.locale);
-			} catch {
-				// no-op in case of errors
-			}
-		}
-	});
+	let { children }: { children: any } = $props();
 </script>
+
+<svelte:head>
+	{#each locales as locale (locale)}
+		<link
+			rel="alternate"
+			hreflang={locale}
+			href={SITE_URL + localizeHref(page.url.pathname, { locale })}
+		/>
+	{/each}
+</svelte:head>
 
 <div class="min-h-screen bg-background flex flex-col">
 	<div class="flex-1">

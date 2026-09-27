@@ -6,7 +6,7 @@
 -->
 
 <script lang="ts">
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 
 	// Get current year
 	const currentYear = new Date().getFullYear();
@@ -21,9 +21,7 @@
 			<p>
 				© {currentYear}
 				<span class="font-semibold montserrat-semibold">Carmen Cárdenas Pacheco</span><br />
-				<span class="text-muted-foreground">
-					{$t('copyrightNotice') || 'All rights reserved.'}</span
-				>
+				<span class="text-muted-foreground"> {m.copyrightNotice()}</span>
 			</p>
 		</div>
 	</div>

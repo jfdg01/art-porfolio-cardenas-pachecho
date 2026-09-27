@@ -1,4 +1,21 @@
 {
+	"redirects": [
+		{
+			"source": "/artwork/:id",
+			"destination": "/obra/:id",
+			"statusCode": 301
+		},
+		{
+			"source": "/clases-online",
+			"destination": "/clases",
+			"statusCode": 301
+		},
+		{
+			"source": "/contact",
+			"destination": "/contacto",
+			"statusCode": 301
+		}
+	],
 	"headers": [
 		{
 			"source": "/(.*)",

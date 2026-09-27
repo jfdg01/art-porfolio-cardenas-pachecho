@@ -35,8 +35,8 @@ flowchart LR
 - **Imágenes por convención de nombre** (`src/lib/assets/images/`): `<id>.webp` es la imagen principal y `<id>-zoom-N.webp` los detalles. Hay una sola copia de cada imagen en el repositorio.
 - **Validación en el build**: una obra sin imagen principal, una imagen sin obra, una etiqueta desconocida o un campo mal formado paran el build con un mensaje que nombra la obra.
 - **Imágenes responsive con `@sveltejs/enhanced-img` + carga diferida**: el build genera AVIF y WebP en varios anchos, y cada tarjeta sirve el tamaño justo para el dispositivo.
-- **Multiidioma con `svelte-i18n`** (ES por defecto, EN): diccionarios en `src/lib/locales/`, pensado también para SEO internacional.
-- **`sitemap.xml` generado** por la ruta `src/routes/sitemap.xml` a partir del módulo de obras: cada página `/artwork/[id]` queda indexable sin mantenimiento manual.
+- **Multiidioma con Paraglide** (ES en la raíz, EN bajo `/en`, con rutas traducidas: `/obra/[id]` y `/en/artwork/[id]`): los textos viven en `messages/`, y una clave que falta es un error de tipos. Cada idioma tiene su propia URL, así los buscadores indexan los dos (ADR 0002).
+- **`sitemap.xml` generado** por la ruta `src/routes/sitemap.xml` a partir del módulo de obras: cada página `/obra/[id]` y `/en/artwork/[id]` queda indexable sin mantenimiento manual.
 - **Cabeceras de seguridad y caché** (`vercel.json`): HSTS, anti-clickjacking y `Cache-Control` inmutable de un año para assets e imágenes.
 - **`bigger-picture`** como visor/lightbox para ver cada obra ampliada sin librerías pesadas.
 
@@ -48,7 +48,7 @@ flowchart LR
 | Lenguaje | TypeScript |
 | Estilos | Tailwind CSS 4 · sin fuentes web (tipografía del sistema) |
 | Imágenes | @sveltejs/enhanced-img · bigger-picture |
-| i18n | svelte-i18n (ES / EN) |
+| i18n | Paraglide (ES / EN) |
 | Iconos | lucide-svelte |
 | Analítica | Vercel Analytics + Speed Insights |
 | Despliegue | Vercel (`@sveltejs/adapter-vercel`, runtime Node.js 22) |

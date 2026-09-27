@@ -7,7 +7,8 @@
 	import type { PageData } from './$types';
 	import { getNeighbours } from '$lib/artworks';
 	import { Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft, Eye } from 'lucide-svelte';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
@@ -40,13 +41,13 @@
 	let hasMultipleImages = $derived(artwork.images.length > 1);
 
 	function goBack() {
-		goto('/', { noScroll: true });
+		goto(localizeHref('/'), { noScroll: true });
 	}
 
 	function navigateToArtwork(artworkId: string) {
 		if (isNavigating) return;
 		isNavigating = true;
-		goto(`/artwork/${artworkId}`, { replaceState: false, noScroll: true });
+		goto(localizeHref(`/artwork/${artworkId}`), { replaceState: false, noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -85,7 +86,7 @@
 		bp?.open({
 			items: artwork.images.map(({ img }) => ({
 				img: img.src,
-				alt: $t('artworkAlt', { values: { title: artwork.title } }),
+				alt: artwork.title,
 				width: img.w,
 				height: img.h
 			})),
@@ -148,10 +149,10 @@
 			<Button.Root
 				onclick={goBack}
 				class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-primary hover:text-primary hover:bg-accent rounded-lg transition-all duration-200 min-h-[44px] md:px-4 md:text-base"
-				aria-label={$t('goBack')}
+				aria-label={m.goBack()}
 			>
 				<ArrowLeft class="w-4 h-4 md:w-5 md:h-5" />
-				<span>{$t('goBack')}</span>
+				<span>{m.goBack()}</span>
 			</Button.Root>
 		</div>
 	</div>
@@ -184,11 +185,11 @@
 							class="cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-lg"
 							role="button"
 							tabindex="0"
-							aria-label={$t('expandImage', { default: 'Expand image' })}
+							aria-label={m.expandImage()}
 						>
 							<enhanced:img
 								src={currentImage}
-								alt={$t('artworkAlt', { values: { title: artwork.title } })}
+								alt={artwork.title}
 								class="w-full h-auto rounded-lg shadow-md"
 								sizes="(min-width: 1360px) 551px, (min-width: 1040px) 40vw, calc(95.56vw - 53px)"
 							/>
@@ -217,7 +218,7 @@
 							<div
 								class="absolute top-4 right-4 bg-destructive text-destructive-foreground px-3 py-1 rounded-full text-sm font-semibold montserrat-semibold"
 							>
-								{$t('sold')}
+								{m.sold()}
 							</div>
 						{/if}
 					</div>
@@ -239,10 +240,10 @@
 							class="inline-flex items-center gap-2 text-xs md:text-sm text-muted-foreground montserrat-medium cursor-pointer hover:text-primary transition-colors duration-200"
 							role="button"
 							tabindex={0}
-							aria-label={$t('clickToEnlarge')}
+							aria-label={m.clickToEnlarge()}
 						>
 							<Eye class="w-4 h-4 md:w-5 md:h-5" />
-							<span>{$t('clickToEnlarge')}</span>
+							<span>{m.clickToEnlarge()}</span>
 						</Label.Root>
 					</div>
 				</div>
@@ -267,7 +268,7 @@
 								<p
 									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
 								>
-									{$t('dimensionsLabel')}
+									{m.dimensionsLabel()}
 								</p>
 								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
 									{artwork.dimensions.width} × {artwork.dimensions.height}
@@ -285,7 +286,7 @@
 								<p
 									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
 								>
-									{$t('yearLabel')}
+									{m.yearLabel()}
 								</p>
 								<p class="text-base md:text-lg font-semibold montserrat-semibold text-foreground">
 									{artwork.year}
@@ -301,14 +302,14 @@
 							<p
 								class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-2"
 							>
-								{$t('tagsLabel')}
+								{m.tagsLabel()}
 							</p>
 							<div class="flex flex-wrap gap-2">
 								{#each artwork.tags as tag (tag)}
 									<span
 										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
 									>
-										{$t('tags.' + tag)}
+										{m[`tag_${tag}`]()}
 									</span>
 								{/each}
 							</div>
@@ -319,20 +320,20 @@
 					{#if !artwork.sold}
 						<div class="bg-primary/5 border border-primary/20 rounded-xl p-4 md:p-6">
 							<h3 class="text-base md:text-lg font-semibold montserrat-semibold text-primary mb-2">
-								{$t('interestedHeading')}
+								{m.interestedHeading()}
 							</h3>
 							<p
 								class="text-muted-foreground text-xs md:text-sm montserrat-medium mb-4 leading-relaxed"
 							>
-								{$t('availableInfo')}
+								{m.availableInfo()}
 							</p>
 							<Button.Root
-								href="/contact"
+								href={localizeHref('/contact')}
 								data-sveltekit-preload-data="hover"
 								data-sveltekit-noscroll
 								class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 							>
-								{$t('contactArtist')}
+								{m.contactArtist()}
 							</Button.Root>
 						</div>
 					{:else}
@@ -341,21 +342,21 @@
 								<h3
 									class="text-base md:text-lg font-semibold montserrat-semibold text-muted-foreground"
 								>
-									{$t('soldHeading')}
+									{m.soldHeading()}
 								</h3>
 								<p
 									class="text-muted-foreground text-xs md:text-sm montserrat-medium leading-relaxed"
 								>
-									{$t('soldInfo')}
+									{m.soldInfo()}
 								</p>
 								<div class="pt-2 flex justify-center">
 									<Button.Root
-										href="/contact"
+										href={localizeHref('/contact')}
 										data-sveltekit-preload-data="hover"
 										data-sveltekit-noscroll
 										class="inline-flex items-center justify-center px-4 py-3 md:px-6 md:py-3 text-sm md:text-base font-semibold montserrat-semibold rounded-lg min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5"
 									>
-										{$t('contactArtist')}
+										{m.contactArtist()}
 									</Button.Root>
 								</div>
 							</div>
@@ -370,20 +371,20 @@
 								onclick={() => navigateToArtwork(neighbours.previous.id)}
 								disabled={isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
-								aria-label={$t('previousArtwork')}
-								title={$t('previousArtwork')}
+								aria-label={m.previousArtwork()}
+								title={m.previousArtwork()}
 							>
 								<ChevronLeft class="w-5 h-5" />
-								<span class="hidden lg:inline">{$t('previousArtwork')}</span>
+								<span class="hidden lg:inline">{m.previousArtwork()}</span>
 							</Button.Root>
 
 							<!-- Go Back to Gallery Button -->
 							<Button.Root
 								onclick={goBack}
 								class="inline-flex items-center justify-center gap-2 px-4 py-2 text-sm font-semibold montserrat-semibold rounded-lg min-h-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-lg transform hover:-translate-y-0.5 md:px-6 md:text-base"
-								aria-label={$t('goBack')}
+								aria-label={m.goBack()}
 							>
-								<span class="whitespace-nowrap">{$t('goBack')}</span>
+								<span class="whitespace-nowrap">{m.goBack()}</span>
 							</Button.Root>
 
 							<!-- Next Artwork Button -->
@@ -391,10 +392,10 @@
 								onclick={() => navigateToArtwork(neighbours.next.id)}
 								disabled={isNavigating}
 								class="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium montserrat-medium text-muted-foreground hover:text-foreground hover:bg-muted rounded-lg transition-all duration-200 min-h-[44px] min-w-[44px] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent md:px-4 md:text-base"
-								aria-label={$t('nextArtwork')}
-								title={$t('nextArtwork')}
+								aria-label={m.nextArtwork()}
+								title={m.nextArtwork()}
 							>
-								<span class="hidden lg:inline">{$t('nextArtwork')}</span>
+								<span class="hidden lg:inline">{m.nextArtwork()}</span>
 								<ChevronRight class="w-5 h-5" />
 							</Button.Root>
 						</div>

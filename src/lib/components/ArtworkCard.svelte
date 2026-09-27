@@ -8,7 +8,8 @@
 <script lang="ts">
 	import type { Artwork } from '$lib/artworks';
 	import { Eye } from 'lucide-svelte';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import { goto } from '$app/navigation';
 
 	/**
@@ -27,7 +28,7 @@
 	} = $props();
 
 	function handleClick() {
-		goto(`/artwork/${artwork.id}`, { noScroll: true });
+		goto(localizeHref(`/artwork/${artwork.id}`), { noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent) {
@@ -46,13 +47,13 @@
 		onkeydown={handleKeydown}
 		tabindex="0"
 		role="button"
-		aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
+		aria-label={m.viewDetailsFor({ title: artwork.title })}
 	>
 		<!-- Image -->
 		<div class="relative overflow-hidden">
 			<enhanced:img
 				src={artwork.images[0]}
-				alt={$t('artworkAlt', { values: { title: artwork.title } })}
+				alt={artwork.title}
 				class="w-full h-auto transition-transform duration-300 group-hover:scale-105"
 				sizes="(min-width: 1540px) 175px, (min-width: 1280px) 221px, (min-width: 1040px) calc(25vw - 33px), (min-width: 520px) calc(32.2vw - 20px), (min-width: 360px) calc(50vw - 24px), calc(100vw - 32px)"
 				fetchpriority={isPriority ? 'high' : undefined}
@@ -81,7 +82,7 @@
 					<span
 						class="relative w-3 h-3 rounded-full flex-shrink-0 animate-pulse"
 						style="background-color: var(--color-success)"
-						aria-label={$t('available', { default: 'Available' })}
+						aria-label={m.available()}
 					>
 						<!-- Animated glow ring -->
 						<span

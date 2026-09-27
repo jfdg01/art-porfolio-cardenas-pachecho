@@ -7,8 +7,9 @@
 
 <script lang="ts">
 	import { Mail, Palette, GraduationCap } from 'lucide-svelte';
-	import { t } from 'svelte-i18n';
-	import LanguageSelector from './LanguageSelector.svelte';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
+	import LanguageLink from './LanguageLink.svelte';
 	import ThemeToggle from './ThemeToggle.svelte';
 	import ScrollToTop from './ScrollToTop.svelte';
 	import { page } from '$app/stores';
@@ -29,7 +30,7 @@
 			<!-- Logo/Title - Mobile First -->
 			<div class="shrink-0">
 				<a
-					href="/"
+					href={localizeHref('/')}
 					data-sveltekit-preload-data="hover"
 					data-sveltekit-noscroll
 					class="text-lg xs:text-xl md:text-2xl lg:text-3xl font-semibold montserrat-semibold tracking-tight bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent hover:from-primary hover:to-primary transition-all duration-200 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-lg px-2 py-1 -mx-2 -my-1 inline-block"
@@ -44,7 +45,7 @@
 				<!-- Navigation Buttons - Desktop -->
 				<div class="flex items-center gap-1 lg:gap-2">
 					<a
-						href="/"
+						href={localizeHref('/')}
 						data-sveltekit-preload-data="hover"
 						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
@@ -56,25 +57,25 @@
 						aria-current={checkActivePath('/') ? 'page' : undefined}
 					>
 						<Palette class="size-4" />
-						<span>{$t('artworks')}</span>
+						<span>{m.artworks()}</span>
 					</a>
 					<a
-						href="/clases-online"
+						href={localizeHref('/classes')}
 						data-sveltekit-preload-data="hover"
 						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
-							'/clases-online'
+							'/classes'
 						)
 							? 'text-primary bg-accent'
 							: 'text-foreground hover:text-primary hover:bg-accent'}"
 						aria-label="Online classes"
-						aria-current={checkActivePath('/clases-online') ? 'page' : undefined}
+						aria-current={checkActivePath('/classes') ? 'page' : undefined}
 					>
 						<GraduationCap class="size-4" />
-						<span>{$t('onlineClassesPage')}</span>
+						<span>{m.onlineClassesPage()}</span>
 					</a>
 					<a
-						href="/contact"
+						href={localizeHref('/contact')}
 						data-sveltekit-preload-data="hover"
 						data-sveltekit-noscroll
 						class="px-4 py-2 text-sm font-medium montserrat-medium rounded-lg transition-all duration-200 flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] min-w-[44px] {checkActivePath(
@@ -86,15 +87,15 @@
 						aria-current={checkActivePath('/contact') ? 'page' : undefined}
 					>
 						<Mail class="size-4" />
-						<span>{$t('contact')}</span>
+						<span>{m.contact()}</span>
 					</a>
 				</div>
 
 				<!-- Theme Toggle - Desktop -->
 				<ThemeToggle />
 
-				<!-- Language Selector - Desktop -->
-				<LanguageSelector />
+				<!-- Language Link - Desktop -->
+				<LanguageLink />
 			</div>
 
 			<!-- Mobile Controls -->
@@ -102,8 +103,8 @@
 				<!-- Dark Theme Toggle - Mobile -->
 				<ThemeToggle />
 
-				<!-- Language Selector - Mobile -->
-				<LanguageSelector />
+				<!-- Language Link - Mobile -->
+				<LanguageLink />
 			</div>
 		</div>
 	</div>

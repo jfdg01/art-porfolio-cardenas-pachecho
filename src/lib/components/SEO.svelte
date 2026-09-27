@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
+	import { getLocale } from '$lib/paraglide/runtime';
+	import { SITE_URL } from '$lib';
 
 	interface SEOData {
 		title: string;
@@ -16,8 +18,6 @@
 	}
 
 	let { seo, noIndex = false }: SEOProps = $props();
-
-	const SITE_URL = 'https://cardenaspacheco.com';
 
 	// Default SEO data
 	const defaultSEO: SEOData = {
@@ -135,7 +135,7 @@
 		{/if}
 
 		<!-- Language -->
-		<meta name="language" content="es" />
+		<meta name="language" content={getLocale()} />
 		<meta name="geo.region" content="ES" />
 		<meta name="geo.country" content="Spain" />
 

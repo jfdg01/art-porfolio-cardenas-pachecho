@@ -1,8 +1,7 @@
 import type { RequestHandler } from '@sveltejs/kit';
 import { artworks } from '$lib/artworks';
-
-// Base URL - update this to your actual domain
-const baseUrl = 'https://cardenaspacheco.com';
+import { locales, localizeHref } from '$lib/paraglide/runtime';
+import { SITE_URL } from '$lib';
 
 // Type definitions for sitemap
 type ImageEntry = {
@@ -23,7 +22,7 @@ export const GET: RequestHandler = async () => {
 	// Static routes
 	const staticRoutes: SitemapRoute[] = [
 		{
-			url: '',
+			url: '/',
 			changefreq: 'weekly',
 			priority: '1.0',
 			lastmod: new Date().toISOString().split('T')[0]
@@ -35,7 +34,7 @@ export const GET: RequestHandler = async () => {
 			lastmod: new Date().toISOString().split('T')[0]
 		},
 		{
-			url: '/clases-online',
+			url: '/classes',
 			changefreq: 'monthly',
 			priority: '0.7',
 			lastmod: new Date().toISOString().split('T')[0]
@@ -49,14 +48,16 @@ export const GET: RequestHandler = async () => {
 		priority: '0.6',
 		lastmod: new Date().toISOString().split('T')[0],
 		images: artwork.images.map(({ img }) => ({
-			loc: `${baseUrl}${img.src}`,
+			loc: `${SITE_URL}${img.src}`,
 			title: artwork.title,
 			caption: `${artwork.title} by Carmen Cárdenas Pacheco`
 		}))
 	}));
 
-	// Combine all routes
-	const allRoutes: SitemapRoute[] = [...staticRoutes, ...artworkRoutes];
+	// Combine all routes, once per Locale
+	const allRoutes: SitemapRoute[] = [...staticRoutes, ...artworkRoutes].flatMap((route) =>
+		locales.map((locale) => ({ ...route, url: localizeHref(route.url, { locale }) }))
+	);
 
 	// Generate XML sitemap with image extensions
 	function generateSitemap(routes: SitemapRoute[]) {
@@ -68,7 +69,7 @@ export const GET: RequestHandler = async () => {
 
 		const urlEntries = routes
 			.map((route) => {
-				const fullUrl = `${baseUrl}${route.url}`;
+				const fullUrl = `${SITE_URL}${route.url}`;
 				let imageEntries = '';
 
 				// Add image entries if they exist

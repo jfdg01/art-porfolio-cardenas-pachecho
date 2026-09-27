@@ -7,7 +7,7 @@
 
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 	import { Send } from 'lucide-svelte';
 	import { Label, Button, Progress, AlertDialog, Separator } from 'bits-ui';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
@@ -35,21 +35,21 @@
 		const errors: Record<string, string> = {};
 
 		if (!formData.name.trim()) {
-			errors.name = $t('nameRequired') || 'Name is required';
+			errors.name = m.nameRequired();
 		}
 
 		if (!formData.email.trim()) {
-			errors.email = $t('emailRequired') || 'Email is required';
+			errors.email = m.emailRequired();
 		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-			errors.email = $t('emailInvalid') || 'Please enter a valid email address';
+			errors.email = m.emailInvalid();
 		}
 
 		if (!formData.subject.trim()) {
-			errors.subject = $t('subjectRequired') || 'Subject is required';
+			errors.subject = m.subjectRequired();
 		}
 
 		if (!formData.message.trim()) {
-			errors.message = $t('messageRequired') || 'Message is required';
+			errors.message = m.messageRequired();
 		}
 
 		return errors;
@@ -118,10 +118,10 @@
 				message: ''
 			};
 
-			submitMessage = $t('emailClientOpened');
+			submitMessage = m.emailClientOpened();
 		} catch (error) {
 			console.error('Error opening email client:', error);
-			submitMessage = $t('emailClientError');
+			submitMessage = m.emailClientError();
 		} finally {
 			isSubmitting = false;
 		}
@@ -138,12 +138,12 @@
 		<h1
 			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-4"
 		>
-			{$t('contactPage')}
+			{m.contactPage()}
 		</h1>
 		<p
 			class="text-sm sm:text-base lg:text-lg font-medium montserrat-medium text-muted-foreground max-w-[70ch] mx-auto"
 		>
-			{$t('contactDescription')}
+			{m.contactDescription()}
 		</p>
 	</div>
 
@@ -158,13 +158,13 @@
 			class="bg-card/80 backdrop-blur-xl rounded-2xl shadow-lg border border-border p-6 md:p-8 w-full"
 		>
 			<h2 class="text-lg md:text-xl font-semibold montserrat-semibold text-card-foreground mb-6">
-				{$t('getInTouch')}
+				{m.getInTouch()}
 			</h2>
 
 			<form onsubmit={handleSubmit} class="space-y-6">
 				<fieldset class="space-y-6">
 					<legend class="sr-only">
-						{$t('getInTouch')}
+						{m.getInTouch()}
 					</legend>
 
 					<!-- Name Field -->
@@ -173,7 +173,7 @@
 							for="name"
 							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
-							{$t('name')}
+							{m.name()}
 						</Label.Root>
 						<input
 							type="text"
@@ -182,7 +182,7 @@
 							class="w-full bg-card border {formErrors.name
 								? 'border-destructive'
 								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
-							placeholder={$t('name')}
+							placeholder={m.name()}
 						/>
 						{#if formErrors.name}
 							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.name}</p>
@@ -195,7 +195,7 @@
 							for="email"
 							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
-							{$t('email')}
+							{m.email()}
 						</Label.Root>
 						<input
 							type="email"
@@ -204,7 +204,7 @@
 							class="w-full bg-card border {formErrors.email
 								? 'border-destructive'
 								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
-							placeholder={$t('email')}
+							placeholder={m.email()}
 						/>
 						{#if formErrors.email}
 							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.email}</p>
@@ -217,7 +217,7 @@
 							for="subject"
 							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
-							{$t('subject')}
+							{m.subject()}
 						</Label.Root>
 						<input
 							type="text"
@@ -226,7 +226,7 @@
 							class="w-full bg-card border {formErrors.subject
 								? 'border-destructive'
 								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 montserrat-medium"
-							placeholder={$t('subject')}
+							placeholder={m.subject()}
 						/>
 						{#if formErrors.subject}
 							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.subject}</p>
@@ -239,7 +239,7 @@
 							for="message"
 							class="block text-sm font-medium text-muted-foreground montserrat-medium mb-2"
 						>
-							{$t('message')}
+							{m.message()}
 						</Label.Root>
 						<textarea
 							id="message"
@@ -248,7 +248,7 @@
 							class="w-full bg-card border {formErrors.message
 								? 'border-destructive'
 								: 'border-border'} rounded-lg px-4 py-3 focus:ring-2 focus:ring-ring focus:border-ring transition-all duration-200 resize-vertical montserrat-medium"
-							placeholder={$t('message')}
+							placeholder={m.message()}
 						></textarea>
 						{#if formErrors.message}
 							<p class="mt-1 text-sm text-destructive montserrat-medium">{formErrors.message}</p>
@@ -263,7 +263,7 @@
 				{#if isSubmitting}
 					<div class="mb-4">
 						<div class="flex justify-between text-sm text-muted-foreground mb-2 montserrat-medium">
-							<span>{$t('sendingMessage') || 'Sending message...'}</span>
+							<span>{m.sendingMessage()}</span>
 							<span>{submissionProgress}%</span>
 						</div>
 						<Progress.Root
@@ -290,16 +290,16 @@
 						<div
 							class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
 						></div>
-						{$t('sending')}
+						{m.sending()}
 					{:else}
 						<Send class="w-5 h-5" />
-						{$t('sendMessage')}
+						{m.sendMessage()}
 					{/if}
 				</Button.Root>
 
 				<!-- Submit Message -->
 				{#if submitMessage}
-					{@const isSuccess = submitMessage === $t('emailClientOpened')}
+					{@const isSuccess = submitMessage === m.emailClientOpened()}
 					<div
 						class="p-4 rounded-lg {isSuccess
 							? 'bg-gradient-to-r from-green-50 to-emerald-50 text-green-800 border border-green-300 shadow-sm'
@@ -332,7 +332,7 @@
 							<div class="flex-1">
 								{#if isSuccess}
 									<h4 class="text-sm font-semibold text-green-800 mb-1 montserrat-semibold">
-										{$t('success')}
+										{m.success()}
 									</h4>
 								{/if}
 								<p
@@ -362,11 +362,10 @@
 		>
 			<div class="flex flex-col space-y-2 text-center sm:text-left">
 				<AlertDialog.Title class="text-lg font-semibold text-card-foreground montserrat-semibold">
-					{$t('confirmSubmission') || 'Confirm Submission'}
+					{m.confirmSubmission()}
 				</AlertDialog.Title>
 				<AlertDialog.Description class="text-sm text-muted-foreground montserrat-medium">
-					{$t('confirmSubmissionMessage') ||
-						'Are you sure you want to send this message? Your default email client will open with the message prepared.'}
+					{m.confirmSubmissionMessage()}
 				</AlertDialog.Description>
 			</div>
 
@@ -375,13 +374,13 @@
 					onclick={cancelSubmission}
 					class="mt-2 inline-flex h-10 items-center justify-center rounded-md border border-border bg-card px-4 py-2 text-sm font-medium text-card-foreground ring-offset-background transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 sm:mt-0 montserrat-medium"
 				>
-					{$t('cancel') || 'Cancel'}
+					{m.cancel()}
 				</AlertDialog.Cancel>
 				<AlertDialog.Action
 					onclick={confirmSubmission}
 					class="inline-flex h-10 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground ring-offset-background transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 montserrat-medium"
 				>
-					{$t('confirm') || 'Confirm'}
+					{m.confirm()}
 				</AlertDialog.Action>
 			</div>
 		</AlertDialog.Content>

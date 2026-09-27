@@ -8,7 +8,7 @@
 <script lang="ts">
 	import { Moon, Sun } from 'lucide-svelte';
 	import { themeStore } from '$lib/stores/theme.svelte';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
 
 	function handleToggle() {
 		if (themeStore.theme === 'dark') {
@@ -22,8 +22,8 @@
 <button
 	onclick={handleToggle}
 	class="inline-flex items-center justify-center rounded-lg border border-border bg-card hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 transition-all duration-200 min-h-[44px] min-w-[44px] text-foreground"
-	aria-label={$t('toggleDarkTheme')}
-	title={$t('toggleDarkTheme')}
+	aria-label={m.toggleDarkTheme()}
+	title={m.toggleDarkTheme()}
 >
 	{#if themeStore.resolvedTheme === 'dark'}
 		<Moon class="size-5" />

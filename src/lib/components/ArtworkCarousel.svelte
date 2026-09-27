@@ -6,7 +6,8 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { artworks } from '$lib/artworks';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import { onMount } from 'svelte';
 	import { ChevronLeft, ChevronRight } from 'lucide-svelte';
 	import { Button, Tooltip } from 'bits-ui';
@@ -80,7 +81,7 @@
 	}
 
 	function navigateToArtwork(artworkId: string) {
-		goto(`/artwork/${artworkId}`, { noScroll: true });
+		goto(localizeHref(`/artwork/${artworkId}`), { noScroll: true });
 	}
 
 	function handleKeydown(event: KeyboardEvent, artworkId: string) {
@@ -266,13 +267,13 @@
 									class="artwork-item flex-shrink-0 cursor-pointer transition-all duration-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-lg overflow-hidden bg-muted border-2 {isCurrentArtwork
 										? 'border-primary shadow-lg scale-105'
 										: 'border-transparent hover:border-muted-foreground/30'}"
-									aria-label={$t('viewDetailsFor', { values: { title: artwork.title } })}
+									aria-label={m.viewDetailsFor({ title: artwork.title })}
 									aria-pressed={isCurrentArtwork}
 									tabindex={0}
 								>
 									<enhanced:img
 										src={artwork.images[0]}
-										alt={$t('artworkAlt', { values: { title: artwork.title } })}
+										alt={artwork.title}
 										class="h-[120px] w-auto rounded-lg"
 										sizes="100px"
 									/>

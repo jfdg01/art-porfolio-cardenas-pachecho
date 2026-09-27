@@ -1,8 +1,8 @@
 {
-	"i18n-ally.localesPaths": ["src/lib/locales"],
-	"i18n-ally.sourceLanguage": "en",
+	"i18n-ally.localesPaths": ["messages"],
+	"i18n-ally.sourceLanguage": "es",
 	"i18n-ally.displayLanguage": "en",
-	"i18n-ally.keystyle": "nested",
+	"i18n-ally.keystyle": "flat",
 	"i18n-ally.sortKeys": true,
 	"i18n-ally.enabledParsers": ["json", "json5"],
 	"i18n-ally.dirStructure": "dir",

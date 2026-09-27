@@ -7,7 +7,8 @@
 
 <script lang="ts">
 	import type { PageData } from './$types';
-	import { t } from 'svelte-i18n';
+	import { m } from '$lib/paraglide/messages';
+	import { localizeHref } from '$lib/paraglide/runtime';
 	import { ArrowRight } from 'lucide-svelte';
 	import GalleryHeader from '$lib/components/GalleryHeader.svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
@@ -27,7 +28,7 @@
 		<h1
 			class="text-3xl sm:text-4xl lg:text-5xl font-bold montserrat-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-4"
 		>
-			{$t('onlineClassesPage')}
+			{m.onlineClassesPage()}
 		</h1>
 	</div>
 
@@ -44,22 +45,22 @@
 		<h2
 			class="text-2xl sm:text-3xl lg:text-4xl font-bold montserrat-bold text-foreground mb-6 sm:mb-8"
 		>
-			{$t('comingSoon')}
+			{m.comingSoon()}
 		</h2>
 		<p
 			class="text-lg sm:text-xl lg:text-2xl font-medium montserrat-medium text-muted-foreground leading-relaxed max-w-[70ch] mx-auto mb-8 sm:mb-12"
 		>
-			{$t('onlineClassesInterest')}
+			{m.onlineClassesInterest()}
 		</p>
 
 		<!-- Contact Button -->
 		<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -->
 		<a
-			href="/contact"
+			href={localizeHref('/contact')}
 			data-sveltekit-preload-data="hover"
 			class="inline-flex items-center gap-3 px-8 py-4 sm:px-10 sm:py-5 text-lg sm:text-xl font-semibold rounded-xl min-h-[44px] min-w-[44px] bg-gradient-to-r from-primary to-primary hover:from-primary/90 hover:to-primary/90 text-primary-foreground transition-all duration-200 hover:shadow-xl transform hover:-translate-y-1 montserrat-semibold"
 		>
-			{$t('contactForPreRegistration')}
+			{m.contactForPreRegistration()}
 			<ArrowRight class="w-6 h-6 group-hover:translate-x-1 transition-transform duration-200" />
 		</a>
 	</div>
