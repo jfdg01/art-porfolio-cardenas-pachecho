@@ -272,8 +272,13 @@
 				.rooms li {
 					flex: none;
 				}
-				/* The view switch sits beside the name; it shows only the other view */
+				/* The view switch sits beside the name; it shows only the other view. Both buttons
+				   share one cell, so the switch keeps one width and the name never moves. */
+				#site .views {
+					display: grid;
+				}
 				#site .views button {
+					grid-area: 1 / 1;
 					height: 2.75rem;
 					padding: 0 0.75rem;
 					font-size: 0.9375rem;
@@ -281,7 +286,7 @@
 					color: var(--wall);
 				}
 				#site .views [aria-pressed='true'] {
-					display: none;
+					visibility: hidden;
 				}
 				/* "Ver todas" on a phone: the page scrolls, a masonry of three columns, no Labels */
 				.mass {
@@ -554,6 +559,7 @@
 			if (PHONE.matches) {
 				end.append(document.querySelector('.proto'));
 				document.querySelector('#site').append(document.querySelector('.views'));
+				document.querySelector('[data-view=todas]').textContent = 'Todas'; // as wide as Paseo
 				document.querySelector('.rooms').prepend(document.querySelector('#site .lang'));
 			}
 			// A link to a Room opens it, once the fonts have set the header height.
