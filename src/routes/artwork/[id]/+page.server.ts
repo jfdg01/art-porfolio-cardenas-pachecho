@@ -36,8 +36,8 @@ export const load: PageServerLoad = async ({ params, url }) => {
 			artworkSurface: artwork.dimensions
 				? `${artwork.dimensions.width}x${artwork.dimensions.height} ${artwork.dimensions.unit}`
 				: undefined,
-			genre: Array.isArray(artwork.category) ? artwork.category.join(', ') : artwork.category,
-			keywords: Array.isArray(artwork.category) ? artwork.category.join(', ') : artwork.category
+			genre: artwork.tags.join(', '),
+			keywords: artwork.tags.join(', ')
 		}
 	};
 

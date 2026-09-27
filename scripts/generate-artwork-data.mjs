@@ -25,21 +25,21 @@ if (!fs.existsSync(outputPath)) {
 }
 
 /**
- * Generate categories based on artwork ID patterns
+ * Generate tags based on artwork ID patterns
  * Only uses: dibujo, pintura, acuarela, grabado, apunte
  */
-function generateCategories(id) {
-	const categories = [];
+function generateTags(id) {
+	const tags = [];
 
 	// Check for specific patterns
 	if (id.includes('apunte')) {
-		categories.push('apunte');
+		tags.push('apunte');
 	}
 	if (id.includes('acuarela')) {
-		categories.push('acuarela');
+		tags.push('acuarela');
 	}
 	if (id.includes('acrilico') || id.includes('pintura') || id.includes('oleo')) {
-		categories.push('pintura');
+		tags.push('pintura');
 	}
 	if (
 		id.includes('grafito') ||
@@ -47,18 +47,18 @@ function generateCategories(id) {
 		id.includes('carbon') ||
 		id.includes('lapiz')
 	) {
-		categories.push('dibujo');
+		tags.push('dibujo');
 	}
 	if (id.includes('grabado') || id.includes('linoleo') || id.includes('xilografia')) {
-		categories.push('grabado');
+		tags.push('grabado');
 	}
 
-	// Default to 'acuarela' if no specific category found
-	if (categories.length === 0) {
-		categories.push('acuarela');
+	// Default to 'acuarela' if no specific tag found
+	if (tags.length === 0) {
+		tags.push('acuarela');
 	}
 
-	return [...new Set(categories)]; // Remove duplicates
+	return [...new Set(tags)]; // Remove duplicates
 }
 
 /**
@@ -143,7 +143,7 @@ function getAvailableArtworkIds() {
  * Generate artwork data entry
  */
 function generateArtworkEntry(id) {
-	const categories = generateCategories(id);
+	const tags = generateTags(id);
 	const dimensions = generateDimensions();
 	const title = generateTitle(id);
 
@@ -154,7 +154,7 @@ function generateArtworkEntry(id) {
 \t\timages: artworkImages['${id}'],
 \t\tyear: 2023, // TODO: Update year
 \t\tdimensions: { width: ${dimensions.width}, height: ${dimensions.height}, unit: '${dimensions.unit}' },
-\t\tcategory: [${categories.map((cat) => `'${cat}'`).join(', ')}],
+\t\ttags: [${tags.map((tag) => `'${tag}'`).join(', ')}],
 \t\tisAvailable: false
 \t}`;
 }

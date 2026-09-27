@@ -20,8 +20,8 @@ Follows mobile-first design system with glass morphism and gradient accents
 	let filterOpen = $state(false);
 	let sortOpen = $state(false);
 
-	// Toggle Group value (array of selected categories)
-	let selectedValue = $derived(galleryState.selectedCategories);
+	// Toggle Group value (array of selected tags)
+	let selectedValue = $derived(galleryState.selectedTags);
 
 	// Sort value
 	let sortValue = $derived(galleryState.sortBy);
@@ -30,24 +30,23 @@ Follows mobile-first design system with glass morphism and gradient accents
 	const sortOptions: { value: SortOption; labelKey: string }[] = [
 		{ value: 'name-asc', labelKey: 'sort.nameAsc' },
 		{ value: 'name-desc', labelKey: 'sort.nameDesc' },
-		{ value: 'category', labelKey: 'sort.category' },
+		{ value: 'tag', labelKey: 'sort.tag' },
 		{ value: 'random', labelKey: 'sort.random' }
 	];
 
-	// Count artworks per category
-	const categoryCounts = $derived.by(() => {
+	// Count artworks per tag
+	const tagCounts = $derived.by(() => {
 		const counts: Record<string, number> = {};
 		galleryState.artworks.forEach((artwork) => {
-			const categories = Array.isArray(artwork.category) ? artwork.category : [artwork.category];
-			categories.forEach((cat) => {
-				counts[cat] = (counts[cat] || 0) + 1;
+			artwork.tags.forEach((tag) => {
+				counts[tag] = (counts[tag] || 0) + 1;
 			});
 		});
 		return counts;
 	});
 
 	function handleValueChange(value: string[]) {
-		galleryState.setCategoryFilter(value);
+		galleryState.setTagFilter(value);
 	}
 
 	function handleSortChange(value: string) {
@@ -108,17 +107,17 @@ Follows mobile-first design system with glass morphism and gradient accents
 					class="w-full flex items-center justify-between px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 min-h-[44px] montserrat-medium {filterOpen
 						? 'bg-accent text-accent-foreground border-border'
 						: 'bg-card text-card-foreground border-border hover:bg-muted'} md:text-base"
-					aria-label={$t('filterByCategory')}
+					aria-label={$t('filterByTag')}
 					aria-expanded={filterOpen}
 				>
 					<div class="flex items-center gap-2 md:gap-3">
 						<Filter class="size-5 {filterOpen ? 'text-primary' : 'text-muted-foreground'}" />
-						<span>{$t('filterByCategory')}</span>
-						{#if galleryState.selectedCategories.length > 0}
+						<span>{$t('filterByTag')}</span>
+						{#if galleryState.selectedTags.length > 0}
 							<span
 								class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-xs font-semibold bg-primary text-primary-foreground montserrat-semibold"
 							>
-								{galleryState.selectedCategories.length}
+								{galleryState.selectedTags.length}
 							</span>
 						{/if}
 					</div>
@@ -134,7 +133,7 @@ Follows mobile-first design system with glass morphism and gradient accents
 					>
 						<div class="pl-1 pr-1 pb-2 space-y-3 md:pl-2 md:pr-2">
 							<!-- Clear Button -->
-							{#if galleryState.selectedCategories.length > 0}
+							{#if galleryState.selectedTags.length > 0}
 								<button
 									onclick={clearFilters}
 									class="w-full flex items-center justify-center gap-2 px-3 py-2 text-sm font-medium text-destructive hover:text-destructive hover:bg-destructive/10 rounded-lg transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive focus-visible:ring-offset-2 min-h-[44px] montserrat-medium md:text-base"
@@ -145,23 +144,23 @@ Follows mobile-first design system with glass morphism and gradient accents
 								</button>
 							{/if}
 
-							<!-- Category Toggles -->
+							<!-- Tag Toggles -->
 							<ToggleGroup.Root
 								type="multiple"
 								value={selectedValue}
 								onValueChange={handleValueChange}
 								class="space-y-2"
 							>
-								{#each galleryState.availableCategories as category (category)}
+								{#each galleryState.availableTags as tag (tag)}
 									<ToggleGroup.Item
-										value={category}
+										value={tag}
 										class="w-full flex items-center justify-between gap-3 px-4 py-2 text-sm font-medium rounded-lg border transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 min-h-[44px] montserrat-medium data-[state=on]:bg-gradient-to-r data-[state=on]:from-primary data-[state=on]:to-primary data-[state=on]:text-primary-foreground data-[state=on]:border-transparent data-[state=on]:shadow-md hover:data-[state=on]:shadow-lg data-[state=on]:transform data-[state=on]:hover:-translate-y-0.5 data-[state=off]:bg-card data-[state=off]:text-card-foreground data-[state=off]:border-border data-[state=off]:hover:bg-muted md:text-base"
 										aria-label={$t('filterBy', {
-											values: { category: $t(`categories.${category}`) }
+											values: { tag: $t(`tags.${tag}`) }
 										})}
 									>
-										<span>{$t(`categories.${category}`)}</span>
-										<span class="text-xs opacity-75">({categoryCounts[category] || 0})</span>
+										<span>{$t(`tags.${tag}`)}</span>
+										<span class="text-xs opacity-75">({tagCounts[tag] || 0})</span>
 									</ToggleGroup.Item>
 								{/each}
 							</ToggleGroup.Root>
@@ -220,10 +219,10 @@ Follows mobile-first design system with glass morphism and gradient accents
 	<div class="mt-2">
 		<p class="text-sm text-muted-foreground text-center md:text-base montserrat-medium">
 			{$t('showingCount', { values: { count: galleryState.filteredArtworks.length } })}
-			{#if galleryState.selectedCategories.length > 0}
+			{#if galleryState.selectedTags.length > 0}
 				<span class="text-primary font-medium montserrat-medium">
 					{$t('in')}
-					{galleryState.selectedCategories.map((cat) => $t(`categories.${cat}`)).join(', ')}
+					{galleryState.selectedTags.map((tag) => $t(`tags.${tag}`)).join(', ')}
 				</span>
 			{/if}
 		</p>

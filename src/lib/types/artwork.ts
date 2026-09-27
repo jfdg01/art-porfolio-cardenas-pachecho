@@ -12,8 +12,6 @@ export interface Artwork {
 	id: string;
 	title: string;
 	description?: string;
-	price?: number;
-	currency?: string; // 'EUR', 'USD', etc.
 	images: ImageVariant[]; // All available image variants
 	year?: number;
 	dimensions?: {
@@ -21,7 +19,7 @@ export interface Artwork {
 		height: number;
 		unit: string; // 'cm', 'in'
 	};
-	category: string | string[];
+	tags: string[];
 	isAvailable: boolean;
 }
 
@@ -39,10 +37,8 @@ export interface ArtworkMetadata {
 	title: string;
 	description?: string;
 	year?: number;
-	category: string | string[];
+	tags: string[];
 	isAvailable: boolean;
-	price?: number;
-	currency?: string;
 	dimensions?: {
 		width: number;
 		height: number;

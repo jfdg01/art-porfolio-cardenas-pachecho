@@ -7,16 +7,7 @@
 	import { browser } from '$app/environment';
 	import type { PageData } from './$types';
 	import type { Artwork } from '$lib/types/artwork';
-	import {
-		Euro,
-		Calendar,
-		Ruler,
-		Tag,
-		ChevronLeft,
-		ChevronRight,
-		ArrowLeft,
-		Eye
-	} from 'lucide-svelte';
+	import { Calendar, Ruler, Tag, ChevronLeft, ChevronRight, ArrowLeft, Eye } from 'lucide-svelte';
 	import { t } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -341,24 +332,6 @@
 							{artwork.title}
 						</h1>
 					</div>
-					<!-- Price -->
-					{#if artwork.price}
-						<div class="flex items-start gap-3">
-							<Euro class="w-5 h-5 text-muted-foreground mt-1" />
-							<div class="flex-1">
-								<p
-									class="text-xs md:text-sm font-medium montserrat-medium text-muted-foreground mb-1"
-								>
-									{$t('priceLabel')}
-								</p>
-								<p class="text-lg md:text-2xl font-bold montserrat-bold text-foreground">
-									{artwork.price}
-									{artwork.currency || 'EUR'}
-								</p>
-							</div>
-						</div>
-					{/if}
-
 					<!-- Dimensions -->
 					{#if artwork.dimensions}
 						<div class="flex items-start gap-3">
@@ -394,7 +367,7 @@
 						</div>
 					{/if}
 
-					<!-- Category -->
+					<!-- Tags -->
 					<div class="flex items-start gap-3">
 						<Tag class="w-5 h-5 text-muted-foreground mt-1" />
 						<div class="flex-1">
@@ -404,21 +377,13 @@
 								{$t('tagsLabel')}
 							</p>
 							<div class="flex flex-wrap gap-2">
-								{#if Array.isArray(artwork.category)}
-									{#each artwork.category as category (category)}
-										<span
-											class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
-										>
-											{$t('categories.' + category)}
-										</span>
-									{/each}
-								{:else}
+								{#each artwork.tags as tag (tag)}
 									<span
-										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-primary/10 text-primary"
+										class="inline-flex items-center px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-medium montserrat-medium bg-accent text-accent-foreground"
 									>
-										{$t('categories.' + artwork.category)}
+										{$t('tags.' + tag)}
 									</span>
-								{/if}
+								{/each}
 							</div>
 						</div>
 					</div>

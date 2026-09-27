@@ -15,7 +15,7 @@ export type SortOption =
 	| 'name-desc'
 	| 'year-newest'
 	| 'year-oldest'
-	| 'category'
+	| 'tag'
 	| 'availability'
 	| 'random';
 
@@ -26,7 +26,7 @@ export type SortOption =
 export class GalleryStateClass {
 	// Reactive properties using $state rune
 	artworks = $state<Artwork[]>([]);
-	selectedCategories = $state<string[]>([]);
+	selectedTags = $state<string[]>([]);
 	sortBy = $state<SortOption>('random');
 	showOnlyAvailable = $state<boolean>(false);
 
@@ -36,17 +36,14 @@ export class GalleryStateClass {
 
 	// Computed properties using $derived
 	filteredArtworks = $derived.by(() => {
-		// First apply category filtering
+		// First apply tag filtering
 		let filtered: Artwork[];
-		if (this.selectedCategories.length === 0) {
+		if (this.selectedTags.length === 0) {
 			filtered = [...this.artworks];
 		} else {
 			filtered = this.artworks.filter((artwork) => {
-				const artworkCategories = Array.isArray(artwork.category)
-					? artwork.category
-					: [artwork.category];
-				// Check if artwork has ANY of the selected categories
-				return artworkCategories.some((cat) => this.selectedCategories.includes(cat));
+				// Check if artwork has ANY of the selected tags
+				return artwork.tags.some((tag) => this.selectedTags.includes(tag));
 			});
 		}
 
@@ -102,13 +99,11 @@ export class GalleryStateClass {
 					return yearComparison !== 0 ? yearComparison : a.id.localeCompare(b.id);
 				});
 
-			case 'category':
+			case 'tag':
 				return sorted.sort((a, b) => {
-					const catA = Array.isArray(a.category) ? a.category[0] : a.category;
-					const catB = Array.isArray(b.category) ? b.category[0] : b.category;
-					const categoryComparison = catA.localeCompare(catB);
+					const tagComparison = a.tags[0].localeCompare(b.tags[0]);
 					// Use ID as tie-breaker for stability
-					return categoryComparison !== 0 ? categoryComparison : a.id.localeCompare(b.id);
+					return tagComparison !== 0 ? tagComparison : a.id.localeCompare(b.id);
 				});
 
 			case 'availability':
@@ -149,16 +144,10 @@ export class GalleryStateClass {
 		return hash;
 	}
 
-	availableCategories = $derived.by(() => {
-		const categories = new SvelteSet<string>();
-		this.artworks.forEach((artwork) => {
-			if (Array.isArray(artwork.category)) {
-				artwork.category.forEach((cat) => categories.add(cat));
-			} else {
-				categories.add(artwork.category);
-			}
-		});
-		return Array.from(categories).sort();
+	availableTags = $derived.by(() => {
+		const tags = new SvelteSet<string>();
+		this.artworks.forEach((artwork) => artwork.tags.forEach((tag) => tags.add(tag)));
+		return Array.from(tags).sort();
 	});
 
 	// Actions
@@ -166,8 +155,8 @@ export class GalleryStateClass {
 		this.artworks = artworks;
 	}
 
-	setCategoryFilter(categories: string[]) {
-		this.selectedCategories = categories;
+	setTagFilter(tags: string[]) {
+		this.selectedTags = tags;
 	}
 
 	setSortBy(sortBy: SortOption) {
@@ -179,14 +168,9 @@ export class GalleryStateClass {
 	}
 
 	clearFilters() {
-		this.selectedCategories = [];
+		this.selectedTags = [];
 		this.showOnlyAvailable = false;
 	}
-
-	// Legacy computed property for backward compatibility (if needed)
-	selectedCategory = $derived(
-		this.selectedCategories.length === 1 ? this.selectedCategories[0] : ''
-	);
 
 	// Utility methods
 	getArtworkById(id: string): Artwork | undefined {

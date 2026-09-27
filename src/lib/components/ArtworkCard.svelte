@@ -1,6 +1,6 @@
 <!--
 @component ArtworkCard
-@description Displays an individual artwork with image, title, and price
+@description Displays an individual artwork with image and title
 @example
   <ArtworkCard {artwork} on:click={handleArtworkClick} />
 -->
