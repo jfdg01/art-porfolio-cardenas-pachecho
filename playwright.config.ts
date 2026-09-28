@@ -9,5 +9,11 @@ export default defineConfig({
 	use: { baseURL: baseURL ?? 'http://localhost:4173', locale: 'es-ES' },
 	webServer: baseURL
 		? undefined
-		: { command: 'npm run build && npm run preview', port: 4173, timeout: 180_000 }
+		: {
+				command: 'npm run build && npm run preview',
+				port: 4173,
+				timeout: 180_000,
+				// The contact form sends each Enquiry to a stub in tests/contact.test.ts, not to Resend.
+				env: { RESEND_API_URL: 'http://localhost:4174', RESEND_API_KEY: 'test' }
+			}
 });

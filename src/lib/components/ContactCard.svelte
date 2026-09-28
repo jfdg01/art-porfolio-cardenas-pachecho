@@ -1,116 +1,78 @@
 <!--
 @component ContactCard
-@description Reusable contact information card with hover effects
-@example
-  <ContactCard />
+@description The direct Contact Channels: email, WhatsApp and Instagram.
 -->
 
 <script lang="ts">
 	import { m } from '$lib/paraglide/messages';
-	import { Mail, Phone, Instagram, MessageCircle } from 'lucide-svelte';
+	import { Mail, MessageCircle, Instagram } from 'lucide-svelte';
+	import { CHANNELS } from '$lib';
 
-	export let showWhatsApp = true;
-	export let showInstagram = true;
-	export let showEmail = true;
-	export let showPhone = true;
+	const channels = [
+		{ icon: Mail, label: m.email(), text: CHANNELS.email, href: `mailto:${CHANNELS.email}` },
+		{ icon: MessageCircle, label: 'WhatsApp', text: CHANNELS.phone, href: CHANNELS.whatsapp },
+		{
+			icon: Instagram,
+			label: 'Instagram',
+			text: `@${CHANNELS.instagram}`,
+			href: `https://instagram.com/${CHANNELS.instagram}`
+		}
+	];
 </script>
 
-<div class="bg-card/80 border border-border p-6 md:p-8">
-	<h2 class="text-lg md:text-xl font-semibold text-card-foreground mb-6 text-center">
-		{m.contactInfo()}
-	</h2>
+<section aria-labelledby="channels">
+	<h2 id="channels">{m.contactInfo()}</h2>
+	<ul>
+		{#each channels as { icon: Icon, label, text, href } (href)}
+			<li>
+				<Icon aria-hidden="true" />
+				<span>
+					<span class="label">{label}</span>
+					<a {href}>{text}</a>
+				</span>
+			</li>
+		{/each}
+	</ul>
+</section>
 
-	<div class="space-y-6">
-		<!-- Email -->
-		{#if showEmail}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<Mail class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground">
-						{m.emailLabel()}
-					</h3>
-					<a
-						href="mailto:cardenaspachecocarmenalejandra@gmail.com"
-						class="text-card-foreground font-medium break-all hover:text-primary transition-colors duration-200"
-					>
-						{m.emailAddress()}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- Phone -->
-		{#if showPhone}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<Phone class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground">
-						{m.phoneNumberLabel()}
-					</h3>
-					<a
-						href="https://wa.me/34628672368"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium break-all hover:text-green-600 transition-colors duration-200"
-					>
-						{m.phoneNumber()}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- WhatsApp -->
-		{#if showWhatsApp}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<MessageCircle class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground">
-						{m.whatsapp()}
-					</h3>
-					<a
-						href="https://wa.me/34628672368"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium break-all hover:text-green-600 transition-colors duration-200"
-					>
-						{m.phoneNumber()}
-					</a>
-				</div>
-			</div>
-		{/if}
-
-		<!-- Instagram -->
-		{#if showInstagram}
-			<div class="flex items-start gap-4 group">
-				<div
-					class="flex-shrink-0 w-12 h-12 bg-gradient-to-r from-pink-500 to-pink-600 flex items-center justify-center group-hover:scale-110 transition-transform duration-300"
-				>
-					<Instagram class="w-6 h-6 text-white" />
-				</div>
-				<div class="min-w-0 flex-1">
-					<h3 class="text-sm font-medium text-muted-foreground">Instagram</h3>
-					<a
-						href="https://instagram.com/cardenas.pacheco"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="text-card-foreground font-medium break-all hover:text-pink-600 transition-colors duration-200"
-					>
-						{m.instagram()}
-					</a>
-				</div>
-			</div>
-		{/if}
-	</div>
-</div>
+<style>
+	section {
+		font-family: var(--font-sans);
+	}
+	h2 {
+		margin: 0 0 1.25rem;
+		font: 400 1.5rem/1.3 var(--font-serif);
+	}
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+	li {
+		display: flex;
+		gap: 0.875rem;
+		align-items: start;
+	}
+	li > :global(svg) {
+		flex: none;
+	}
+	li > span {
+		display: flex;
+		flex-direction: column;
+		min-width: 0;
+	}
+	.label {
+		color: var(--color-muted-foreground);
+	}
+	a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+		color: var(--color-foreground);
+		font-size: 1.125rem;
+		overflow-wrap: anywhere;
+	}
+</style>

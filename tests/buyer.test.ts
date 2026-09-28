@@ -70,11 +70,14 @@ for (const { locale, messages, artwork: path, contact } of siteByLocale) {
 		});
 	}
 
-	test(`the ${locale} ask link leads to the contact page with the Artwork ID`, async ({ page }) => {
-		const { id } = artworks[0];
+	test(`the ${locale} ask link leads to the contact form with the Artwork Title as the subject`, async ({
+		page
+	}) => {
+		const { id, title } = artworks[0];
 		await page.goto(path(id));
 		await page.getByRole('link', { name: messages.askAboutArtwork }).click();
 		await expect(page).toHaveURL(`${contact}?artwork=${id}`);
+		await expect(page.getByLabel(messages.subject)).toHaveValue(title);
 	});
 }
 

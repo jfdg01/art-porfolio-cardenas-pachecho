@@ -1,103 +1,28 @@
 <!--
 @component ContactPage
-@description Contact page with form and contact information
-@example
-  <ContactPage />
+@description The contact page: every Contact Channel. The form works without JavaScript;
+the server checks it, sends the Enquiry, and keeps the typed text on a problem.
 -->
 
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { m } from '$lib/paraglide/messages';
-	import { Send } from 'lucide-svelte';
 	import ContactCard from '$lib/components/ContactCard.svelte';
 	import SEO from '$lib/components/SEO.svelte';
-	import { ARTIST } from '$lib';
+	import { ARTIST, CHANNELS } from '$lib';
+
+	let { data, form } = $props();
+	let sending = $state(false);
 
 	const description =
 		'Contacta con Carmen Cárdenas Pacheco para consultas sobre su portfolio artístico, compras y colaboraciones.';
 
-	let formData = $state({
-		name: '',
-		email: '',
-		subject: '',
-		message: ''
-	});
-
-	let isSubmitting = $state(false);
-	let submitMessage = $state('');
-	let formErrors = $state<Record<string, string>>({});
-
-	// Validation function
-	function validateForm() {
-		const errors: Record<string, string> = {};
-
-		if (!formData.name.trim()) {
-			errors.name = m.nameRequired();
-		}
-
-		if (!formData.email.trim()) {
-			errors.email = m.emailRequired();
-		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-			errors.email = m.emailInvalid();
-		}
-
-		if (!formData.subject.trim()) {
-			errors.subject = m.subjectRequired();
-		}
-
-		if (!formData.message.trim()) {
-			errors.message = m.messageRequired();
-		}
-
-		return errors;
-	}
-
-	async function handleSubmit(event: Event) {
-		event.preventDefault();
-		if (isSubmitting) return;
-
-		// Clear previous errors and messages
-		formErrors = {};
-		submitMessage = '';
-
-		// Validate form
-		const validationErrors = validateForm();
-		if (Object.keys(validationErrors).length > 0) {
-			formErrors = validationErrors;
-			return;
-		}
-
-		if (confirm(m.confirmSubmissionMessage())) handleFormSubmission();
-	}
-
-	async function handleFormSubmission() {
-		isSubmitting = true;
-		try {
-			// Create mailto link with form data
-			const subject = encodeURIComponent(`Contact Form: ${formData.subject}`);
-			const body = encodeURIComponent(
-				`Name: ${formData.name}\nEmail: ${formData.email}\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
-			);
-			const mailtoLink = `mailto:cardenaspachecocarmenalejandra@gmail.com?subject=${subject}&body=${body}`;
-
-			// Open default email client
-			window.open(mailtoLink, '_blank');
-
-			// Reset form
-			formData = {
-				name: '',
-				email: '',
-				subject: '',
-				message: ''
-			};
-
-			submitMessage = m.emailClientOpened();
-		} catch (error) {
-			console.error('Error opening email client:', error);
-			submitMessage = m.emailClientError();
-		} finally {
-			isSubmitting = false;
-		}
-	}
+	const fields = [
+		{ name: 'name', label: m.name, type: 'text', autocomplete: 'name', required: true },
+		{ name: 'email', label: m.email, type: 'email', autocomplete: 'email', required: true },
+		{ name: 'subject', label: m.subject, type: 'text', autocomplete: 'off', required: false },
+		{ name: 'message', label: m.message, type: 'textarea', autocomplete: 'off', required: true }
+	] as const;
 </script>
 
 <SEO
@@ -109,187 +34,179 @@
 		description,
 		mainEntity: {
 			...ARTIST,
-			email: 'cardenaspachecocarmenalejandra@gmail.com',
+			email: CHANNELS.email,
 			jobTitle: 'Artista',
 			description: 'Artista contemporánea especializada en pintura y técnicas mixtas'
 		}
 	}}
 />
 
-<main class="mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl py-8 sm:py-12 lg:py-16">
-	<!-- Page Header -->
-	<div class="text-center mb-8 sm:mb-12 lg:mb-16">
-		<h1
-			class="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent mb-4"
+<main class="page">
+	<h1>{m.contact()}</h1>
+	<p class="intro">{m.contactIntro()}</p>
+
+	<div class="columns">
+		<form
+			method="POST"
+			novalidate
+			use:enhance={() => {
+				sending = true;
+				return async ({ update }) => {
+					await update();
+					sending = false;
+				};
+			}}
 		>
-			{m.contactPage()}
-		</h1>
-		<p
-			class="text-sm sm:text-base lg:text-lg font-medium text-muted-foreground max-w-[70ch] mx-auto"
-		>
-			{m.contactDescription()}
-		</p>
-	</div>
+			{#if form?.sent}
+				<p class="note" role="status">{m.enquirySent()}</p>
+			{:else if form?.failed}
+				<p class="note error" role="alert">{m.enquiryFailed()}</p>
+			{/if}
 
-	<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 w-full">
-		<!-- Contact Information -->
-		<div class="space-y-6 lg:space-y-8">
-			<ContactCard />
-		</div>
-
-		<!-- Contact Form -->
-		<div class="bg-card/80 border border-border p-6 md:p-8 w-full">
-			<h2 class="text-lg md:text-xl font-semibold text-card-foreground mb-6">
-				{m.getInTouch()}
-			</h2>
-
-			<form onsubmit={handleSubmit} class="space-y-6">
-				<fieldset class="space-y-6">
-					<legend class="sr-only">
-						{m.getInTouch()}
-					</legend>
-
-					<!-- Name Field -->
-					<div>
-						<label for="name" class="block text-sm font-medium text-muted-foreground mb-2">
-							{m.name()}
-						</label>
-						<input
-							type="text"
-							id="name"
-							bind:value={formData.name}
-							class="w-full bg-card border {formErrors.name
-								? 'border-destructive'
-								: 'border-border'} px-4 py-3 transition-all duration-200"
-							placeholder={m.name()}
-						/>
-						{#if formErrors.name}
-							<p class="mt-1 text-sm text-destructive">{formErrors.name}</p>
-						{/if}
-					</div>
-
-					<!-- Email Field -->
-					<div>
-						<label for="email" class="block text-sm font-medium text-muted-foreground mb-2">
-							{m.email()}
-						</label>
-						<input
-							type="email"
-							id="email"
-							bind:value={formData.email}
-							class="w-full bg-card border {formErrors.email
-								? 'border-destructive'
-								: 'border-border'} px-4 py-3 transition-all duration-200"
-							placeholder={m.email()}
-						/>
-						{#if formErrors.email}
-							<p class="mt-1 text-sm text-destructive">{formErrors.email}</p>
-						{/if}
-					</div>
-
-					<!-- Subject Field -->
-					<div>
-						<label for="subject" class="block text-sm font-medium text-muted-foreground mb-2">
-							{m.subject()}
-						</label>
-						<input
-							type="text"
-							id="subject"
-							bind:value={formData.subject}
-							class="w-full bg-card border {formErrors.subject
-								? 'border-destructive'
-								: 'border-border'} px-4 py-3 transition-all duration-200"
-							placeholder={m.subject()}
-						/>
-						{#if formErrors.subject}
-							<p class="mt-1 text-sm text-destructive">{formErrors.subject}</p>
-						{/if}
-					</div>
-
-					<!-- Message Field -->
-					<div>
-						<label for="message" class="block text-sm font-medium text-muted-foreground mb-2">
-							{m.message()}
-						</label>
+			{#each fields as { name, label, type, autocomplete, required } (name)}
+				{@const error = form?.errors?.[name]}
+				{@const value = form?.values?.[name] ?? (name === 'subject' ? data.subject : '')}
+				<div class="field">
+					<label for={name}>
+						{label()}
+						{#if !required}<span class="optional">{m.optional()}</span>{/if}
+					</label>
+					{#if type === 'textarea'}
 						<textarea
-							id="message"
-							bind:value={formData.message}
-							rows="6"
-							class="w-full bg-card border {formErrors.message
-								? 'border-destructive'
-								: 'border-border'} px-4 py-3 transition-all duration-200 resize-vertical"
-							placeholder={m.message()}
+							id={name}
+							{name}
+							{required}
+							rows="8"
+							{value}
+							aria-invalid={!!error}
+							aria-describedby={error && `${name}-error`}
 						></textarea>
-						{#if formErrors.message}
-							<p class="mt-1 text-sm text-destructive">{formErrors.message}</p>
-						{/if}
-					</div>
-				</fieldset>
-
-				<!-- Separator -->
-				<hr class="my-6 border-border" />
-
-				<!-- Submit Button -->
-				<button
-					type="submit"
-					disabled={isSubmitting}
-					class="w-full px-6 py-3 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
-				>
-					{#if isSubmitting}
-						<div class="w-5 h-5 border-2 border-white border-t-transparent animate-spin"></div>
-						{m.sending()}
 					{:else}
-						<Send class="w-5 h-5" />
-						{m.sendMessage()}
+						<input
+							id={name}
+							{name}
+							{type}
+							{required}
+							{autocomplete}
+							{value}
+							aria-invalid={!!error}
+							aria-describedby={error && `${name}-error`}
+						/>
 					{/if}
-				</button>
+					{#if error}<p id="{name}-error" class="error">{error}</p>{/if}
+				</div>
+			{/each}
 
-				<!-- Submit Message -->
-				{#if submitMessage}
-					{@const isSuccess = submitMessage === m.emailClientOpened()}
-					<div
-						class="p-4 {isSuccess
-							? 'border border-foreground text-foreground'
-							: 'border border-destructive text-destructive'}"
-					>
-						<div class="flex items-start gap-3">
-							{#if isSuccess}
-								<!-- Success Icon -->
-								<div class="flex-shrink-0 w-5 h-5 mt-0.5">
-									<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											fill-rule="evenodd"
-											d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-								</div>
-							{:else}
-								<!-- Error Icon -->
-								<div class="flex-shrink-0 w-5 h-5 mt-0.5">
-									<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-										<path
-											fill-rule="evenodd"
-											d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-											clip-rule="evenodd"
-										/>
-									</svg>
-								</div>
-							{/if}
-							<div class="flex-1">
-								{#if isSuccess}
-									<h4 class="text-sm font-semibold mb-1">
-										{m.success()}
-									</h4>
-								{/if}
-								<p class="text-sm leading-relaxed">
-									{submitMessage}
-								</p>
-							</div>
-						</div>
-					</div>
-				{/if}
-			</form>
-		</div>
+			<!-- The honeypot: off the screen and out of the tab order, so only a bot fills it -->
+			<div class="honeypot" aria-hidden="true">
+				<label for="website">{m.honeypot()}</label>
+				<input id="website" name="website" tabindex="-1" autocomplete="off" />
+			</div>
+
+			<button type="submit" disabled={sending}>{sending ? m.sending() : m.sendMessage()}</button>
+		</form>
+
+		<ContactCard />
 	</div>
 </main>
+
+<style>
+	.page {
+		max-width: 64rem;
+		margin: 0 auto;
+		padding: 1rem clamp(1rem, 4vw, 3rem) 4rem;
+		font-family: var(--font-sans);
+	}
+	h1 {
+		margin: 0;
+		font: 400 2.25rem/1.2 var(--font-serif);
+	}
+	.intro {
+		max-width: 60ch;
+		margin: 0.75rem 0 2rem;
+		font-size: 1.125rem;
+		line-height: 1.5;
+		color: var(--color-muted-foreground);
+	}
+	.columns {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) 22rem;
+		gap: clamp(2rem, 5vw, 4rem);
+		align-items: start;
+	}
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+	.field {
+		display: flex;
+		flex-direction: column;
+		gap: 0.375rem;
+	}
+	label {
+		font-size: 1.0625rem;
+		font-weight: 600;
+	}
+	.optional {
+		font-weight: 400;
+		color: var(--color-muted-foreground);
+	}
+	input,
+	textarea {
+		width: 100%;
+		padding: 0.75rem;
+		border: 1px solid var(--color-muted-foreground);
+		background: var(--color-muted);
+		color: var(--color-foreground);
+		font: inherit;
+		font-size: 1.125rem;
+	}
+	textarea {
+		resize: vertical;
+	}
+	[aria-invalid='true'] {
+		border: 2px solid var(--color-destructive);
+	}
+	.error {
+		margin: 0;
+		color: var(--color-destructive);
+	}
+	.note {
+		margin: 0;
+		padding: 1rem;
+		border: 2px solid var(--color-foreground);
+		font-size: 1.125rem;
+		line-height: 1.45;
+	}
+	.note.error {
+		border-color: var(--color-destructive);
+	}
+	.honeypot {
+		position: absolute;
+		left: -10000px;
+	}
+	button {
+		align-self: start;
+		min-height: 48px;
+		padding: 0 2rem;
+		border: 0;
+		background: var(--color-primary);
+		color: var(--color-primary-foreground);
+		font: inherit;
+		font-size: 1.125rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	button:hover {
+		text-decoration: underline;
+	}
+	button:disabled {
+		cursor: wait;
+	}
+	@media (max-width: 900px) {
+		.columns {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
