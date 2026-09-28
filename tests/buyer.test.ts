@@ -1,3 +1,4 @@
+import { readdirSync } from 'node:fs';
 import { expect, test } from '@playwright/test';
 import artworks from '../src/lib/artworks.json' with { type: 'json' };
 import es from '../messages/es.json' with { type: 'json' };
@@ -33,39 +34,65 @@ test('the Wall lists every Artwork', async ({ page }) => {
 	}
 });
 
-for (const { locale, messages, artwork: path } of siteByLocale) {
+// The detail images of each Artwork, from the image file names: `<id>-zoom-<n>.webp`.
+const images = readdirSync('src/lib/assets/images');
+const detailCount = (id: string) => images.filter((name) => name.startsWith(`${id}-zoom-`)).length;
+
+for (const { locale, messages, artwork: path, contact } of siteByLocale) {
 	for (const artwork of artworks) {
-		test(`the ${locale} Artwork page of ${artwork.id} shows its Title and facts and no price`, async ({
+		test(`the ${locale} Artwork page of ${artwork.id} shows its images, its Label and no price`, async ({
 			page
 		}) => {
 			await page.goto(path(artwork.id));
 			await expect(page.locator('html')).toHaveAttribute('lang', locale);
 			const main = page.getByRole('main');
-			await expect(page.getByRole('heading', { level: 1 })).toHaveText(artwork.title);
-			if ('year' in artwork) await expect(main).toContainText(String(artwork.year));
+			const label = main.locator('figcaption');
+			await expect(label.getByRole('heading', { level: 1 })).toHaveText(artwork.title);
+			if ('year' in artwork) await expect(label).toContainText(String(artwork.year));
 			if ('dimensions' in artwork) {
 				const { width, height } = artwork.dimensions as { width: number; height: number };
-				await expect(main).toContainText(`${width} × ${height}`);
+				await expect(label).toContainText(`${width} × ${height}`);
 			}
 			for (const tag of artwork.tags) {
-				await expect(main).toContainText(messages[`tag_${tag}` as keyof typeof messages] as string);
+				await expect(label).toContainText(
+					messages[`tag_${tag}` as keyof typeof messages] as string
+				);
 			}
-			if (artwork.sold) await expect(main).toContainText(messages.sold);
-			else await expect(main).not.toContainText(messages.sold);
+			if (artwork.sold) await expect(label).toContainText(messages.sold);
+			else await expect(label).not.toContainText(messages.sold);
+			// The main image, then one image for each detail image
+			await expect(main.locator(`img[alt="${artwork.title}"]`)).toHaveCount(
+				1 + detailCount(artwork.id)
+			);
+			// A visible line tells the Buyer that a tap or a click enlarges an image
+			await expect(main.getByText(messages.enlargeHint)).toBeVisible();
 			await expect(page.locator('body')).not.toContainText(/€|\beur\b|precio|price/i);
 		});
 	}
+
+	test(`the ${locale} ask link leads to the contact page with the Artwork ID`, async ({ page }) => {
+		const { id } = artworks[0];
+		await page.goto(path(id));
+		await page.getByRole('link', { name: messages.askAboutArtwork }).click();
+		await expect(page).toHaveURL(`${contact}?artwork=${id}`);
+	});
 }
 
 test('previous and next walk the Wall order and wrap at its ends', async ({ page }) => {
 	const [first, second] = artworks;
 	const last = artworks.at(-1)!;
-	await page.goto(spanish.artwork(first.id));
-	await page.getByRole('button', { name: es.nextArtwork }).click();
-	await expect(page).toHaveURL(spanish.artwork(second.id));
-	await page.goto(spanish.artwork(first.id));
-	await page.getByRole('button', { name: es.previousArtwork }).click();
-	await expect(page).toHaveURL(spanish.artwork(last.id));
+	for (const [name, neighbour] of [
+		[es.nextArtwork, second],
+		[es.previousArtwork, last]
+	] as const) {
+		await page.goto(spanish.artwork(first.id));
+		const link = page.getByRole('link', { name });
+		// The link names the neighbour, so a Buyer knows where it goes
+		await expect(link).toContainText(neighbour.title);
+		await link.click();
+		await expect(page).toHaveURL(spanish.artwork(neighbour.id));
+		await expect(page.getByRole('heading', { level: 1 })).toHaveText(neighbour.title);
+	}
 });
 
 // Each page as a pair of paths: the Spanish one and the English one.

@@ -2,18 +2,27 @@
 @component Label
 @description The museum Label of an Artwork: Title, year, Tags, dimensions, and Sold in words.
 The short Label, under a small work, shows the Title and Sold only; the image alt names the work.
+On the Artwork page the Title is the page heading, and the children follow the facts.
 -->
 
 <script lang="ts">
 	import type { Artwork } from '$lib/artworks';
+	import type { Snippet } from 'svelte';
 	import { m } from '$lib/paraglide/messages';
 
-	let { artwork, short = false }: { artwork: Artwork; short?: boolean } = $props();
+	let {
+		artwork,
+		short = false,
+		heading = false,
+		children
+	}: { artwork: Artwork; short?: boolean; heading?: boolean; children?: Snippet } = $props();
 	const d = $derived(artwork.dimensions);
 </script>
 
 <svelte:element this={short ? 'span' : 'figcaption'} class={['label', short && 'short']}>
-	<span class="title" aria-hidden={short || undefined}>{artwork.title}</span>
+	<svelte:element this={heading ? 'h1' : 'span'} class="title" aria-hidden={short || undefined}
+		>{artwork.title}</svelte:element
+	>
 	{#if !short}
 		<span class="facts">
 			{#if artwork.year}<span>{artwork.year}</span>{/if}
@@ -22,6 +31,7 @@ The short Label, under a small work, shows the Title and Sold only; the image al
 		</span>
 	{/if}
 	{#if artwork.sold}<span class="sold">{m.sold()}</span>{/if}
+	{@render children?.()}
 </svelte:element>
 
 <style>
