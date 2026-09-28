@@ -4,7 +4,7 @@ import artworks from '../src/lib/artworks.json' with { type: 'json' };
 import es from '../messages/es.json' with { type: 'json' };
 
 // The visual foundation (issue #8): one dark wall, sharp shapes, self-hosted fonts.
-const paths = ['/', `/obra/${artworks[0].id}`, '/clases', '/contacto'];
+const paths = ['/', `/obra/${artworks[0].id}`, '/clases', '/contacto', '/sobre-mi'];
 const phone = { width: 360, height: 740 };
 
 for (const path of paths) {
@@ -57,16 +57,19 @@ test('on a phone the site links scroll away and the name stays on top, on one li
 	await page.goto('/clases');
 	const nav = page.getByRole('navigation', { name: es.mainNavigation });
 	const name = page.getByRole('link', { name: 'Carmen Cárdenas Pacheco' }).first();
-	for (const label of [es.artworks, es.onlineClassesPage, es.contact]) {
+	for (const label of [es.artworks, es.about, es.onlineClassesPage, es.contact]) {
 		await expect(nav.getByRole('link', { name: label })).toBeInViewport();
 	}
 	await page.mouse.wheel(0, 2000);
 	await expect(nav).not.toBeInViewport();
 	await expect(name).toBeInViewport();
-	const lines = await name.evaluate((el) => {
-		const range = document.createRange();
-		range.selectNodeContents(el);
-		return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
-	});
-	expect(lines).toBe(1);
+	// The name and each link take one line: the header hides exactly one row of links
+	for (const el of [name, ...(await nav.getByRole('link').all())]) {
+		const lines = await el.evaluate((el) => {
+			const range = document.createRange();
+			range.selectNodeContents(el);
+			return new Set([...range.getClientRects()].map((r) => Math.round(r.top))).size;
+		});
+		expect(lines, await el.innerText()).toBe(1);
+	}
 });

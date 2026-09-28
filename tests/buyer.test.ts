@@ -12,7 +12,8 @@ const siteByLocale = [
 		wall: '/',
 		artwork: (id: string) => `/obra/${id}`,
 		classes: '/clases',
-		contact: '/contacto'
+		contact: '/contacto',
+		about: '/sobre-mi'
 	},
 	{
 		locale: 'en',
@@ -20,7 +21,8 @@ const siteByLocale = [
 		wall: '/en',
 		artwork: (id: string) => `/en/artwork/${id}`,
 		classes: '/en/classes',
-		contact: '/en/contact'
+		contact: '/en/contact',
+		about: '/en/about'
 	}
 ] as const;
 const [spanish, english] = siteByLocale;
@@ -81,6 +83,28 @@ for (const { locale, messages, artwork: path, contact } of siteByLocale) {
 	});
 }
 
+for (const { locale, messages, wall, about } of siteByLocale) {
+	test(`the ${locale} navigation leads to the About page, with a photo, a biography and exhibitions`, async ({
+		page
+	}) => {
+		await page.goto(wall);
+		await page
+			.getByRole('navigation', { name: messages.mainNavigation })
+			.getByRole('link', { name: messages.about })
+			.click();
+		await expect(page).toHaveURL(about);
+		await expect(page.locator('html')).toHaveAttribute('lang', locale);
+		const main = page.getByRole('main');
+		await expect(main.getByRole('heading', { level: 1 })).toHaveText(messages.about);
+		await expect(main.getByRole('img', { name: messages.artistPhoto })).toBeVisible();
+		await expect(main.getByRole('heading', { name: messages.biography })).toBeVisible();
+		await expect(main.getByRole('heading', { name: messages.exhibitions })).toBeVisible();
+		await expect(main.getByRole('listitem').first()).toBeVisible();
+		// Each place still holds dummy content, marked so that nobody takes it as true
+		await expect(main.getByText(messages.placeholder, { exact: true })).toHaveCount(3);
+	});
+}
+
 test('previous and next walk the Wall order and wrap at its ends', async ({ page }) => {
 	const [first, second] = artworks;
 	const last = artworks.at(-1)!;
@@ -103,7 +127,8 @@ const pages = [
 	[spanish.wall, english.wall],
 	[spanish.artwork(artworks[0].id), english.artwork(artworks[0].id)],
 	[spanish.classes, english.classes],
-	[spanish.contact, english.contact]
+	[spanish.contact, english.contact],
+	[spanish.about, english.about]
 ];
 
 for (const [esPath, enPath] of pages) {
@@ -152,6 +177,7 @@ test('the sitemap lists every page in both Locales', async ({ request }) => {
 		site.wall,
 		site.classes,
 		site.contact,
+		site.about,
 		...artworks.map(({ id }) => site.artwork(id))
 	]);
 	expect(paths.map(([, path]) => path).sort()).toEqual(expected.sort());

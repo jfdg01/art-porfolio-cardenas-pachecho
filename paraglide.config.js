@@ -24,6 +24,7 @@ const config = {
 		translate('/artwork/:id', '/obra/:id', '/en/artwork/:id'),
 		translate('/classes', '/clases', '/en/classes'),
 		translate('/contact', '/contacto', '/en/contact'),
+		translate('/about', '/sobre-mi', '/en/about'),
 		translate('/:path(.*)?', '/:path(.*)?', '/en/:path(.*)?')
 	]
 };

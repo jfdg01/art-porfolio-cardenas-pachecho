@@ -4,6 +4,7 @@ import { m } from '$lib/paraglide/messages';
 /** The one navigation list of the site. */
 export const LINKS = [
 	{ path: '/', label: m.artworks },
+	{ path: '/about', label: m.about },
 	{ path: '/classes', label: m.onlineClassesPage },
 	{ path: '/contact', label: m.contact }
 ];

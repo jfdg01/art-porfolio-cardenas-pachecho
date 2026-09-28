@@ -85,7 +85,11 @@ On a phone the links row scrolls away and the name stays on top.
 		}
 		ul {
 			justify-content: space-between;
-			gap: 0 1rem;
+			gap: 0 0.75rem;
+		}
+		nav a {
+			font-size: clamp(0.875rem, 4.2vw, 1rem); /* four links on one row down to 360 px */
+			white-space: nowrap;
 		}
 		.name {
 			font-weight: 600;

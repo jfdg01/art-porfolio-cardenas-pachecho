@@ -37,6 +37,12 @@ export const GET: RequestHandler = async () => {
 			lastmod: new Date().toISOString().split('T')[0]
 		},
 		{
+			url: '/about',
+			changefreq: 'monthly',
+			priority: '0.7',
+			lastmod: new Date().toISOString().split('T')[0]
+		},
+		{
 			url: '/classes',
 			changefreq: 'monthly',
 			priority: '0.7',
