@@ -3,6 +3,7 @@
 	"artworks": "Portfolio",
 	"available": "Disponible",
 	"availableInfo": "Esta pieza está disponible para la compra. Contáctanos para más información sobre envío, pago y entrega.",
+	"backToTop": "Arriba",
 	"clickToEnlarge": "Haz clic en la imagen para ampliar",
 	"comingSoon": "Próximamente",
 	"confirmSubmissionMessage": "¿Estás seguro de que quieres enviar este mensaje? Se abrirá tu cliente de correo predeterminado con el mensaje preparado.",
@@ -32,24 +33,31 @@
 	"name": "Nombre",
 	"nameRequired": "El nombre es obligatorio",
 	"nextArtwork": "Siguiente obra",
+	"nextRoom": "después: {room}",
+	"nextStop": "Siguiente",
 	"onlineClassesInterest": "Si estás interesad@ en las clases online, contacta conmigo para apuntarte a la preinscripción",
 	"onlineClassesPage": "Clases Online",
 	"otherLanguage": "English",
 	"phoneNumber": "+34628672368",
 	"phoneNumberLabel": "Número de teléfono",
 	"previousArtwork": "Obra anterior",
+	"previousStop": "Anterior",
+	"room_abstracto": "Abstractos",
+	"room_acuarela": "Acuarela",
+	"room_animal": "Animales",
+	"room_apunte": "Apuntes",
+	"room_arquitectura": "Arquitectura",
+	"room_collage": "Collage",
+	"room_dibujo": "Dibujo",
+	"room_figura": "Figura",
+	"room_grabado": "Grabado",
+	"room_paisaje": "Paisajes",
+	"room_pintura": "Pintura",
+	"room_retrato": "Retratos",
+	"roomOf": "Sala {n} de {total}",
+	"rooms": "Salas",
 	"sending": "Enviando...",
 	"sendMessage": "Enviar Mensaje",
-	"showingCount": [
-		{
-			"declarations": ["input count", "local countPlural = count: plural"],
-			"selectors": ["countPlural"],
-			"match": {
-				"countPlural=one": "Mostrando {count} obra",
-				"countPlural=*": "Mostrando {count} obras"
-			}
-		}
-	],
 	"sold": "Vendido",
 	"soldHeading": "Esta obra ha sido vendida",
 	"soldInfo": "Esta obra no está disponible para la compra, pero si te interesa puedes contactarme y encargar una obra similar",
@@ -69,8 +77,23 @@
 	"tag_pintura": "Pintura",
 	"tag_retrato": "Retrato",
 	"tagsLabel": "Etiquetas",
+	"viewAll": "Ver todas",
+	"viewAllShort": "Todas",
 	"viewDetailsFor": "Ver detalles de {title}",
 	"viewImage": "Ver imagen {num}",
+	"views": "Vista",
+	"viewWalk": "Paseo",
+	"walkWork": "{room} · obra {n} de {count}",
 	"whatsapp": "WhatsApp",
+	"workCount": [
+		{
+			"declarations": ["input count", "local countPlural = count: plural"],
+			"selectors": ["countPlural"],
+			"match": {
+				"countPlural=one": "{count} obra",
+				"countPlural=*": "{count} obras"
+			}
+		}
+	],
 	"yearLabel": "Año"
 }

@@ -8,22 +8,16 @@ On a phone the links row scrolls away and the name stays on top.
 	import { page } from '$app/state';
 	import { m } from '$lib/paraglide/messages';
 	import { localizeHref } from '$lib/paraglide/runtime';
-	import { isActivePath } from '$lib/utils/navigation';
+	import { LINKS, isActivePath } from '$lib/utils/navigation';
 	import LanguageLink from './LanguageLink.svelte';
 	import ScrollToTop from './ScrollToTop.svelte';
-
-	const links = [
-		{ path: '/', label: m.artworks },
-		{ path: '/classes', label: m.onlineClassesPage },
-		{ path: '/contact', label: m.contact }
-	];
 </script>
 
 <header>
 	<a class="name" href={localizeHref('/')}>Carmen Cárdenas Pacheco</a>
 	<nav aria-label={m.mainNavigation()}>
 		<ul>
-			{#each links as { path, label } (path)}
+			{#each LINKS as { path, label } (path)}
 				<li>
 					<a
 						href={localizeHref(path)}

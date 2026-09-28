@@ -8,6 +8,7 @@
 <script lang="ts">
 	import { ArrowUp } from 'lucide-svelte';
 	import { onMount } from 'svelte';
+	import { m } from '$lib/paraglide/messages';
 
 	let showScrollToTop = $state(false);
 
@@ -15,7 +16,7 @@
 	function scrollToTop() {
 		window.scrollTo({
 			top: 0,
-			behavior: 'smooth'
+			behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
 		});
 	}
 
@@ -36,7 +37,7 @@
 <!-- Scroll to Top Button -->
 <button
 	onclick={scrollToTop}
-	aria-label="Scroll to top"
+	aria-label={m.backToTop()}
 	class="fixed bottom-4 right-4 z-50 bg-background text-foreground border border-muted-foreground hover:bg-primary hover:text-primary-foreground p-3 transition-opacity duration-300 min-h-[48px] min-w-[48px] flex items-center justify-center group {showScrollToTop
 		? 'opacity-100 translate-y-0 pointer-events-auto'
 		: 'opacity-0 translate-y-2 pointer-events-none'}"

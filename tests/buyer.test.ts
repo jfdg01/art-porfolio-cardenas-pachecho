@@ -28,7 +28,8 @@ test('the Wall lists every Artwork', async ({ page }) => {
 	await page.goto('/');
 	const wall = page.getByRole('main');
 	for (const artwork of artworks) {
-		await expect(wall.getByText(artwork.title, { exact: true })).toBeVisible();
+		// An Artwork hangs once in each Room its Tags name.
+		await expect(wall.getByText(artwork.title, { exact: true }).first()).toBeVisible();
 	}
 });
 

@@ -106,3 +106,15 @@ export function getNeighbours(id: string): { previous: Artwork; next: Artwork } 
 	const n = artworks.length;
 	return { previous: artworks[(i - 1 + n) % n], next: artworks[(i + 1) % n] };
 }
+
+export interface Room {
+	tag: Tag;
+	artworks: Artwork[];
+}
+
+/** The Rooms in the curated order, one per Tag, each with its Artworks in Wall order.
+ * An Artwork hangs in every Room its Tags name. A Tag with no Artwork has no Room. */
+export const rooms: Room[] = TAGS.map((tag) => ({
+	tag,
+	artworks: artworks.filter((artwork) => artwork.tags.includes(tag))
+})).filter((room) => room.artworks.length);

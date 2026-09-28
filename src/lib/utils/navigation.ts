@@ -1,4 +1,12 @@
 import { deLocalizeHref } from '$lib/paraglide/runtime';
+import { m } from '$lib/paraglide/messages';
+
+/** The one navigation list of the site. */
+export const LINKS = [
+	{ path: '/', label: m.artworks },
+	{ path: '/classes', label: m.onlineClassesPage },
+	{ path: '/contact', label: m.contact }
+];
 
 /**
  * Check if a path is currently active in the navigation

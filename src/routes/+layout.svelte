@@ -15,7 +15,7 @@
 	let { children }: { children: any } = $props();
 </script>
 
-<div class="min-h-screen flex flex-col">
+<div class="site min-h-screen flex flex-col">
 	<SiteHeader />
 	<div class="flex-1">
 		{@render children?.()}
